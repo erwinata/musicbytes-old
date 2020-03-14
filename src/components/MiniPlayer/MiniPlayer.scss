@@ -1,0 +1,54 @@
+@import "_base.scss";
+
+.MiniPlayer {
+  @extend .centerHorizontal;
+
+  position: fixed;
+  width: 95%;
+  max-width: 512px;
+  height: 10vh;
+  bottom: 9.5vh;
+  box-shadow: 0px 2.5px 10px 5px rgba(0, 0, 0, 0.25);
+  background: $color-black-transparent;
+  border-radius: 10px;
+  padding: 0 0.5rem;
+
+  display: grid;
+  grid-template-columns: 8vh 4fr 1.25fr;
+  grid-gap: 0.5rem;
+  align-items: center;
+
+  img {
+    height: 8vh;
+    border-radius: 10px;
+  }
+  .info {
+    overflow: hidden;
+
+    h1 {
+      position: relative;
+      font-size: 1rem;
+      white-space: nowrap;
+      // left: -10px;
+    }
+    h2 {
+      font-size: 0.8rem;
+      color: $color-blue;
+    }
+  }
+
+  .control {
+    display: grid;
+    grid-template-columns: 1fr 4fr 1.25fr;
+    grid-gap: 1rem;
+    align-items: center;
+
+    img {
+      width: 2.75rem;
+      border-radius: 0px;
+    }
+    .buttonNext {
+      width: 1rem;
+    }
+  }
+}

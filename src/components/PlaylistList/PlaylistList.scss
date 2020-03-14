@@ -1,0 +1,28 @@
+@import "_base.scss";
+
+.PlaylistList {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-gap: 1rem;
+}
+
+.PlaylistListItem {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  grid-gap: 0.5rem;
+  align-items: center;
+
+  img {
+    width: 1.25rem;
+    float: left;
+  }
+
+  .info {
+    // padding-left: 2rem;
+
+    h1 {
+      @extend .regularText;
+      font-size: 1.1rem;
+    }
+  }
+}

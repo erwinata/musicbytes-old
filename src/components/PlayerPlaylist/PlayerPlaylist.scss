@@ -1,0 +1,27 @@
+@import "_base.scss";
+
+.PlayerPlaylist {
+  margin-top: 0.5rem;
+
+  .PlayerPlaylistHeader {
+    width: 95%;
+    margin: 0 auto;
+    padding: 0.5rem 0 0;
+    position: relative;
+
+    h1 {
+      color: $color-blue;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    .ButtonSave {
+      position: absolute;
+      right: 0;
+
+      img {
+        width: 1.1rem;
+      }
+    }
+  }
+}

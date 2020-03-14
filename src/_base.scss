@@ -1,0 +1,56 @@
+$color-white: rgb(255, 255, 255);
+$color-blue: rgb(58, 89, 140);
+$color-red: rgb(237, 37, 78);
+$color-violet: rgb(182, 39, 216);
+$color-bg-blue: rgb(49, 59, 101);
+$color-bg-black: rgb(1, 22, 39);
+$color-black-transparent: rgba(15, 33, 53, 0.95);
+$color-black-semi-transparent: rgba(15, 33, 53, 0.5);
+$color-pitch-black-overlay: rgba(0, 0, 0, 0.8);
+
+$font-default: Segoe UI, sans serif;
+
+h1 {
+  @extend .regularText;
+}
+h2 {
+  @extend .subText;
+}
+button {
+  background: none;
+  border: 1px solid $color-red;
+  padding: 0.5rem 2rem;
+  border-radius: 50px;
+}
+input {
+  border: none;
+  background: $color-bg-black;
+  border-radius: 100px;
+  padding: 1rem 2rem;
+  outline: none;
+}
+
+.headingText {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: $color-white;
+}
+.regularText {
+  font-size: 0.85rem;
+  font-weight: normal;
+  color: $color-white;
+}
+.subText {
+  font-size: 0.7rem;
+  font-weight: normal;
+  color: $color-blue;
+}
+
+.centerHorizontal {
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+.centerVertical {
+  top: 50%;
+  transform: translate(0, -50%);
+}

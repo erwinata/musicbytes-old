@@ -1,0 +1,28 @@
+@import "_base";
+@import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+  color: $color-white;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+.App {
+  font-family: $font-default;
+  padding-bottom: 10vh;
+  color: $color-white;
+  background: $color-bg-blue;
+  background: linear-gradient($color-bg-black 0%, $color-bg-blue 100%);
+}
+
+h1,
+h2 {
+  font-weight: normal;
+}

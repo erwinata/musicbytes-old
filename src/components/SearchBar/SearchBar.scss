@@ -1,0 +1,25 @@
+@import "_base.scss";
+
+.SearchBar {
+  width: 100%;
+  background: $color-black-transparent;
+  padding: 0.75rem 1rem;
+  position: relative;
+
+  img {
+    position: absolute;
+    height: 1.5rem;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+
+  input {
+    background: none;
+    outline: none;
+    border: none;
+    padding-left: 2.5rem;
+    width: 100%;
+    font-size: 1.25rem;
+    color: $color-white;
+  }
+}
