@@ -1,0 +1,54 @@
+@import "_base.scss";
+
+.PlayerControl {
+  padding-top: 0.5rem;
+  background: $color-black-semi-transparent;
+
+  .PlayerTopButtonList {
+    overflow: hidden;
+    padding: 0 2.5%;
+
+    .ButtonVideo {
+      float: left;
+      width: 1.5rem;
+    }
+    .ButtonLike {
+      float: right;
+      width: 1.5rem;
+    }
+  }
+
+  .PlayerTitle {
+    text-align: center;
+
+    h1 {
+      font-size: 1.2rem;
+    }
+  }
+
+  .PlayerButtonList {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-top: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 1rem;
+    align-items: center;
+    text-align: center;
+
+    .ButtonPlay img {
+      width: 3.5rem;
+    }
+
+    .ButtonNext img,
+    .ButtonPrev img {
+      width: 1.1rem;
+    }
+
+    .ButtonShuffle img,
+    .ButtonRepeat img {
+      width: 0.9rem;
+    }
+  }
+}

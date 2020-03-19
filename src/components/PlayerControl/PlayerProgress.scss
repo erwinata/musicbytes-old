@@ -1,0 +1,40 @@
+@import "_base.scss";
+
+.PlayerProgress {
+  .PlayerProgressBar {
+    height: 2px;
+    background: $color-black-transparent;
+    position: relative;
+
+    .current {
+      height: 4px;
+      background: $color-violet;
+    }
+
+    .pointer {
+      border-radius: 100%;
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      top: -6px;
+      left: 100px;
+      background: $color-violet;
+    }
+  }
+
+  .PlayerTime {
+    overflow: hidden;
+    font-size: 0.8rem;
+    width: 97.5%;
+    position: relative;
+    margin: 0 auto;
+    top: -0.25rem;
+
+    .current {
+      float: left;
+    }
+    .total {
+      float: right;
+    }
+  }
+}

@@ -1,0 +1,8 @@
+.SongGrid {
+  width: 95%;
+  margin: 0 auto;
+  overflow-x: auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(27.5vw, 1fr));
+  grid-gap: 0.75rem;
+}

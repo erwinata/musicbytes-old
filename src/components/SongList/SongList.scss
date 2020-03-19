@@ -1,0 +1,10 @@
+.SongList {
+  width: 95%;
+  margin: 0 auto;
+  display: grid;
+
+  padding-top: 1rem;
+
+  grid-template-rows: 1fr;
+  grid-gap: 0.5rem;
+}

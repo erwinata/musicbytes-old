@@ -1,0 +1,10 @@
+@import "_base.scss";
+
+.CategoryTitle {
+  width: 95%;
+  margin: 1rem auto;
+
+  h1 {
+    @extend .headingText;
+  }
+}

@@ -1,0 +1,30 @@
+@import "_base.scss";
+
+.Navbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: $color-black-transparent;
+  height: 8vh;
+  padding: 1vh 0 0;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.NavbarItem {
+  text-align: center;
+
+  div {
+    display: block;
+    margin: 0 auto;
+    height: 1.25rem;
+  }
+  img {
+    min-height: 1rem;
+  }
+  span {
+    font-size: 0.8rem;
+    color: $color-blue;
+  }
+}

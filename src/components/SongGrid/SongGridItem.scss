@@ -1,0 +1,17 @@
+@import "_base";
+
+.SongGridItem {
+  img {
+    border-radius: 8px;
+    width: 100%;
+  }
+
+  h1 {
+    @extend .regularText;
+    text-align: center;
+  }
+  h2 {
+    @extend .subText;
+    text-align: center;
+  }
+}

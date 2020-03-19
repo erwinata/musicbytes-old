@@ -1,0 +1,19 @@
+@import "_base.scss";
+
+.Tooltip {
+  position: absolute;
+  z-index: 10;
+  right: 1rem;
+  background: $color-black-transparent;
+  border: 1px solid $color-red;
+  padding: 1rem;
+  border-radius: 10px;
+
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-gap: 0.5rem;
+
+  .TooltipItem {
+    font-size: 0.8rem;
+  }
+}
