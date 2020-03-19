@@ -7,7 +7,7 @@ export const PlayerPlaylist = () => {
   return (
     <div className="PlayerPlaylist">
       <PlayerPlaylistHeader />
-      <SongList />
+      {/* <SongList /> */}
     </div>
   );
 };

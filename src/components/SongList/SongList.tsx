@@ -1,15 +1,18 @@
 import React from "react";
 import "./SongList.scss";
-import { SongListItem } from "./SongListItem";
+import SongListItem from "./SongListItem";
+import { Song } from "types/Song";
 
-export const SongList = () => {
+interface Props {
+  songs: Song[];
+}
+
+export const SongList: React.FC<Props> = ({ songs }: Props) => {
   return (
     <div className="SongList">
-      <SongListItem />
-      <SongListItem />
-      <SongListItem />
-      <SongListItem />
-      <SongListItem />
+      {songs.map(song => (
+        <SongListItem song={song} />
+      ))}
     </div>
   );
 };
