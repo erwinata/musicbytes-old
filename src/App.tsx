@@ -10,18 +10,10 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Switch>
-          <Route path="/discover">
-            <Discover />
-          </Route>
-          {/* <Route path="/library">
-            <Library />
-          </Route> */}
-          <Route path="/player">
-            <Player />
-          </Route>
-          <Route path="/">
-            <Listen />
-          </Route>
+          <Route path="/" exact component={Listen} />
+          <Route path="/discover" exact component={Discover} />
+          <Route path="/player" exact component={Player} />
+          <Route path="/" render={() => <div>404</div>} />
         </Switch>
       </BrowserRouter>
     </div>
