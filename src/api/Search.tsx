@@ -11,7 +11,11 @@ export const SearchSong = (query: string, total: number): Promise<Song[]> => {
 
   return new Promise((resolve, reject) => {
     api
-      .searchAll(query, total, { type: "video", videoCategoryId: 10 })
+      .searchAll(query, total, {
+        type: "video",
+        videoCategoryId: 10,
+        part: "snippet"
+      })
       .then((data: any) => {
         data.items.map((video: any) => {
           var snippet: any = video.snippet;
@@ -24,7 +28,8 @@ export const SearchSong = (query: string, total: number): Promise<Song[]> => {
               default: snippet.thumbnails.default.url,
               medium: snippet.thumbnails.medium.url,
               high: snippet.thumbnails.high.url
-            }
+            },
+            duration: 0
           };
           result.push(item);
         });

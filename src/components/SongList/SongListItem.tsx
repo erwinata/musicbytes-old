@@ -2,12 +2,12 @@ import React from "react";
 import "./SongListItem.scss";
 import { Song } from "types/Song";
 import { useHistory } from "react-router";
-import { AppState } from "store/configureStore";
+import { AppState } from "redux/store/configureStore";
 import { ThunkDispatch } from "redux-thunk";
 import { AppActions } from "types/actions";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { startPlaySong } from "actions/player";
+import { playSong } from "redux/actions/player";
 
 type Props = PassingProps & DispatchProps;
 
@@ -45,7 +45,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AppActions>
   // ownProps: DiscoverProps
 ) => ({
-  startPlaySong: bindActionCreators(startPlaySong, dispatch)
+  startPlaySong: bindActionCreators(playSong, dispatch)
 });
 
 export default connect(null, mapDispatchToProps)(SongListItem);

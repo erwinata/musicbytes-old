@@ -1,11 +1,11 @@
 import React, { ChangeEvent } from "react";
 import "./SearchBar.scss";
-import { AppState } from "store/configureStore";
+import { AppState } from "redux/store/configureStore";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { AppActions } from "types/actions";
 import { bindActionCreators } from "redux";
-import { startSearchSong } from "actions/discover";
+import { searchSong } from "redux/actions/discover";
 
 type Props = StateProps & DispatchProps;
 
@@ -47,7 +47,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AppActions>
   // ownProps: DiscoverProps
 ) => ({
-  startSearchSong: bindActionCreators(startSearchSong, dispatch)
+  startSearchSong: bindActionCreators(searchSong, dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);

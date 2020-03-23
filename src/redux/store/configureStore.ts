@@ -1,9 +1,9 @@
 import { combineReducers, compose, createStore, applyMiddleware } from "redux";
 import reduxThunk, { ThunkMiddleware } from "redux-thunk";
-import { discoverReducer } from "reducers/discover";
+import { discoverReducer } from "redux/reducers/discover";
 import { AppActions } from "types/actions";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { playerReducer } from "reducers/player";
+import { playerReducer } from "redux/reducers/player";
 
 export const rootReducer = combineReducers({
   discover: discoverReducer,

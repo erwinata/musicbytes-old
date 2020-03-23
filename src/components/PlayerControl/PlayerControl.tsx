@@ -9,24 +9,65 @@ import {
   ButtonShuffle,
   ButtonVideo
 } from "components/Buttons/Buttons";
-import { PlayerProgress } from "components/PlayerControl/PlayerProgress";
+import PlayerProgress from "components/PlayerControl/PlayerProgress";
+import { connect } from "react-redux";
+import { AppState } from "redux/store/configureStore";
+import { Song } from "types/Song";
+import { Repeat } from "types/Repeat";
+import { ThunkDispatch } from "redux-thunk";
+import { AppActions } from "types/actions";
+import { bindActionCreators } from "redux";
+import { togglePlaying, seekTo } from "redux/actions/player";
+import { PlayState } from "types/PlayState";
 
-export const PlayerControl = () => {
+type Props = StateProps & DispatchProps;
+interface StateProps {
+  playState: PlayState;
+  songPlaying: Song | null;
+  shuffle: boolean;
+  repeat: Repeat;
+  timeCurrent: number;
+  timeTotal: number;
+}
+interface DispatchProps {
+  togglePlaying: () => any;
+  seekTo: (to: number) => any;
+}
+
+const PlayerControl: React.FC<Props> = ({
+  playState,
+  songPlaying,
+  shuffle,
+  repeat,
+  timeCurrent,
+  timeTotal,
+  togglePlaying,
+  seekTo
+}: Props) => {
   return (
     <div className="PlayerControl">
       <PlayerTopButtonList />
-      <PlayerTitle />
-      <PlayerButtonList />
-      <PlayerProgress />
+      <PlayerTitle songPlaying={songPlaying} />
+      <PlayerButtonList playState={playState} togglePlaying={togglePlaying} />
+      <PlayerProgress
+        timeCurrent={timeCurrent}
+        timeTotal={timeTotal}
+        seekTo={seekTo}
+      />
     </div>
   );
 };
 
-const PlayerTitle = () => {
+interface PlayerTitleProps {
+  songPlaying: Song | null;
+}
+const PlayerTitle: React.FC<PlayerTitleProps> = ({
+  songPlaying
+}: PlayerTitleProps) => {
   return (
     <div className="PlayerTitle">
-      <h1>That's What I Like</h1>
-      <h2>Bruno Mars</h2>
+      <h1>{songPlaying?.title}</h1>
+      <h2>{songPlaying?.channel}</h2>
     </div>
   );
 };
@@ -40,14 +81,46 @@ const PlayerTopButtonList = () => {
   );
 };
 
-const PlayerButtonList = () => {
+interface PlayerButtonListProps {
+  playState: PlayState;
+  togglePlaying: () => any;
+}
+const PlayerButtonList: React.FC<PlayerButtonListProps> = ({
+  playState: PlayState,
+  togglePlaying
+}) => {
+  const handleClickPlay = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    togglePlaying();
+    console.log("asdaad");
+  };
+
   return (
     <div className="PlayerButtonList">
       <ButtonShuffle />
       <ButtonPrev />
-      <ButtonPlay />
+      <ButtonPlay onClick={handleClickPlay} />
       <ButtonNext />
       <ButtonRepeat />
     </div>
   );
 };
+
+const mapStateToProps = (state: AppState) => {
+  return {
+    playState: state.player.playState,
+    songPlaying: state.player.songPlaying,
+    shuffle: state.player.shuffle,
+    repeat: state.player.repeat,
+    timeCurrent: state.player.timeCurrent,
+    timeTotal: state.player.timeTotal
+  };
+};
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<any, any, AppActions>
+  // ownProps: DiscoverProps
+) => ({
+  togglePlaying: bindActionCreators(togglePlaying, dispatch),
+  seekTo: bindActionCreators(seekTo, dispatch)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlayerControl);

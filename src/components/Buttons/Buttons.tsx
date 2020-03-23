@@ -16,9 +16,9 @@ export const ButtonLike = () => {
   );
 };
 
-export const ButtonPlay = () => {
+export const ButtonPlay: React.FC<any> = ({ onClick }: any) => {
   return (
-    <div className="ButtonPlay">
+    <div className="ButtonPlay" onClick={onClick}>
       <img src="/res/play.svg" alt="Play" />
     </div>
   );

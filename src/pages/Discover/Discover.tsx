@@ -9,10 +9,10 @@ import { Popup } from "components/Popup/Popup";
 import { SearchSong } from "api/Search";
 import { Song } from "types/Song";
 import { useDispatch, useSelector, connect } from "react-redux";
-import { AppState } from "store/configureStore";
+import { AppState } from "redux/store/configureStore";
 import { ThunkDispatch } from "redux-thunk";
 import { AppActions } from "types/actions";
-import { startSearchSong } from "actions/discover";
+import { searchSong } from "redux/actions/discover";
 import { bindActionCreators } from "redux";
 
 type Props = PassingProps & StateProps & DispatchProps;

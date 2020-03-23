@@ -11,7 +11,7 @@ export const SongList: React.FC<Props> = ({ songs }: Props) => {
   return (
     <div className="SongList">
       {songs.map(song => (
-        <SongListItem song={song} />
+        <SongListItem song={song} key={song.id} />
       ))}
     </div>
   );

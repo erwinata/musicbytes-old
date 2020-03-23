@@ -7,4 +7,5 @@ export interface Song {
     medium: string;
     high: string;
   };
+  duration: number;
 }

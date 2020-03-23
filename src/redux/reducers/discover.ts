@@ -10,7 +10,7 @@ export interface IDiscoverState {
 const discoverReducerDefaultState: IDiscoverState = {
   songs: [],
   loading: true,
-  query: ""
+  query: "never gonna give you up"
 };
 
 export const discoverReducer = (
