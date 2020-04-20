@@ -23,10 +23,6 @@ interface StateProps {
 }
 
 const App: React.FC<Props> = ({ songPlaying, songs, showPlayer }) => {
-  useEffect(() => {
-    console.log(showPlayer);
-  });
-
   return (
     <div className="App">
       <BrowserRouter>
@@ -34,7 +30,7 @@ const App: React.FC<Props> = ({ songPlaying, songs, showPlayer }) => {
 
         {songs.length > 0 ? <MiniPlayer /> : null}
 
-        {showPlayer ? <Player /> : null}
+        <Player />
 
         <Switch>
           <Route path="/" exact component={Listen} />
@@ -51,7 +47,7 @@ const mapStateToProps = (state: AppState) => {
   return {
     songPlaying: state.player.songPlaying,
     songs: state.player.songs,
-    showPlayer: state.player.showPlayer
+    showPlayer: state.player.showPlayer,
   };
 };
 

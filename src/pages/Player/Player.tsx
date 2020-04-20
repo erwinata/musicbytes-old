@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSpring, animated } from "react-spring";
 import { Navbar } from "components/Navbar/Navbar";
 import PlayerThumbnail from "components/PlayerThumbnail/PlayerThumbnail";
 import PlayerControl from "components/PlayerControl/PlayerControl";
@@ -16,6 +17,7 @@ import "./Player.scss";
 
 type Props = StateProps & DispatchProps;
 interface StateProps {
+  showPlayer: boolean;
   songs: Song[];
   songPlaying: Song | null;
   playState: PlayState;
@@ -32,6 +34,7 @@ interface StatePlayer {
   durationInterval: any;
 }
 const Player: React.FC<Props> = ({
+  showPlayer,
   songs,
   songPlaying,
   playState,
@@ -39,10 +42,10 @@ const Player: React.FC<Props> = ({
   repeat,
   timeCurrent,
   timeTotal,
-  durationIncrement
+  durationIncrement,
 }: Props) => {
   const [state, setState] = useState<StatePlayer>({
-    durationInterval: undefined
+    durationInterval: undefined,
   });
 
   useEffect(() => {
@@ -50,31 +53,36 @@ const Player: React.FC<Props> = ({
       var interval = setInterval(durationIncrement, 1000);
       setState({
         ...state,
-        durationInterval: interval
+        durationInterval: interval,
       });
     } else {
       clearInterval(state.durationInterval);
     }
   }, [playState]);
 
+  const slide = useSpring({
+    top: showPlayer ? "0vh" : "100vh",
+  });
+
   return (
-    <div className="Player">
+    <animated.div className="Player" style={slide}>
       <PlayerThumbnail />
       <PlayerControl />
       <PlayerPlaylist />
-    </div>
+    </animated.div>
   );
 };
 
 const mapStateToProps = (state: AppState) => {
   return {
+    showPlayer: state.player.showPlayer,
     songPlaying: state.player.songPlaying,
     songs: state.player.songs,
     playState: state.player.playState,
     shuffle: state.player.shuffle,
     repeat: state.player.repeat,
     timeCurrent: state.player.timeCurrent,
-    timeTotal: state.player.timeTotal
+    timeTotal: state.player.timeTotal,
   };
 };
 
@@ -82,7 +90,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AppActions>
   // ownProps: DiscoverProps
 ) => ({
-  durationIncrement: bindActionCreators(durationIncrement, dispatch)
+  durationIncrement: bindActionCreators(durationIncrement, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Player);

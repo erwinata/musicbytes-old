@@ -10,7 +10,7 @@ export interface IDiscoverState {
 const discoverReducerDefaultState: IDiscoverState = {
   songs: [],
   loading: true,
-  query: "never gonna give you up"
+  query: "10 Minute Timer (count-up stopwatch)",
 };
 
 export const discoverReducer = (
@@ -23,7 +23,7 @@ export const discoverReducer = (
       return {
         ...state,
         query: action.query,
-        songs: action.songs
+        songs: action.songs,
       };
     default:
       return state;
