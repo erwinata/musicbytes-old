@@ -1,45 +1,32 @@
 import React from "react";
 import "./Navbar.scss";
+import { Link } from "react-router-dom";
+import { ThunkDispatch } from "redux-thunk";
+import { AppActions } from "types/actions";
+import { bindActionCreators } from "redux";
+import { showPlayer } from "redux/actions/player";
+import { connect } from "react-redux";
+import { Navigation } from "types/Navigation";
+import NavbarItem from "./NavbarItem";
 
-const NAV_DISCOVER = 0;
-const NAV_LISTEN = 1;
-const NAV_LIBRARY = 2;
+type Props = DispatchProps;
+
+interface DispatchProps {
+  showPlayer: (show: boolean) => any;
+}
 
 export const Navbar = () => {
   return (
     <div className="Navbar">
-      <NavbarItem type={NAV_DISCOVER} />
-      <NavbarItem type={NAV_LISTEN} />
-      <NavbarItem type={NAV_LIBRARY} />
-    </div>
-  );
-};
-
-const NavbarItem = (props: { type: number }) => {
-  var name = "";
-  var img = "";
-
-  switch (props.type) {
-    case NAV_DISCOVER:
-      name = "Discover";
-      img = "search";
-      break;
-    case NAV_LISTEN:
-      name = "Listen";
-      img = "music";
-      break;
-    case NAV_LIBRARY:
-      name = "Library";
-      img = "library";
-      break;
-  }
-
-  return (
-    <div className="NavbarItem">
-      <div>
-        <img src={`/res/${img}.svg`} alt="Navbar Icon" />
-      </div>
-      <span>{name}</span>
+      <Link to="/Discover">
+        <NavbarItem type={Navigation.DISCOVER} />
+      </Link>
+      <Link to="/">
+        <NavbarItem type={Navigation.LIBRARY} />
+      </Link>
+      <Link to="/Library">
+        <NavbarItem type={Navigation.LIBRARY} />
+      </Link>
     </div>
   );
 };

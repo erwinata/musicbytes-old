@@ -4,10 +4,11 @@
   position: absolute;
   z-index: 10;
   right: 1rem;
+  margin-top: 0.75rem;
   background: $color-black-transparent;
   border: 1px solid $color-red;
   padding: 1rem;
-  border-radius: 10px;
+  border-radius: 10px 0px 10px 10px;
 
   display: grid;
   grid-template-rows: 1fr;

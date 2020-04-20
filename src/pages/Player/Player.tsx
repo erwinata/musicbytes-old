@@ -12,6 +12,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { AppActions } from "types/actions";
 import { bindActionCreators } from "redux";
 import { PlayState } from "types/PlayState";
+import "./Player.scss";
 
 type Props = StateProps & DispatchProps;
 interface StateProps {
@@ -61,8 +62,6 @@ const Player: React.FC<Props> = ({
       <PlayerThumbnail />
       <PlayerControl />
       <PlayerPlaylist />
-
-      <Navbar />
     </div>
   );
 };

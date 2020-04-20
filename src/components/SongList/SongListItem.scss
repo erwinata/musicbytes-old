@@ -2,9 +2,16 @@
 
 .SongListItem {
   display: grid;
-  grid-template-columns: 3rem 1fr 3rem;
+  grid-template-columns: 1fr 3rem;
   grid-gap: 0.75rem;
   align-items: center;
+
+  .song {
+    display: grid;
+    grid-gap: 0.75rem;
+    grid-template-columns: 3rem 1fr;
+    align-items: center;
+  }
 
   img {
     width: 100%;

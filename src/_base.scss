@@ -10,6 +10,9 @@ $color-pitch-black-overlay: rgba(0, 0, 0, 0.8);
 
 $font-default: Segoe UI, sans serif;
 
+a {
+  text-decoration: none;
+}
 h1 {
   @extend .regularText;
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./SongListItem.scss";
 import { Song } from "types/Song";
 import { useHistory } from "react-router";
@@ -7,7 +7,9 @@ import { ThunkDispatch } from "redux-thunk";
 import { AppActions } from "types/actions";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { playSong } from "redux/actions/player";
+import { playSong, addToNowPlaying } from "redux/actions/player";
+import Tooltip from "components/Tooltip/Tooltip";
+import { ButtonLike, ButtonOption } from "components/Buttons/Buttons";
 
 type Props = PassingProps & DispatchProps;
 
@@ -16,26 +18,76 @@ interface PassingProps {
 }
 interface DispatchProps {
   startPlaySong: (song: Song) => any;
+  addToNowPlaying: (song: Song) => any;
 }
 
-const SongListItem: React.FC<Props> = ({ song, startPlaySong }) => {
-  const history = useHistory();
+export interface StateSongListItem {
+  tooltipShown: boolean;
+  song: Song;
+}
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+const SongListItem: React.FC<Props> = ({
+  song,
+  startPlaySong,
+  addToNowPlaying
+}) => {
+  const clickSongListItem = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     startPlaySong(song);
-    history.push("/player");
   };
 
+  const clickButtonOption = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    setState({
+      ...state,
+      tooltipShown: true
+    });
+  };
+
+  const dismissTooltip = () => {
+    setState({
+      ...state,
+      tooltipShown: false
+    });
+  };
+
+  const clickTooltipItem = (index: number) => {
+    switch (index) {
+      case 1:
+        console.log("CLIKTULTIP");
+        addToNowPlaying(state.song);
+        break;
+    }
+  };
+
+  const [state, setState] = useState<StateSongListItem>({
+    tooltipShown: false,
+    song: song
+  });
+
   return (
-    <div className="SongListItem" onClick={handleClick}>
-      <img src={song.thumbnails?.default} alt="Thumbnail Image" />
-      <div className="info">
-        <h1>{song.title}</h1>
-        <h2>{song.channel}</h2>
+    <div className="SongListItem">
+      {state.tooltipShown ? (
+        <Tooltip
+          dismissTooltip={dismissTooltip}
+          clickTooltipItem={clickTooltipItem}
+        />
+      ) : (
+        ""
+      )}
+
+      <div className="song" onClick={clickSongListItem}>
+        <img src={song.thumbnails?.default} alt="Thumbnail Image" />
+        <div className="info">
+          <h1>{song.title}</h1>
+          <h2>{song.channel}</h2>
+        </div>
       </div>
       <div className="option">
-        <img src="/res/like.svg" className="btnLike" alt="Like Song" />
-        <img src="/res/option.svg" className="btnOption" alt="Option" />
+        <ButtonLike />
+        <ButtonOption onClick={clickButtonOption} />
       </div>
     </div>
   );
@@ -45,7 +97,8 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AppActions>
   // ownProps: DiscoverProps
 ) => ({
-  startPlaySong: bindActionCreators(playSong, dispatch)
+  startPlaySong: bindActionCreators(playSong, dispatch),
+  addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch)
 });
 
 export default connect(null, mapDispatchToProps)(SongListItem);

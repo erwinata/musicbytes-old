@@ -15,6 +15,13 @@ export const ButtonLike = () => {
     </div>
   );
 };
+export const ButtonOption: React.FC<any> = ({ onClick }: any) => {
+  return (
+    <div className="ButtonOption" onClick={onClick}>
+      <img src="/res/option.svg" alt="Option" />
+    </div>
+  );
+};
 
 export const ButtonPlay: React.FC<any> = ({ onClick }: any) => {
   return (

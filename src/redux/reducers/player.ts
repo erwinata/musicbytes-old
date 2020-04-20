@@ -4,6 +4,7 @@ import { Repeat } from "types/Repeat";
 import { PlayState } from "types/PlayState";
 
 export interface PlayerState {
+  showPlayer: boolean;
   songs: Song[];
   songPlaying: Song | null;
   playState: PlayState;
@@ -14,6 +15,7 @@ export interface PlayerState {
   seeking: boolean;
 }
 const playerReducerDefaultState: PlayerState = {
+  showPlayer: false,
   songs: [],
   songPlaying: null,
   // songPlaying: {
@@ -39,6 +41,11 @@ export const playerReducer = (
   action: PlayerActionTypes
 ): PlayerState => {
   switch (action.type) {
+    case "SHOW_PLAYER":
+      return {
+        ...state,
+        showPlayer: action.show
+      };
     case "PLAY_SONG":
       return {
         ...state,
@@ -46,6 +53,11 @@ export const playerReducer = (
         songPlaying: action.song,
         timeCurrent: 0,
         timeTotal: action.song.duration
+      };
+    case "ADD_TO_NOW_PLAYING":
+      return {
+        ...state,
+        songs: [...state.songs, action.song]
       };
     case "DURATION_INCREMENT":
       return {
