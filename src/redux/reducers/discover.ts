@@ -1,4 +1,4 @@
-import { DiscoverActionTypes } from "types/actions";
+import { DiscoverActionTypes, SONG_SEARCH } from "redux/types/discover";
 import { Song } from "types/Song";
 
 export interface IDiscoverState {
@@ -10,7 +10,7 @@ export interface IDiscoverState {
 const discoverReducerDefaultState: IDiscoverState = {
   songs: [],
   loading: true,
-  query: "10 Minute Timer (count-up stopwatch)",
+  query: "take on me aha",
 };
 
 export const discoverReducer = (
@@ -18,7 +18,7 @@ export const discoverReducer = (
   action: DiscoverActionTypes
 ): IDiscoverState => {
   switch (action.type) {
-    case "SONG_SEARCH":
+    case SONG_SEARCH:
       // console.log("REDUCER" + action.query);
       return {
         ...state,

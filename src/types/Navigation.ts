@@ -1,5 +1,5 @@
-export enum Navigation {
+export enum NavigationTab {
   DISCOVER,
   LISTEN,
-  LIBRARY
+  LIBRARY,
 }

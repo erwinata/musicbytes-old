@@ -1,13 +1,5 @@
-import { Song } from "./Song";
-import { PlayState } from "./PlayState";
-
-export const SONG_SEARCH = "SONG_SEARCH";
-
-export interface SongSearchAction {
-  type: typeof SONG_SEARCH;
-  query: string;
-  songs: Song[];
-}
+import { Song } from "../../types/Song";
+import { PlayState } from "../../types/PlayState";
 
 export const SHOW_PLAYER = "SHOW_PLAYER";
 export const PLAY_SONG = "PLAY_SONG";
@@ -44,7 +36,6 @@ export interface AddToNowPlayingAction {
   song: Song;
 }
 
-export type DiscoverActionTypes = SongSearchAction;
 export type PlayerActionTypes =
   | ShowPlayerAction
   | PlaySongAction
@@ -53,5 +44,3 @@ export type PlayerActionTypes =
   | SeekToAction
   | SeekDoneAction
   | AddToNowPlayingAction;
-
-export type AppActions = DiscoverActionTypes | PlayerActionTypes;

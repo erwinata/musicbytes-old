@@ -1,13 +1,15 @@
 import { combineReducers, compose, createStore, applyMiddleware } from "redux";
 import reduxThunk, { ThunkMiddleware } from "redux-thunk";
 import { discoverReducer } from "redux/reducers/discover";
-import { AppActions } from "types/actions";
+import { AllActions } from "redux/types/app";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { playerReducer } from "redux/reducers/player";
+import { appReducer } from "redux/reducers/app";
 
 export const rootReducer = combineReducers({
+  app: appReducer,
   discover: discoverReducer,
-  player: playerReducer
+  player: playerReducer,
 });
 
 export type AppState = ReturnType<typeof rootReducer>;

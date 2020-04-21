@@ -25,6 +25,13 @@
   background: linear-gradient($color-bg-black 0%, $color-bg-blue 100%);
 }
 
+.Listen,
+.Discover,
+.Library {
+  position: absolute;
+  width: 100vw;
+}
+
 h1,
 h2 {
   font-weight: normal;

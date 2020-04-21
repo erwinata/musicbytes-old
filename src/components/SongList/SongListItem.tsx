@@ -4,7 +4,7 @@ import { Song } from "types/Song";
 import { useHistory } from "react-router";
 import { AppState } from "redux/store/configureStore";
 import { ThunkDispatch } from "redux-thunk";
-import { AppActions } from "types/actions";
+import { AllActions } from "redux/types/app";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { playSong, addToNowPlaying } from "redux/actions/player";
@@ -29,7 +29,7 @@ export interface StateSongListItem {
 const SongListItem: React.FC<Props> = ({
   song,
   startPlaySong,
-  addToNowPlaying
+  addToNowPlaying,
 }) => {
   const clickSongListItem = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -42,14 +42,14 @@ const SongListItem: React.FC<Props> = ({
   ) => {
     setState({
       ...state,
-      tooltipShown: true
+      tooltipShown: true,
     });
   };
 
   const dismissTooltip = () => {
     setState({
       ...state,
-      tooltipShown: false
+      tooltipShown: false,
     });
   };
 
@@ -64,7 +64,7 @@ const SongListItem: React.FC<Props> = ({
 
   const [state, setState] = useState<StateSongListItem>({
     tooltipShown: false,
-    song: song
+    song: song,
   });
 
   return (
@@ -94,11 +94,11 @@ const SongListItem: React.FC<Props> = ({
 };
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<any, any, AppActions>
+  dispatch: ThunkDispatch<any, any, AllActions>
   // ownProps: DiscoverProps
 ) => ({
   startPlaySong: bindActionCreators(playSong, dispatch),
-  addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch)
+  addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch),
 });
 
 export default connect(null, mapDispatchToProps)(SongListItem);

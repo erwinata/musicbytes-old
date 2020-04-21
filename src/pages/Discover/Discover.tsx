@@ -9,7 +9,7 @@ import { Song } from "types/Song";
 import { useDispatch, useSelector, connect } from "react-redux";
 import { AppState } from "redux/store/configureStore";
 import { ThunkDispatch } from "redux-thunk";
-import { AppActions } from "types/actions";
+import { AllActions } from "redux/types/app";
 import { searchSong } from "redux/actions/discover";
 import { bindActionCreators } from "redux";
 
@@ -27,8 +27,6 @@ interface DispatchProps {
 interface DiscoverState {}
 
 export const Discover: React.FC<Props> = ({ query, songs }: Props) => {
-  console.log(query);
-
   return (
     <div className="Discover">
       <Header />
@@ -42,7 +40,7 @@ export const Discover: React.FC<Props> = ({ query, songs }: Props) => {
 const mapStateToProps = (state: AppState) => {
   return {
     query: state.discover.query,
-    songs: state.discover.songs
+    songs: state.discover.songs,
   };
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import "./MiniPlayer.scss";
 import { ThunkDispatch } from "redux-thunk";
-import { AppActions } from "types/actions";
+import { AllActions } from "redux/types/app";
 import { connect } from "react-redux";
 import { AppState } from "redux/store/configureStore";
 import { useHistory } from "react-router";
@@ -20,7 +20,7 @@ const MiniPlayer: React.FC<Props> = ({ showPlayer }) => {
   return (
     <div
       className="MiniPlayer"
-      onClick={e => {
+      onClick={(e) => {
         showPlayer(true);
       }}
     >
@@ -44,12 +44,12 @@ const mapStateToProps = (state: AppState) => {
     songPlaying: state.player.songPlaying,
     songs: state.player.songs,
     timeCurrent: state.player.timeCurrent,
-    timeTotal: state.player.timeTotal
+    timeTotal: state.player.timeTotal,
   };
 };
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<any, any, AppActions>
+  dispatch: ThunkDispatch<any, any, AllActions>
   // ownProps: DiscoverProps
 ) => ({ showPlayer: bindActionCreators(showPlayer, dispatch) });
 

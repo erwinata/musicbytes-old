@@ -1,7 +1,7 @@
-import { DiscoverActionTypes, PlayerActionTypes } from "types/actions";
 import { Song } from "types/Song";
 import { Repeat } from "types/Repeat";
 import { PlayState } from "types/PlayState";
+import { PlayerActionTypes } from "redux/types/player";
 
 export interface PlayerState {
   showPlayer: boolean;
@@ -33,7 +33,7 @@ const playerReducerDefaultState: PlayerState = {
   repeat: Repeat.NO_REPEAT,
   timeCurrent: 0,
   timeTotal: 180,
-  seeking: false
+  seeking: false,
 };
 
 export const playerReducer = (
@@ -44,7 +44,7 @@ export const playerReducer = (
     case "SHOW_PLAYER":
       return {
         ...state,
-        showPlayer: action.show
+        showPlayer: action.show,
       };
     case "PLAY_SONG":
       return {
@@ -52,28 +52,28 @@ export const playerReducer = (
         songs: [action.song],
         songPlaying: action.song,
         timeCurrent: 0,
-        timeTotal: action.song.duration
+        timeTotal: action.song.duration,
       };
     case "ADD_TO_NOW_PLAYING":
       return {
         ...state,
-        songs: [...state.songs, action.song]
+        songs: [...state.songs, action.song],
       };
     case "DURATION_INCREMENT":
       return {
         ...state,
-        timeCurrent: state.timeCurrent + 1
+        timeCurrent: state.timeCurrent + 1,
       };
     case "SEEK_TO":
       return {
         ...state,
         seeking: true,
-        timeCurrent: action.to
+        timeCurrent: action.to,
       };
     case "SEEK_DONE":
       return {
         ...state,
-        seeking: false
+        seeking: false,
       };
     case "TOGGLE_PLAYING":
       var newPlayState = state.playState;
@@ -88,7 +88,7 @@ export const playerReducer = (
       }
       return {
         ...state,
-        playState: newPlayState
+        playState: newPlayState,
       };
     default:
       return state;

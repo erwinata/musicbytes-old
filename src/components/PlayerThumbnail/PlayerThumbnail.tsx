@@ -6,7 +6,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { bindActionCreators } from "redux";
 import { AppState } from "redux/store/configureStore";
 import { Song } from "types/Song";
-import { AppActions } from "types/actions";
+import { AllActions } from "redux/types/app";
 import { togglePlaying, seekDone } from "redux/actions/player";
 import { PlayState } from "types/PlayState";
 
@@ -33,11 +33,11 @@ const PlayerThumbnail: React.FC<Props> = ({
   seeking,
   timeCurrent,
   togglePlaying,
-  seekDone
+  seekDone,
 }: Props) => {
   const [state, setState] = useState<IPlayerThumbnail>({
     youtubePlayer: null,
-    ready: false
+    ready: false,
   });
 
   const opts: Options = {
@@ -49,14 +49,14 @@ const PlayerThumbnail: React.FC<Props> = ({
       fs: 0,
       rel: 0,
       modestbranding: 1,
-      showinfo: 0
-    }
+      showinfo: 0,
+    },
   };
 
   const handleOnReady = (event: any) => {
     setState({
       youtubePlayer: event.target,
-      ready: true
+      ready: true,
     });
     event.target.playVideo();
     togglePlaying();
@@ -111,16 +111,16 @@ const mapStateToProps = (state: AppState) => {
     song: state.player.songPlaying,
     playState: state.player.playState,
     seeking: state.player.seeking,
-    timeCurrent: state.player.timeCurrent
+    timeCurrent: state.player.timeCurrent,
   };
 };
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<any, any, AppActions>
+  dispatch: ThunkDispatch<any, any, AllActions>
   // ownProps: DiscoverProps
 ) => ({
   togglePlaying: bindActionCreators(togglePlaying, dispatch),
-  seekDone: bindActionCreators(seekDone, dispatch)
+  seekDone: bindActionCreators(seekDone, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayerThumbnail);

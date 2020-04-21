@@ -7,7 +7,7 @@ import {
   ButtonPrev,
   ButtonRepeat,
   ButtonShuffle,
-  ButtonVideo
+  ButtonVideo,
 } from "components/Buttons/Buttons";
 import PlayerProgress from "components/PlayerControl/PlayerProgress";
 import { connect } from "react-redux";
@@ -15,7 +15,7 @@ import { AppState } from "redux/store/configureStore";
 import { Song } from "types/Song";
 import { Repeat } from "types/Repeat";
 import { ThunkDispatch } from "redux-thunk";
-import { AppActions } from "types/actions";
+import { AllActions } from "redux/types/app";
 import { bindActionCreators } from "redux";
 import { togglePlaying, seekTo } from "redux/actions/player";
 import { PlayState } from "types/PlayState";
@@ -42,7 +42,7 @@ const PlayerControl: React.FC<Props> = ({
   timeCurrent,
   timeTotal,
   togglePlaying,
-  seekTo
+  seekTo,
 }: Props) => {
   return (
     <div className="PlayerControl">
@@ -62,7 +62,7 @@ interface PlayerTitleProps {
   songPlaying: Song | null;
 }
 const PlayerTitle: React.FC<PlayerTitleProps> = ({
-  songPlaying
+  songPlaying,
 }: PlayerTitleProps) => {
   return (
     <div className="PlayerTitle">
@@ -87,7 +87,7 @@ interface PlayerButtonListProps {
 }
 const PlayerButtonList: React.FC<PlayerButtonListProps> = ({
   playState: PlayState,
-  togglePlaying
+  togglePlaying,
 }) => {
   const handleClickPlay = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     togglePlaying();
@@ -112,15 +112,15 @@ const mapStateToProps = (state: AppState) => {
     shuffle: state.player.shuffle,
     repeat: state.player.repeat,
     timeCurrent: state.player.timeCurrent,
-    timeTotal: state.player.timeTotal
+    timeTotal: state.player.timeTotal,
   };
 };
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<any, any, AppActions>
+  dispatch: ThunkDispatch<any, any, AllActions>
   // ownProps: DiscoverProps
 ) => ({
   togglePlaying: bindActionCreators(togglePlaying, dispatch),
-  seekTo: bindActionCreators(seekTo, dispatch)
+  seekTo: bindActionCreators(seekTo, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayerControl);

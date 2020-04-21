@@ -10,7 +10,7 @@ import { Song } from "types/Song";
 import { Repeat } from "types/Repeat";
 import { durationIncrement, togglePlaying } from "redux/actions/player";
 import { ThunkDispatch } from "redux-thunk";
-import { AppActions } from "types/actions";
+import { AllActions } from "redux/types/app";
 import { bindActionCreators } from "redux";
 import { PlayState } from "types/PlayState";
 import "./Player.scss";
@@ -62,6 +62,7 @@ const Player: React.FC<Props> = ({
 
   const slide = useSpring({
     top: showPlayer ? "0vh" : "100vh",
+    opacity: showPlayer ? 1 : 0,
   });
 
   return (
@@ -87,7 +88,7 @@ const mapStateToProps = (state: AppState) => {
 };
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<any, any, AppActions>
+  dispatch: ThunkDispatch<any, any, AllActions>
   // ownProps: DiscoverProps
 ) => ({
   durationIncrement: bindActionCreators(durationIncrement, dispatch),

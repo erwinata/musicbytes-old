@@ -3,7 +3,7 @@ import "./SearchBar.scss";
 import { AppState } from "redux/store/configureStore";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
-import { AppActions } from "types/actions";
+import { AllActions } from "redux/types/app";
 import { bindActionCreators } from "redux";
 import { searchSong } from "redux/actions/discover";
 
@@ -39,15 +39,15 @@ const SearchBar: React.FC<Props> = ({ query, startSearchSong }: Props) => {
 
 const mapStateToProps = (state: AppState) => {
   return {
-    query: state.discover.query
+    query: state.discover.query,
   };
 };
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<any, any, AppActions>
+  dispatch: ThunkDispatch<any, any, AllActions>
   // ownProps: DiscoverProps
 ) => ({
-  startSearchSong: bindActionCreators(searchSong, dispatch)
+  startSearchSong: bindActionCreators(searchSong, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
