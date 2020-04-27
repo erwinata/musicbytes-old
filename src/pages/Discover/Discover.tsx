@@ -32,7 +32,7 @@ export const Discover: React.FC<Props> = ({ query, songs }: Props) => {
       <Header />
 
       <SearchBar />
-      <SongList songs={songs} />
+      <SongList songs={songs} resetPlaylist={true} />
     </div>
   );
 };

@@ -30,32 +30,32 @@ export const ButtonPlay: React.FC<any> = ({ onClick }: any) => {
     </div>
   );
 };
-export const ButtonPrev = () => {
+export const ButtonPrev: React.FC<any> = ({ onClick }: any) => {
   return (
-    <div className="ButtonPrev">
+    <div className="ButtonPrev" onClick={onClick}>
       <img src="/res/prev.svg" alt="Prev" />
     </div>
   );
 };
-export const ButtonNext = () => {
+export const ButtonNext: React.FC<any> = ({ onClick }: any) => {
   return (
-    <div className="ButtonNext">
+    <div className="ButtonNext" onClick={onClick}>
       <img src="/res/next.svg" alt="Next" />
     </div>
   );
 };
 
-export const ButtonShuffle = () => {
+export const ButtonShuffle: React.FC<any> = ({ onClick }: any) => {
   return (
-    <div className="ButtonShuffle">
+    <div className="ButtonShuffle" onClick={onClick}>
       <img src="/res/shuffle.svg" alt="Shuffle" />
     </div>
   );
 };
 
-export const ButtonRepeat = () => {
+export const ButtonRepeat: React.FC<any> = ({ onClick }: any) => {
   return (
-    <div className="ButtonRepeat">
+    <div className="ButtonRepeat" onClick={onClick}>
       <img src="/res/repeat.svg" alt="Repeat" />
     </div>
   );

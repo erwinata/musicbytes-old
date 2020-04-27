@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SongListItem.scss";
 import { Song } from "types/Song";
 import { useHistory } from "react-router";
@@ -7,43 +7,49 @@ import { ThunkDispatch } from "redux-thunk";
 import { AllActions } from "redux/types/app";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { playSong, addToNowPlaying } from "redux/actions/player";
+import { playSong, addToNowPlaying, removeSong } from "redux/actions/player";
 import Tooltip from "components/Tooltip/Tooltip";
 import { ButtonLike, ButtonOption } from "components/Buttons/Buttons";
 
-type Props = PassingProps & DispatchProps;
+type Props = PassingProps & StateProps & DispatchProps;
 
 interface PassingProps {
   song: Song;
+  resetPlaylist: boolean;
+}
+interface StateProps {
+  songPlaying: Song | null;
 }
 interface DispatchProps {
-  startPlaySong: (song: Song) => any;
+  playSong: (song: Song, resetPlaylist: boolean) => any;
   addToNowPlaying: (song: Song) => any;
+  removeSong: (song: Song) => any;
 }
 
 export interface StateSongListItem {
   tooltipShown: boolean;
   song: Song;
+  active: boolean;
 }
 
 const SongListItem: React.FC<Props> = ({
   song,
-  startPlaySong,
+  resetPlaylist,
+  songPlaying,
+  playSong,
   addToNowPlaying,
+  removeSong,
 }) => {
-  const clickSongListItem = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    startPlaySong(song);
+  const clickSongListItem = () => {
+    playSong(song, resetPlaylist);
   };
 
-  const clickButtonOption = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    setState({
-      ...state,
-      tooltipShown: true,
-    });
+  const clickButtonOption = () => {
+    // setState({
+    //   ...state,
+    //   tooltipShown: true,
+    // });
+    removeSong(song);
   };
 
   const dismissTooltip = () => {
@@ -65,10 +71,27 @@ const SongListItem: React.FC<Props> = ({
   const [state, setState] = useState<StateSongListItem>({
     tooltipShown: false,
     song: song,
+    active: false,
   });
 
+  useEffect(() => {
+    if (songPlaying !== null) {
+      setState({
+        ...state,
+        active: songPlaying.id == state.song.id,
+      });
+    } else {
+      setState({
+        ...state,
+        active: false,
+      });
+    }
+  }, [songPlaying]);
+
+  const classActive = state.active ? "active" : "";
+
   return (
-    <div className="SongListItem">
+    <div className={`SongListItem ${classActive}`}>
       {state.tooltipShown ? (
         <Tooltip
           dismissTooltip={dismissTooltip}
@@ -93,12 +116,19 @@ const SongListItem: React.FC<Props> = ({
   );
 };
 
+const mapStateToProps = (state: AppState) => {
+  return {
+    songPlaying: state.player.songPlaying,
+  };
+};
+
 const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AllActions>
   // ownProps: DiscoverProps
 ) => ({
-  startPlaySong: bindActionCreators(playSong, dispatch),
+  playSong: bindActionCreators(playSong, dispatch),
   addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch),
+  removeSong: bindActionCreators(removeSong, dispatch),
 });
 
-export default connect(null, mapDispatchToProps)(SongListItem);
+export default connect(mapStateToProps, mapDispatchToProps)(SongListItem);

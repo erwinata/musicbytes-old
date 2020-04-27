@@ -10,7 +10,7 @@ export interface IDiscoverState {
 const discoverReducerDefaultState: IDiscoverState = {
   songs: [],
   loading: true,
-  query: "take on me aha",
+  query: "michael jackson",
 };
 
 export const discoverReducer = (

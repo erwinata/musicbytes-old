@@ -14,7 +14,7 @@ export const searchSong = (query: string) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     console.log("ACT" + query);
 
-    var total = 2;
+    var total = 4;
     var songs = await SearchSong(query, total);
 
     dispatch(actionSearchSong(query, songs));

@@ -14,22 +14,24 @@ export const SearchSong = (query: string, total: number): Promise<Song[]> => {
       .searchAll(query, total, {
         type: "video",
         videoCategoryId: 10,
-        part: "snippet"
+        part: "snippet",
       })
       .then((data: any) => {
         data.items.map((video: any) => {
           var snippet: any = video.snippet;
 
           var item: Song = {
+            index: -1,
+            playOrder: -1,
             id: video.id.videoId,
             title: decodeText(snippet.title),
             channel: decodeText(snippet.channelTitle),
             thumbnails: {
               default: snippet.thumbnails.default.url,
               medium: snippet.thumbnails.medium.url,
-              high: snippet.thumbnails.high.url
+              high: snippet.thumbnails.high.url,
             },
-            duration: 0
+            duration: 0,
           };
           result.push(item);
         });

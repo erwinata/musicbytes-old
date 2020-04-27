@@ -18,12 +18,12 @@ const PlayerPlaylist: React.FC<Props> = ({
   songPlaying,
   songs,
   shuffle,
-  repeat
+  repeat,
 }: Props) => {
   return (
     <div className="PlayerPlaylist">
       <PlayerPlaylistHeader />
-      <SongList songs={songs} />
+      <SongList songs={songs} resetPlaylist={false} />
     </div>
   );
 };
@@ -42,7 +42,7 @@ const mapStateToProps = (state: AppState) => {
     songPlaying: state.player.songPlaying,
     songs: state.player.songs,
     shuffle: state.player.shuffle,
-    repeat: state.player.repeat
+    repeat: state.player.repeat,
   };
 };
 

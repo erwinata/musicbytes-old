@@ -9,9 +9,13 @@ export const actionShowPlayer = (show: boolean): AllActions => ({
   type: "SHOW_PLAYER",
   show,
 });
-export const actionPlaySong = (song: Song): AllActions => ({
+export const actionPlaySong = (
+  song: Song,
+  resetPlaylist: boolean
+): AllActions => ({
   type: "PLAY_SONG",
   song,
+  resetPlaylist,
 });
 export const actionDurationIncrement = (): AllActions => ({
   type: "DURATION_INCREMENT",
@@ -20,6 +24,26 @@ export const actionTogglePlaying = (state?: PlayState): AllActions => ({
   type: "TOGGLE_PLAYING",
   state,
 });
+
+export const actionNextSong = (): AllActions => ({
+  type: "NEXT_SONG",
+});
+export const actionPrevSong = (): AllActions => ({
+  type: "PREV_SONG",
+});
+
+export const actionRemoveSong = (song: Song): AllActions => ({
+  type: "REMOVE_SONG",
+  song,
+});
+
+export const actionToggleShuffle = (): AllActions => ({
+  type: "TOGGLE_SHUFFLE",
+});
+export const actionToggleRepeat = (): AllActions => ({
+  type: "TOGGLE_REPEAT",
+});
+
 export const actionSeekTo = (to: number): AllActions => ({
   type: "SEEK_TO",
   to,
@@ -38,12 +62,12 @@ export const showPlayer = (show: boolean) => {
   };
 };
 
-export const playSong = (song: Song) => {
+export const playSong = (song: Song, resetPlaylist: boolean) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     console.log(song);
     song = await SongDetail(song);
 
-    dispatch(actionPlaySong(song));
+    dispatch(actionPlaySong(song, resetPlaylist));
     dispatch(actionShowPlayer(true));
   };
 };
@@ -66,6 +90,36 @@ export const durationIncrement = () => {
 export const togglePlaying = (state?: PlayState) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionTogglePlaying(state));
+  };
+};
+
+export const nextSong = () => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionNextSong());
+  };
+};
+
+export const prevSong = () => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionPrevSong());
+  };
+};
+
+export const removeSong = (song: Song) => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionRemoveSong(song));
+  };
+};
+
+export const toggleShuffle = () => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionToggleShuffle());
+  };
+};
+
+export const toggleRepeat = () => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionToggleRepeat());
   };
 };
 

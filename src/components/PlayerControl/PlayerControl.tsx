@@ -17,7 +17,14 @@ import { Repeat } from "types/Repeat";
 import { ThunkDispatch } from "redux-thunk";
 import { AllActions } from "redux/types/app";
 import { bindActionCreators } from "redux";
-import { togglePlaying, seekTo } from "redux/actions/player";
+import {
+  togglePlaying,
+  seekTo,
+  nextSong,
+  prevSong,
+  toggleShuffle,
+  toggleRepeat,
+} from "redux/actions/player";
 import { PlayState } from "types/PlayState";
 
 type Props = StateProps & DispatchProps;
@@ -32,6 +39,10 @@ interface StateProps {
 interface DispatchProps {
   togglePlaying: () => any;
   seekTo: (to: number) => any;
+  nextSong: () => any;
+  prevSong: () => any;
+  toggleShuffle: () => any;
+  toggleRepeat: () => any;
 }
 
 const PlayerControl: React.FC<Props> = ({
@@ -42,13 +53,24 @@ const PlayerControl: React.FC<Props> = ({
   timeCurrent,
   timeTotal,
   togglePlaying,
+  nextSong,
+  prevSong,
+  toggleShuffle,
+  toggleRepeat,
   seekTo,
 }: Props) => {
   return (
     <div className="PlayerControl">
       <PlayerTopButtonList />
       <PlayerTitle songPlaying={songPlaying} />
-      <PlayerButtonList playState={playState} togglePlaying={togglePlaying} />
+      <PlayerButtonList
+        playState={playState}
+        togglePlaying={togglePlaying}
+        nextSong={nextSong}
+        prevSong={prevSong}
+        toggleShuffle={toggleShuffle}
+        toggleRepeat={toggleRepeat}
+      />
       <PlayerProgress
         timeCurrent={timeCurrent}
         timeTotal={timeTotal}
@@ -84,23 +106,62 @@ const PlayerTopButtonList = () => {
 interface PlayerButtonListProps {
   playState: PlayState;
   togglePlaying: () => any;
+  nextSong: () => any;
+  prevSong: () => any;
+  toggleShuffle: () => any;
+  toggleRepeat: () => any;
 }
 const PlayerButtonList: React.FC<PlayerButtonListProps> = ({
   playState: PlayState,
   togglePlaying,
+  nextSong,
+  prevSong,
+  toggleShuffle,
+  toggleRepeat,
 }) => {
-  const handleClickPlay = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleClickPlay = () => {
     togglePlaying();
-    console.log("asdaad");
+  };
+
+  const handleClickNext = () => {
+    nextSong();
+  };
+
+  const handleClickPrev = () => {
+    prevSong();
+  };
+
+  const handleClickShuffle = () => {
+    toggleShuffle();
   };
 
   return (
     <div className="PlayerButtonList">
-      <ButtonShuffle />
-      <ButtonPrev />
-      <ButtonPlay onClick={handleClickPlay} />
-      <ButtonNext />
-      <ButtonRepeat />
+      <ButtonShuffle
+        onClick={() => {
+          handleClickShuffle();
+        }}
+      />
+      <ButtonPrev
+        onClick={() => {
+          handleClickPrev();
+        }}
+      />
+      <ButtonPlay
+        onClick={() => {
+          handleClickPlay();
+        }}
+      />
+      <ButtonNext
+        onClick={() => {
+          handleClickNext();
+        }}
+      />
+      <ButtonRepeat
+        onClick={() => {
+          toggleRepeat();
+        }}
+      />
     </div>
   );
 };
@@ -120,6 +181,10 @@ const mapDispatchToProps = (
   // ownProps: DiscoverProps
 ) => ({
   togglePlaying: bindActionCreators(togglePlaying, dispatch),
+  nextSong: bindActionCreators(nextSong, dispatch),
+  prevSong: bindActionCreators(prevSong, dispatch),
+  toggleShuffle: bindActionCreators(toggleShuffle, dispatch),
+  toggleRepeat: bindActionCreators(toggleRepeat, dispatch),
   seekTo: bindActionCreators(seekTo, dispatch),
 });
 

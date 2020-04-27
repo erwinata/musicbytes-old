@@ -1,4 +1,6 @@
 export interface Song {
+  index: number;
+  playOrder: number;
   id: string;
   title: string;
   channel: string;
