@@ -70,6 +70,8 @@ const PlayerControl: React.FC<Props> = ({
         prevSong={prevSong}
         toggleShuffle={toggleShuffle}
         toggleRepeat={toggleRepeat}
+        shuffle={shuffle}
+        repeat={repeat}
       />
       <PlayerProgress
         timeCurrent={timeCurrent}
@@ -105,6 +107,8 @@ const PlayerTopButtonList = () => {
 
 interface PlayerButtonListProps {
   playState: PlayState;
+  repeat: Repeat;
+  shuffle: boolean;
   togglePlaying: () => any;
   nextSong: () => any;
   prevSong: () => any;
@@ -112,7 +116,9 @@ interface PlayerButtonListProps {
   toggleRepeat: () => any;
 }
 const PlayerButtonList: React.FC<PlayerButtonListProps> = ({
-  playState: PlayState,
+  playState,
+  repeat,
+  shuffle,
   togglePlaying,
   nextSong,
   prevSong,
@@ -141,6 +147,7 @@ const PlayerButtonList: React.FC<PlayerButtonListProps> = ({
         onClick={() => {
           handleClickShuffle();
         }}
+        shuffle={shuffle}
       />
       <ButtonPrev
         onClick={() => {
@@ -151,6 +158,7 @@ const PlayerButtonList: React.FC<PlayerButtonListProps> = ({
         onClick={() => {
           handleClickPlay();
         }}
+        playState={playState}
       />
       <ButtonNext
         onClick={() => {
@@ -161,6 +169,7 @@ const PlayerButtonList: React.FC<PlayerButtonListProps> = ({
         onClick={() => {
           toggleRepeat();
         }}
+        repeat={repeat}
       />
     </div>
   );

@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import "./Buttons.scss";
+import { useSpring, animated, config } from "react-spring";
+import { Repeat } from "types/Repeat";
+import { PlayState } from "types/PlayState";
 
 export const ButtonVideo = () => {
   return (
@@ -23,41 +26,200 @@ export const ButtonOption: React.FC<any> = ({ onClick }: any) => {
   );
 };
 
-export const ButtonPlay: React.FC<any> = ({ onClick }: any) => {
+export const ButtonPlay: React.FC<{ onClick: any; playState: PlayState }> = ({
+  onClick,
+  playState,
+}) => {
+  const [resetAnimation, setResetAnimation] = useState(false);
+
+  const animation = useSpring({
+    to: {
+      opacity: 1,
+      transform: "scale(1, 1)",
+    },
+    from: {
+      opacity: 0.85,
+      transform: "scale(1.25,1.25)",
+    },
+    reset: resetAnimation,
+    config: config.stiff,
+  });
+
+  useLayoutEffect(() => {
+    setResetAnimation(true);
+    setTimeout(() => {
+      setResetAnimation(false);
+    }, 10);
+  }, [playState]);
+
   return (
-    <div className="ButtonPlay" onClick={onClick}>
-      <img src="/res/play.svg" alt="Play" />
-    </div>
+    <animated.div
+      className="ButtonPlay"
+      onClick={() => {
+        onClick();
+      }}
+      style={animation}
+    >
+      {playState == PlayState.PLAYING ||
+      playState == PlayState.BUFFERING ||
+      playState == PlayState.CUED ? (
+        <img src="/res/pause.svg" alt="Pause" />
+      ) : (
+        <img src="/res/play.svg" alt="Play" />
+      )}
+    </animated.div>
   );
 };
 export const ButtonPrev: React.FC<any> = ({ onClick }: any) => {
+  const [resetAnimation, setResetAnimation] = useState(false);
+
+  const animation = useSpring({
+    to: {
+      opacity: 1,
+      transform: "scale(1, 1)",
+    },
+    from: {
+      opacity: 0.5,
+      transform: "scale(1.75,1.75)",
+    },
+    reset: resetAnimation,
+    config: config.stiff,
+  });
+
   return (
-    <div className="ButtonPrev" onClick={onClick}>
+    <animated.div
+      className="ButtonPrev"
+      onClick={() => {
+        onClick();
+        setResetAnimation(true);
+        setTimeout(() => {
+          setResetAnimation(false);
+        }, 10);
+      }}
+      style={animation}
+    >
       <img src="/res/prev.svg" alt="Prev" />
-    </div>
+    </animated.div>
   );
 };
 export const ButtonNext: React.FC<any> = ({ onClick }: any) => {
+  const [resetAnimation, setResetAnimation] = useState(false);
+
+  const animation = useSpring({
+    to: {
+      opacity: 1,
+      transform: "scale(1, 1)",
+    },
+    from: {
+      opacity: 0.5,
+      transform: "scale(1.75,1.75)",
+    },
+    reset: resetAnimation,
+    config: config.stiff,
+  });
+
   return (
-    <div className="ButtonNext" onClick={onClick}>
+    <animated.div
+      className="ButtonNext"
+      onClick={() => {
+        onClick();
+        setResetAnimation(true);
+        setTimeout(() => {
+          setResetAnimation(false);
+        }, 10);
+      }}
+      style={animation}
+    >
       <img src="/res/next.svg" alt="Next" />
-    </div>
+    </animated.div>
   );
 };
 
-export const ButtonShuffle: React.FC<any> = ({ onClick }: any) => {
+export const ButtonShuffle: React.FC<{ onClick: any; shuffle: boolean }> = ({
+  onClick,
+  shuffle,
+}) => {
+  const [resetAnimation, setResetAnimation] = useState(false);
+
+  const animation = useSpring({
+    to: {
+      opacity: 1,
+      transform: "scale(1, 1)",
+    },
+    from: {
+      opacity: 0.5,
+      transform: "scale(2,2)",
+    },
+    reset: resetAnimation,
+    config: config.stiff,
+  });
+
+  useLayoutEffect(() => {
+    setResetAnimation(true);
+    setTimeout(() => {
+      setResetAnimation(false);
+    }, 10);
+  }, [shuffle]);
+
   return (
-    <div className="ButtonShuffle" onClick={onClick}>
-      <img src="/res/shuffle.svg" alt="Shuffle" />
-    </div>
+    <animated.div
+      className="ButtonShuffle"
+      onClick={() => {
+        onClick();
+      }}
+      style={animation}
+    >
+      {shuffle ? (
+        <img src="/res/shuffle-active.svg" alt="Shuffle" />
+      ) : (
+        <img src="/res/shuffle.svg" alt="Shuffle" />
+      )}
+    </animated.div>
   );
 };
 
-export const ButtonRepeat: React.FC<any> = ({ onClick }: any) => {
+export const ButtonRepeat: React.FC<{ onClick: any; repeat: Repeat }> = ({
+  onClick,
+  repeat,
+}) => {
+  const [resetAnimation, setResetAnimation] = useState(false);
+
+  const animation = useSpring({
+    to: {
+      opacity: 1,
+      transform: "scale(1, 1)",
+    },
+    from: {
+      opacity: 0.5,
+      transform: "scale(1.75,1.75)",
+    },
+    reset: resetAnimation,
+    config: config.stiff,
+  });
+
+  useLayoutEffect(() => {
+    setResetAnimation(true);
+    setTimeout(() => {
+      setResetAnimation(false);
+    }, 10);
+  }, [repeat]);
+
   return (
-    <div className="ButtonRepeat" onClick={onClick}>
-      <img src="/res/repeat.svg" alt="Repeat" />
-    </div>
+    <animated.div
+      className="ButtonShuffle"
+      onClick={() => {
+        onClick();
+      }}
+      style={animation}
+    >
+      {repeat == Repeat.REPEAT_ONE ? (
+        <img src="/res/repeat-one.svg" alt="Shuffle" />
+      ) : repeat == Repeat.REPEAT_ALL ? (
+        <img src="/res/repeat-all.svg" alt="Shuffle" />
+      ) : (
+        <img src="/res/repeat.svg" alt="Shuffle" />
+      )}
+    </animated.div>
   );
 };
 
