@@ -8,6 +8,7 @@ import {
   arrayRemoveObjectAtIndex,
 } from "helpers/array";
 import { shuffle, orderBy, indexOf, findIndex } from "lodash";
+import { seekTo } from "redux/actions/player";
 
 export interface PlayerState {
   showPlayer: boolean;
@@ -73,6 +74,45 @@ const samplePlaylist: Song[] = [
       high: "https://i.ytimg.com/vi/F2AitTPI5U0/hqdefault.jpg",
     },
     duration: 383,
+  },
+  {
+    index: 4,
+    playOrder: -1,
+    id: "je9okpHFZp0",
+    title: "HIVI! - Bumi dan Bulan (Official Music Video)",
+    channel: "HIVI!",
+    thumbnails: {
+      default: "https://i.ytimg.com/vi/je9okpHFZp0/default.jpg",
+      medium: "https://i.ytimg.com/vi/je9okpHFZp0/mqdefault.jpg",
+      high: "https://i.ytimg.com/vi/je9okpHFZp0/hqdefault.jpg",
+    },
+    duration: 0,
+  },
+  {
+    index: 5,
+    playOrder: -1,
+    id: "kX1O93X77d4",
+    title: "HIVI! - Siapkah Kau 'Tuk Jatuh Cinta Lagi (Official Lyric Video)",
+    channel: "HIVI!",
+    thumbnails: {
+      default: "https://i.ytimg.com/vi/kX1O93X77d4/default.jpg",
+      medium: "https://i.ytimg.com/vi/kX1O93X77d4/mqdefault.jpg",
+      high: "https://i.ytimg.com/vi/kX1O93X77d4/hqdefault.jpg",
+    },
+    duration: 0,
+  },
+  {
+    index: 6,
+    playOrder: -1,
+    id: "tUJAxxm1y1I",
+    title: "HIVI! - Remaja (Official Lyric Video)",
+    channel: "HIVI!",
+    thumbnails: {
+      default: "https://i.ytimg.com/vi/tUJAxxm1y1I/default.jpg",
+      medium: "https://i.ytimg.com/vi/tUJAxxm1y1I/mqdefault.jpg",
+      high: "https://i.ytimg.com/vi/tUJAxxm1y1I/hqdefault.jpg",
+    },
+    duration: 0,
   },
 ];
 const sampleSongPlaying: Song = {
@@ -140,6 +180,35 @@ export const playerReducer = (
       return {
         ...state,
         playState: newPlayState,
+      };
+
+    case "AUTO_NEXT_SONG":
+      var index = -1;
+      var seeking = false;
+      switch (state.repeat) {
+        case Repeat.NO_REPEAT:
+          index =
+            findIndex(state.songs, (el) => el.id == state.songPlaying!.id) + 1;
+          break;
+        case Repeat.REPEAT_ALL:
+          index =
+            findIndex(state.songs, (el) => el.id == state.songPlaying!.id) + 1;
+          break;
+        case Repeat.REPEAT_ONE:
+          index = findIndex(
+            state.songs,
+            (el) => el.id == state.songPlaying!.id
+          );
+          seeking = true;
+          break;
+      }
+
+      return {
+        ...state,
+        songPlaying: state.songs[index],
+        timeCurrent: 0,
+        timeTotal: state.songs[index].duration,
+        seeking: seeking,
       };
 
     case "NEXT_SONG":

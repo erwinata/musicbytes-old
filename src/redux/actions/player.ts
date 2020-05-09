@@ -25,6 +25,9 @@ export const actionTogglePlaying = (state?: PlayState): AllActions => ({
   state,
 });
 
+export const actionAutoNextSong = (): AllActions => ({
+  type: "AUTO_NEXT_SONG",
+});
 export const actionNextSong = (): AllActions => ({
   type: "NEXT_SONG",
 });
@@ -90,6 +93,12 @@ export const durationIncrement = () => {
 export const togglePlaying = (state?: PlayState) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionTogglePlaying(state));
+  };
+};
+
+export const autoNextSong = () => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionAutoNextSong());
   };
 };
 

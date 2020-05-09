@@ -3,26 +3,6 @@ import "./Popup.scss";
 import { PlaylistList } from "components/PlaylistList/PlaylistList";
 import { PlaylistNaming } from "components/PlaylistNaming/PlaylistNaming";
 
-// interface TooltipDataType {
-//   index: number;
-//   label: string;
-// }
-
-// const tooltipList: TooltipDataType[] = [
-//   {
-//     index: 1,
-//     label: "Add to Now Playing"
-//   },
-//   {
-//     index: 2,
-//     label: "Add to Playlist"
-//   },
-//   {
-//     index: 3,
-//     label: "Like Songs"
-//   }
-// ];
-
 export const Popup = () => {
   return (
     <div className="Popup">

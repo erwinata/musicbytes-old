@@ -9,9 +9,11 @@ import { Song } from "types/Song";
 import { useDispatch, useSelector, connect } from "react-redux";
 import { AppState } from "redux/store/configureStore";
 import { ThunkDispatch } from "redux-thunk";
-import { AllActions } from "redux/types/app";
+import { AllActions, AppActionTypes } from "redux/types/app";
 import { searchSong } from "redux/actions/discover";
 import { bindActionCreators } from "redux";
+import { OptionItemData } from "types/Option";
+import { addToNowPlaying } from "redux/actions/player";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -21,18 +23,48 @@ interface StateProps {
   songs: Song[];
 }
 interface DispatchProps {
-  // startSearchSong: (query: string) => any;
+  addToNowPlaying: (song: Song) => any;
 }
 
 interface DiscoverState {}
 
-export const Discover: React.FC<Props> = ({ query, songs }: Props) => {
+export const Discover: React.FC<Props> = ({
+  query,
+  songs,
+  addToNowPlaying,
+}: Props) => {
+  const optionList: OptionItemData[] = [
+    {
+      index: 0,
+      label: "Add to Now Playing",
+      action: (item: Song) => {
+        console.log("plaaaaa");
+        console.log(item);
+        addToNowPlaying(item);
+      },
+    },
+    {
+      index: 1,
+      label: "Add to Playlist",
+      action: () => {
+        console.log("add playlist");
+      },
+    },
+    {
+      index: 2,
+      label: "Like Songs",
+      action: () => {
+        console.log("like songs");
+      },
+    },
+  ];
+
   return (
     <div className="Discover">
       <Header />
 
       <SearchBar />
-      <SongList songs={songs} resetPlaylist={true} />
+      <SongList songs={songs} optionList={optionList} resetPlaylist={true} />
     </div>
   );
 };
@@ -44,11 +76,10 @@ const mapStateToProps = (state: AppState) => {
   };
 };
 
-// const mapDispatchToProps = (
-//   dispatch: ThunkDispatch<any, any, AppActions>,
-//   ownProps: DiscoverProps
-// ) => ({
-//   startSearchSong: bindActionCreators(startSearchSong, dispatch)
-// });
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<any, any, AppActionTypes>
+) => ({
+  addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch),
+});
 
-export default connect(mapStateToProps)(Discover);
+export default connect(mapStateToProps, mapDispatchToProps)(Discover);

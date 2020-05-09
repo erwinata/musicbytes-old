@@ -7,7 +7,7 @@ import { bindActionCreators } from "redux";
 import { AppState } from "redux/store/configureStore";
 import { Song } from "types/Song";
 import { AllActions } from "redux/types/app";
-import { togglePlaying, seekDone } from "redux/actions/player";
+import { togglePlaying, seekDone, autoNextSong } from "redux/actions/player";
 import { PlayState } from "types/PlayState";
 
 type Props = StateProps & DispatchProps;
@@ -19,6 +19,7 @@ interface StateProps {
   timeCurrent: number;
 }
 interface DispatchProps {
+  autoNextSong: () => any;
   togglePlaying: (state?: PlayState) => any;
   seekDone: () => any;
 }
@@ -34,6 +35,7 @@ const PlayerThumbnail: React.FC<Props> = ({
   timeCurrent,
   togglePlaying,
   seekDone,
+  autoNextSong,
 }: Props) => {
   const [state, setState] = useState<IPlayerThumbnail>({
     youtubePlayer: null,
@@ -65,6 +67,9 @@ const PlayerThumbnail: React.FC<Props> = ({
   const handleOnStateChange = (event: any) => {
     console.log(event);
     switch (event.data) {
+      case 0:
+        autoNextSong();
+        break;
       case 1:
         togglePlaying(PlayState.PLAYING);
         break;
@@ -119,6 +124,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AllActions>
   // ownProps: DiscoverProps
 ) => ({
+  autoNextSong: bindActionCreators(autoNextSong, dispatch),
   togglePlaying: bindActionCreators(togglePlaying, dispatch),
   seekDone: bindActionCreators(seekDone, dispatch),
 });

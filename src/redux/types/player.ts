@@ -5,6 +5,8 @@ export const SHOW_PLAYER = "SHOW_PLAYER";
 
 export const PLAY_SONG = "PLAY_SONG";
 export const TOGGLE_PLAYING = "TOGGLE_PLAYING";
+
+export const AUTO_NEXT_SONG = "AUTO_NEXT_SONG";
 export const NEXT_SONG = "NEXT_SONG";
 export const PREV_SONG = "PREV_SONG";
 
@@ -31,6 +33,9 @@ export interface PlaySongAction {
 export interface TogglePlayingAction {
   type: typeof TOGGLE_PLAYING;
   state?: PlayState;
+}
+export interface AutoNextSongAction {
+  type: typeof AUTO_NEXT_SONG;
 }
 export interface NextSongAction {
   type: typeof NEXT_SONG;
@@ -72,6 +77,7 @@ export type PlayerActionTypes =
   | ShowPlayerAction
   | PlaySongAction
   | TogglePlayingAction
+  | AutoNextSongAction
   | NextSongAction
   | PrevSongAction
   | RemoveSongAction

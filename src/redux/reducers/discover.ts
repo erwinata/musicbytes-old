@@ -7,8 +7,25 @@ export interface IDiscoverState {
   query: string;
 }
 
+const sampleSearchSong = [
+  {
+    index: -1,
+    playOrder: -1,
+    id: "iSyxz2RVddA",
+    title: "HIVI! - Tersenyum, Untuk Siapa? (Official Lyric Video)",
+    channel: "HIVI!",
+    thumbnails: {
+      default: "https://i.ytimg.com/vi/iSyxz2RVddA/default.jpg",
+      medium: "https://i.ytimg.com/vi/iSyxz2RVddA/mqdefault.jpg",
+      high: "https://i.ytimg.com/vi/iSyxz2RVddA/hqdefault.jpg",
+    },
+    duration: 0,
+  },
+];
+
 const discoverReducerDefaultState: IDiscoverState = {
-  songs: [],
+  // songs: [],
+  songs: sampleSearchSong,
   loading: true,
   query: "michael jackson",
 };

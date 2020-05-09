@@ -8,14 +8,17 @@ import { AllActions } from "redux/types/app";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { playSong, addToNowPlaying, removeSong } from "redux/actions/player";
-import Tooltip from "components/Tooltip/Tooltip";
+import Option from "components/Option/Option";
 import { ButtonLike, ButtonOption } from "components/Buttons/Buttons";
+import { OptionItemData } from "types/Option";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
 interface PassingProps {
+  index: number;
   song: Song;
   resetPlaylist: boolean;
+  setOptionState: any;
 }
 interface StateProps {
   songPlaying: Song | null;
@@ -27,14 +30,15 @@ interface DispatchProps {
 }
 
 export interface StateSongListItem {
-  tooltipShown: boolean;
   song: Song;
   active: boolean;
 }
 
 const SongListItem: React.FC<Props> = ({
+  index,
   song,
   resetPlaylist,
+  setOptionState,
   songPlaying,
   playSong,
   addToNowPlaying,
@@ -45,31 +49,13 @@ const SongListItem: React.FC<Props> = ({
   };
 
   const clickButtonOption = () => {
-    // setState({
-    //   ...state,
-    //   tooltipShown: true,
-    // });
-    removeSong(song);
-  };
-
-  const dismissTooltip = () => {
-    setState({
-      ...state,
-      tooltipShown: false,
+    setOptionState({
+      index: index,
     });
-  };
-
-  const clickTooltipItem = (index: number) => {
-    switch (index) {
-      case 1:
-        console.log("CLIKTULTIP");
-        addToNowPlaying(state.song);
-        break;
-    }
+    // removeSong(song);
   };
 
   const [state, setState] = useState<StateSongListItem>({
-    tooltipShown: false,
     song: song,
     active: false,
   });
@@ -92,15 +78,6 @@ const SongListItem: React.FC<Props> = ({
 
   return (
     <div className={`SongListItem ${classActive}`}>
-      {state.tooltipShown ? (
-        <Tooltip
-          dismissTooltip={dismissTooltip}
-          clickTooltipItem={clickTooltipItem}
-        />
-      ) : (
-        ""
-      )}
-
       <div className="song" onClick={clickSongListItem}>
         <img src={song.thumbnails?.default} alt="Thumbnail Image" />
         <div className="info">
