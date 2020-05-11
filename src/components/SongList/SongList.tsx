@@ -2,36 +2,31 @@ import React, { useState } from "react";
 import "./SongList.scss";
 import SongListItem from "./SongListItem";
 import { Song } from "types/Song";
-import {
-  useTransition,
-  animated,
-  SpringValue,
-  config,
-  useSpring,
-} from "react-spring";
+import { useTransition, animated, config, useSpring } from "react-spring";
 import { OptionItemData } from "types/Option";
 import Option from "components/Option/Option";
+import { AppState } from "redux/store/configureStore";
+import { connect } from "react-redux";
+import { findIndex } from "lodash";
 
-interface Props {
+type Props = PassingProps & StateProps;
+
+interface PassingProps {
   songs: Song[];
   resetPlaylist: boolean;
   optionList: OptionItemData[];
 }
+interface StateProps {
+  collection: Song[];
+}
 
-export const SongList: React.FC<Props> = ({
+const SongList: React.FC<Props> = ({
   songs,
   optionList,
   resetPlaylist,
+  collection,
 }: Props) => {
-  // const transitions = useTransition(songs, (item) => item.order, {
-  //   initial: { transform: "translate3d(0%, 0%,0)" },
-  //   from: { transform: "translate3d(0%,-100%,0)" },
-  //   enter: { transform: "translate3d(0%, 0%,0)" },
-  //   leave: { transform: "translate3d(100%,0%,0)" },
-  // });
-
   const height = 50;
-  // const position: SpringValue<PositionProperty> = "absolute";
 
   const transitions = useTransition(
     songs.map((data, i) => ({ ...data, y: i * height, x: 0 })),
@@ -53,15 +48,6 @@ export const SongList: React.FC<Props> = ({
     index: -1,
   });
 
-  const optionStyle = useSpring({
-    to: {
-      opacity: optionState.index == -1 ? 0 : 1,
-      height: optionState.index == -1 ? 0 : "auto",
-      top: optionState.index == -1 ? 0 : optionState.index * 50,
-    },
-    config: config.stiff,
-  });
-
   const dismissOption = () => {
     setOptionState({
       index: -1,
@@ -79,25 +65,38 @@ export const SongList: React.FC<Props> = ({
         dismissOption={dismissOption}
         clickOptionItem={clickOptionItem}
         optionList={optionList}
-        style={optionStyle}
+        optionState={optionState}
       />
-      {transitions.map(({ item, props: { y, ...rest }, key }, index) => (
-        <animated.div
-          key={key}
-          style={{
-            ...rest,
-            transform: y.interpolate((y) => `translate3d(0,${y}px,0)`),
-          }}
-        >
-          <SongListItem
-            index={index}
-            song={item}
-            resetPlaylist={resetPlaylist}
-            setOptionState={setOptionState}
-            key={item.id}
-          />
-        </animated.div>
-      ))}
+      {transitions.map(({ item, props: { y, ...rest }, key }, index) => {
+        var like =
+          findIndex(collection, (el) => el.id == item.id) !== -1 ? true : false;
+        return (
+          <animated.div
+            key={key}
+            style={{
+              ...rest,
+              transform: y.interpolate((y) => `translate3d(0,${y}px,0)`),
+            }}
+          >
+            <SongListItem
+              index={index}
+              song={item}
+              resetPlaylist={resetPlaylist}
+              setOptionState={setOptionState}
+              like={like}
+              key={item.id}
+            />
+          </animated.div>
+        );
+      })}
     </div>
   );
 };
+
+const mapStateToProps = (state: AppState) => {
+  return {
+    collection: state.library.collection,
+  };
+};
+
+export default connect(mapStateToProps)(SongList);

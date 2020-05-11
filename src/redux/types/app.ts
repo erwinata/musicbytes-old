@@ -1,6 +1,7 @@
 import { DiscoverActionTypes } from "./discover";
 import { PlayerActionTypes } from "./player";
 import { NavigationTab } from "types/Navigation";
+import { LibraryActionTypes } from "./library";
 
 export const CHANGE_TAB = "CHANGE_TAB";
 
@@ -14,4 +15,5 @@ export type AppActionTypes = ChangeTabAction;
 export type AllActions =
   | AppActionTypes
   | DiscoverActionTypes
-  | PlayerActionTypes;
+  | PlayerActionTypes
+  | LibraryActionTypes;

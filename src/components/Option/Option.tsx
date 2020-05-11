@@ -9,7 +9,7 @@ import { Song } from "types/Song";
 import { addToNowPlaying } from "redux/actions/player";
 import { bindActionCreators } from "redux";
 import { OptionItemData } from "types/Option";
-import { animated } from "react-spring";
+import { animated, useSpring, config } from "react-spring";
 
 type Props = PassingProps & StateProps;
 interface StateProps {
@@ -20,7 +20,7 @@ interface PassingProps {
   dismissOption: () => any;
   clickOptionItem: (index: number) => any;
   optionList: OptionItemData[];
-  style: any;
+  optionState: any;
 }
 
 // interface TooltipDataType {
@@ -47,12 +47,22 @@ const Option: React.FC<Props> = ({
   dismissOption,
   clickOptionItem,
   optionList,
+  optionState,
   songPlaying,
   songs,
-  style,
 }) => {
+  const optionStyle = useSpring({
+    to: {
+      opacity: optionState.index == -1 ? 0 : 1,
+      height: optionState.index == -1 ? 0 : "auto",
+      top: optionState.index == -1 ? 0 : optionState.index * 50,
+      width: optionState.index == -1 ? 0 : "auto",
+    },
+    config: config.stiff,
+  });
+
   return (
-    <animated.div className="Tooltip" style={style}>
+    <animated.div className="Option" style={optionStyle}>
       {optionList.map((optionItem) => {
         if (optionItem.index == 1 && songs.length == 0) {
           return null;
@@ -85,7 +95,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
 }) => {
   return (
     <div
-      className="TooltipItem"
+      className="OptionItem"
       onClick={() => {
         clickOptionItem(index);
         dismissOption();

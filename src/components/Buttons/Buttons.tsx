@@ -11,10 +11,22 @@ export const ButtonVideo = () => {
     </div>
   );
 };
-export const ButtonLike = () => {
+export const ButtonLike: React.FC<{ like: boolean; onClick: any }> = ({
+  like,
+  onClick,
+}) => {
   return (
-    <div className="ButtonLike">
-      <img src="/res/like.svg" alt="Like" />
+    <div
+      className="ButtonLike"
+      onClick={() => {
+        onClick();
+      }}
+    >
+      {like ? (
+        <img src="/res/like-active.svg" alt="Like" />
+      ) : (
+        <img src="/res/like.svg" alt="Like" />
+      )}
     </div>
   );
 };

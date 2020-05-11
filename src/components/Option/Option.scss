@@ -1,6 +1,7 @@
 @import "_base.scss";
 
-.Tooltip {
+.Option {
+  overflow: hidden;
   position: absolute;
   z-index: 50;
   right: 1.25rem;
@@ -13,7 +14,7 @@
   display: grid;
   grid-template-rows: 1fr;
 
-  .TooltipItem {
+  .OptionItem {
     font-size: 0.8rem;
     padding: 0.5rem 1rem;
 

@@ -100,7 +100,7 @@ const PlayerTopButtonList = () => {
   return (
     <div className="PlayerTopButtonList">
       <ButtonVideo />
-      <ButtonLike />
+      {/* <ButtonLike like={true} /> */}
     </div>
   );
 };

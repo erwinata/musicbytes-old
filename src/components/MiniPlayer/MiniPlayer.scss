@@ -4,6 +4,7 @@
   @extend .centerHorizontal;
 
   position: fixed;
+  z-index: 50;
   width: 95%;
   max-width: 512px;
   height: 10vh;

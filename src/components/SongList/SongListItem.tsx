@@ -11,6 +11,7 @@ import { playSong, addToNowPlaying, removeSong } from "redux/actions/player";
 import Option from "components/Option/Option";
 import { ButtonLike, ButtonOption } from "components/Buttons/Buttons";
 import { OptionItemData } from "types/Option";
+import { likeSong } from "redux/actions/library";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -19,6 +20,7 @@ interface PassingProps {
   song: Song;
   resetPlaylist: boolean;
   setOptionState: any;
+  like: boolean;
 }
 interface StateProps {
   songPlaying: Song | null;
@@ -27,6 +29,7 @@ interface DispatchProps {
   playSong: (song: Song, resetPlaylist: boolean) => any;
   addToNowPlaying: (song: Song) => any;
   removeSong: (song: Song) => any;
+  likeSong: (song: Song, like: boolean) => any;
 }
 
 export interface StateSongListItem {
@@ -39,13 +42,19 @@ const SongListItem: React.FC<Props> = ({
   song,
   resetPlaylist,
   setOptionState,
+  like,
   songPlaying,
   playSong,
   addToNowPlaying,
   removeSong,
+  likeSong,
 }) => {
   const clickSongListItem = () => {
     playSong(song, resetPlaylist);
+  };
+
+  const clickButtonLike = () => {
+    likeSong(song, !like);
   };
 
   const clickButtonOption = () => {
@@ -76,6 +85,8 @@ const SongListItem: React.FC<Props> = ({
 
   const classActive = state.active ? "active" : "";
 
+  console.log(like);
+
   return (
     <div className={`SongListItem ${classActive}`}>
       <div className="song" onClick={clickSongListItem}>
@@ -86,7 +97,7 @@ const SongListItem: React.FC<Props> = ({
         </div>
       </div>
       <div className="option">
-        <ButtonLike />
+        <ButtonLike like={like} onClick={clickButtonLike} />
         <ButtonOption onClick={clickButtonOption} />
       </div>
     </div>
@@ -106,6 +117,7 @@ const mapDispatchToProps = (
   playSong: bindActionCreators(playSong, dispatch),
   addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch),
   removeSong: bindActionCreators(removeSong, dispatch),
+  likeSong: bindActionCreators(likeSong, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SongListItem);

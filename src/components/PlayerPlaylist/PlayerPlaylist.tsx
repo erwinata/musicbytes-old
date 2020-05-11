@@ -1,6 +1,6 @@
 import React from "react";
 import "./PlayerPlaylist.scss";
-import { SongList } from "components/SongList/SongList";
+import SongList from "components/SongList/SongList";
 import { ButtonSave } from "components/Buttons/Buttons";
 import { connect } from "react-redux";
 import { AppState } from "redux/store/configureStore";
