@@ -2,8 +2,6 @@ import React from "react";
 import { Header } from "components/Header/Header";
 import { CategoryTitle } from "components/CategoryTitle/CategoryTitle";
 import SongGrid from "components/SongGrid/SongGrid";
-import { Navbar } from "components/Navbar/Navbar";
-import { PlaylistList } from "components/PlaylistList/PlaylistList";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { ThunkDispatch } from "redux-thunk";
@@ -12,22 +10,25 @@ import { AppState } from "redux/store/configureStore";
 import SongList from "components/SongList/SongList";
 import { Song } from "types/Song";
 import { OptionItemData } from "types/Option";
-import { addToNowPlaying } from "redux/actions/player";
+import { addToNowPlaying, playSong } from "redux/actions/player";
 import { Playlist } from "types/Playlist";
+import "./PlaylistView.scss";
+import { useSpring, animated } from "react-spring";
+import PlaylistViewHeader from "components/PlaylistViewHeader/PlaylistViewHeader";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
 interface PassingProps {}
 interface StateProps {
-  playlists: Playlist[];
+  playlistViewing?: Playlist;
   collection: Song[];
 }
 interface DispatchProps {
   addToNowPlaying: (song: Song) => any;
 }
 
-const Library: React.FC<Props> = ({
-  playlists,
+const PlaylistView: React.FC<Props> = ({
+  playlistViewing,
   collection,
   addToNowPlaying,
 }) => {
@@ -57,30 +58,31 @@ const Library: React.FC<Props> = ({
     },
   ];
 
+  const slide = useSpring({
+    left: playlistViewing ? "0vw" : "100vh",
+    opacity: playlistViewing ? 1 : 0,
+  });
+
   return (
-    <div className="Library">
-      <Header />
+    <animated.div className="PlaylistView" style={slide}>
+      {playlistViewing !== undefined ? (
+        <div>
+          <PlaylistViewHeader />
 
-      {/* <h1>Library</h1>
-
-      <PlaylistList/> */}
-
-      <CategoryTitle text="Your Playlist" />
-      <SongGrid playlists={playlists} />
-
-      <CategoryTitle text="Liked Songs" />
-      <SongList
-        songs={collection}
-        optionList={optionList}
-        resetPlaylist={true}
-      />
-    </div>
+          <SongList
+            songs={playlistViewing!.songs}
+            optionList={optionList}
+            resetPlaylist={true}
+          />
+        </div>
+      ) : null}
+    </animated.div>
   );
 };
 
 const mapStateToProps = (state: AppState) => {
   return {
-    playlists: state.library.playlists,
+    playlistViewing: state.app.playlistViewing,
     collection: state.library.collection,
   };
 };
@@ -91,4 +93,4 @@ const mapDispatchToProps = (
   addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Library);
+export default connect(mapStateToProps, mapDispatchToProps)(PlaylistView);

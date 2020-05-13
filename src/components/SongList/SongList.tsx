@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./SongList.scss";
 import SongListItem from "./SongListItem";
 import { Song } from "types/Song";
-import { useTransition, animated, config, useSpring } from "react-spring";
+import { useTransition, animated, config } from "react-spring";
 import { OptionItemData } from "types/Option";
 import Option from "components/Option/Option";
 import { AppState } from "redux/store/configureStore";

@@ -1,0 +1,16 @@
+@import "_base.scss";
+
+.Button {
+  img {
+    vertical-align: middle;
+  }
+}
+
+.ButtonCapsuleText {
+  font-size: 1.2rem;
+  background: $color-red;
+  padding: 0.85rem 3.5rem;
+  display: inline-block;
+  border-radius: 10rem;
+  font-weight: bold;
+}

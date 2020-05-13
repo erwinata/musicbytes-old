@@ -1,9 +1,12 @@
 import { Song } from "../../types/Song";
 import { PlayState } from "../../types/PlayState";
+import { Playlist } from "types/Playlist";
 
 export const SHOW_PLAYER = "SHOW_PLAYER";
 
 export const PLAY_SONG = "PLAY_SONG";
+export const PLAY_PLAYLIST = "PLAY_PLAYLIST";
+export const CLEAR_PLAYLIST = "CLEAR_PLAYLIST";
 export const TOGGLE_PLAYING = "TOGGLE_PLAYING";
 
 export const AUTO_NEXT_SONG = "AUTO_NEXT_SONG";
@@ -29,6 +32,13 @@ export interface PlaySongAction {
   type: typeof PLAY_SONG;
   song: Song;
   resetPlaylist: boolean;
+}
+export interface PlayPlaylistAction {
+  type: typeof PLAY_PLAYLIST;
+  playlist: Playlist;
+}
+export interface ClearPlaylistAction {
+  type: typeof CLEAR_PLAYLIST;
 }
 export interface TogglePlayingAction {
   type: typeof TOGGLE_PLAYING;
@@ -76,6 +86,8 @@ export interface AddToNowPlayingAction {
 export type PlayerActionTypes =
   | ShowPlayerAction
   | PlaySongAction
+  | PlayPlaylistAction
+  | ClearPlaylistAction
   | TogglePlayingAction
   | AutoNextSongAction
   | NextSongAction

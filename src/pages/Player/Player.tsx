@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSpring, animated } from "react-spring";
+import { useSpring } from "react-spring";
 import { Navbar } from "components/Navbar/Navbar";
 import PlayerThumbnail from "components/PlayerThumbnail/PlayerThumbnail";
 import PlayerControl from "components/PlayerControl/PlayerControl";
@@ -13,6 +13,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { AllActions } from "redux/types/app";
 import { bindActionCreators } from "redux";
 import { PlayState } from "types/PlayState";
+import { animated } from "react-spring";
 import "./Player.scss";
 
 type Props = StateProps & DispatchProps;

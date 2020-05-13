@@ -7,11 +7,14 @@ $color-bg-black: rgb(1, 22, 39);
 $color-bg-black-blue: rgb(15, 33, 53);
 $color-bg-black-blue-75: rgba(15, 33, 53, 0.75);
 $color-bg-black-blue-50: rgba(15, 33, 53, 0.5);
+$color-bg-black-blue-25: rgba(15, 33, 53, 0.25);
 $color-black-transparent: rgba(15, 33, 53, 0.95);
 $color-black-semi-transparent: rgba(15, 33, 53, 0.5);
+$color-pitch-black-overlay-25: rgba(0, 0, 0, 0.5);
 $color-pitch-black-overlay: rgba(0, 0, 0, 0.8);
 
 $font-default: Segoe UI, sans serif;
+$font-default: "Varela Round", sans-serif;
 
 a {
   text-decoration: none;
@@ -42,12 +45,12 @@ input {
   color: $color-white;
 }
 .regularText {
-  font-size: 0.85rem;
+  font-size: 1.2rem;
   font-weight: normal;
   color: $color-white;
 }
 .subText {
-  font-size: 0.7rem;
+  font-size: 1rem;
   font-weight: normal;
   color: $color-blue;
 }

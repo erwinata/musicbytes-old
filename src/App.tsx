@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState } from "react";
 import { Listen } from "pages/Listen/Listen";
 import Discover from "pages/Discover/Discover";
 import Player from "pages/Player/Player";
+import Library from "pages/Library/Library";
 import "./App.scss";
 import { Switch, Route, BrowserRouter, useLocation } from "react-router-dom";
 import { Navbar } from "components/Navbar/Navbar";
@@ -16,7 +17,10 @@ import { showPlayer } from "redux/actions/player";
 import { useTransition, animated } from "react-spring";
 import { NavigationTab } from "types/Navigation";
 import { changeTab } from "redux/actions/app";
-import { Library } from "pages/Library/Library";
+import PlaylistView from "pages/PlaylistView/PlaylistView";
+declare module "react-spring" {
+  export const animated: any;
+}
 
 type Props = StateProps;
 
@@ -104,6 +108,7 @@ const App: React.FC<Props> = ({
       {songs.length > 0 ? <MiniPlayer /> : null}
 
       <Player />
+      <PlaylistView />
       {page}
     </div>
   );

@@ -1,10 +1,10 @@
 import React from "react";
 import "./CategoryTitle.scss";
 
-export const CategoryTitle = () => {
+export const CategoryTitle: React.FC<{ text: string }> = ({ text }) => {
   return (
     <div className="CategoryTitle">
-      <h1>Recent Playlist</h1>
+      <h1>{text}</h1>
     </div>
   );
 };

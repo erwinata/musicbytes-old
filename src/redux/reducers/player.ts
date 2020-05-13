@@ -130,8 +130,8 @@ const sampleSongPlaying: Song = {
 };
 
 const playerReducerDefaultState: PlayerState = {
-  // showPlayer: false,
-  showPlayer: true,
+  showPlayer: false,
+  // showPlayer: true,
   songs: samplePlaylist,
   songPlaying: sampleSongPlaying,
   playState: PlayState.ENDED,
@@ -164,6 +164,11 @@ export const playerReducer = (
         songPlaying: action.song,
         timeCurrent: 0,
         timeTotal: action.song.duration,
+      };
+    case "CLEAR_PLAYLIST":
+      return {
+        ...state,
+        songs: [],
       };
 
     case "TOGGLE_PLAYING":

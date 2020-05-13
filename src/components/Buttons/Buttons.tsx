@@ -4,20 +4,32 @@ import { useSpring, animated, config } from "react-spring";
 import { Repeat } from "types/Repeat";
 import { PlayState } from "types/PlayState";
 
+export const ButtonCapsuleText: React.FC<{ text: string; onClick: any }> = ({
+  text,
+  onClick,
+}) => {
+  return (
+    <div className="Button ButtonCapsuleText" onClick={onClick}>
+      {text}
+    </div>
+  );
+};
+
 export const ButtonVideo = () => {
   return (
-    <div className="ButtonVideo">
+    <div className="Button ButtonVideo">
       <img src="/res/video.svg" alt="Video" />
     </div>
   );
 };
+
 export const ButtonLike: React.FC<{ like: boolean; onClick: any }> = ({
   like,
   onClick,
 }) => {
   return (
     <div
-      className="ButtonLike"
+      className="Button ButtonLike"
       onClick={() => {
         onClick();
       }}
@@ -30,9 +42,10 @@ export const ButtonLike: React.FC<{ like: boolean; onClick: any }> = ({
     </div>
   );
 };
+
 export const ButtonOption: React.FC<any> = ({ onClick }: any) => {
   return (
-    <div className="ButtonOption" onClick={onClick}>
+    <div className="Button ButtonOption" onClick={onClick}>
       <img src="/res/option.svg" alt="Option" />
     </div>
   );
@@ -66,7 +79,7 @@ export const ButtonPlay: React.FC<{ onClick: any; playState: PlayState }> = ({
 
   return (
     <animated.div
-      className="ButtonPlay"
+      className="Button ButtonPlay"
       onClick={() => {
         onClick();
       }}
@@ -100,7 +113,7 @@ export const ButtonPrev: React.FC<any> = ({ onClick }: any) => {
 
   return (
     <animated.div
-      className="ButtonPrev"
+      className="Button ButtonPrev"
       onClick={() => {
         onClick();
         setResetAnimation(true);
@@ -132,7 +145,7 @@ export const ButtonNext: React.FC<any> = ({ onClick }: any) => {
 
   return (
     <animated.div
-      className="ButtonNext"
+      className="Button ButtonNext"
       onClick={() => {
         onClick();
         setResetAnimation(true);
@@ -175,7 +188,7 @@ export const ButtonShuffle: React.FC<{ onClick: any; shuffle: boolean }> = ({
 
   return (
     <animated.div
-      className="ButtonShuffle"
+      className="Button ButtonShuffle"
       onClick={() => {
         onClick();
       }}
@@ -218,7 +231,7 @@ export const ButtonRepeat: React.FC<{ onClick: any; repeat: Repeat }> = ({
 
   return (
     <animated.div
-      className="ButtonShuffle"
+      className="Button ButtonShuffle"
       onClick={() => {
         onClick();
       }}
@@ -237,8 +250,16 @@ export const ButtonRepeat: React.FC<{ onClick: any; repeat: Repeat }> = ({
 
 export const ButtonSave = () => {
   return (
-    <div className="ButtonSave">
+    <div className="Button ButtonSave">
       <img src="/res/save.svg" alt="Save Playlist" />
+    </div>
+  );
+};
+
+export const ButtonClose: React.FC<any> = ({ onClick }: any) => {
+  return (
+    <div className="Button ButtonClose" onClick={onClick}>
+      <img src="/res/close.svg" alt="Close" />
     </div>
   );
 };

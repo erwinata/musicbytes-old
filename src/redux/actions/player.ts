@@ -4,6 +4,7 @@ import { AppState } from "redux/store/configureStore";
 import { Song } from "types/Song";
 import { SongDetail } from "api/SongDetail";
 import { PlayState } from "types/PlayState";
+import { Playlist } from "types/Playlist";
 
 export const actionShowPlayer = (show: boolean): AllActions => ({
   type: "SHOW_PLAYER",
@@ -16,6 +17,13 @@ export const actionPlaySong = (
   type: "PLAY_SONG",
   song,
   resetPlaylist,
+});
+export const actionPlayPlaylist = (playlist: Playlist): AllActions => ({
+  type: "PLAY_PLAYLIST",
+  playlist,
+});
+export const actionClearPlaylist = (): AllActions => ({
+  type: "CLEAR_PLAYLIST",
 });
 export const actionDurationIncrement = (): AllActions => ({
   type: "DURATION_INCREMENT",
@@ -72,6 +80,37 @@ export const playSong = (song: Song, resetPlaylist: boolean) => {
 
     dispatch(actionPlaySong(song, resetPlaylist));
     dispatch(actionShowPlayer(true));
+  };
+};
+
+export const playPlaylist = (playlist: Playlist) => {
+  return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionClearPlaylist());
+
+    var detailedSongsPromise = new Promise<Song[]>(async (resolve, reject) => {
+      var detailedSongs: Song[] = [];
+      for (const song of playlist.songs) {
+        console.log(song);
+        const detailedSong = await SongDetail(song);
+        detailedSongs.push(detailedSong);
+        console.log("EA");
+      }
+      resolve(detailedSongs);
+    }).then(async (detailedSongs) => {
+      // console.log(detailedSongs);
+      console.log("FINISH");
+      detailedSongs.forEach((song) => {
+        dispatch(actionAddToNowPlaying(song));
+      });
+      dispatch(actionPlaySong(playlist.songs[0], false));
+      dispatch(actionShowPlayer(true));
+    });
+  };
+};
+
+export const clearPlaylist = () => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionClearPlaylist());
   };
 };
 

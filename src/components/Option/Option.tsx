@@ -9,7 +9,7 @@ import { Song } from "types/Song";
 import { addToNowPlaying } from "redux/actions/player";
 import { bindActionCreators } from "redux";
 import { OptionItemData } from "types/Option";
-import { animated, useSpring, config } from "react-spring";
+import { useSpring, animated, config } from "react-spring";
 
 type Props = PassingProps & StateProps;
 interface StateProps {
