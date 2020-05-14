@@ -7,14 +7,16 @@ import { AppState } from "redux/store/configureStore";
 import { useHistory } from "react-router";
 import { bindActionCreators } from "redux";
 import { showPlayer } from "redux/actions/player";
+import { showToast } from "redux/actions/app";
 
 type Props = DispatchProps;
 
 interface DispatchProps {
   showPlayer: (show: boolean) => any;
+  showToast: (text: string) => any;
 }
 
-const MiniPlayer: React.FC<Props> = ({ showPlayer }) => {
+const MiniPlayer: React.FC<Props> = ({ showPlayer, showToast }) => {
   const history = useHistory();
 
   return (
@@ -22,6 +24,7 @@ const MiniPlayer: React.FC<Props> = ({ showPlayer }) => {
       className="MiniPlayer"
       onClick={(e) => {
         showPlayer(true);
+        showToast("Player showing");
       }}
     >
       <img src="/res/sample-album.png" alt="Thumbnail Image" />
@@ -51,6 +54,9 @@ const mapStateToProps = (state: AppState) => {
 const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AllActions>
   // ownProps: DiscoverProps
-) => ({ showPlayer: bindActionCreators(showPlayer, dispatch) });
+) => ({
+  showPlayer: bindActionCreators(showPlayer, dispatch),
+  showToast: bindActionCreators(showToast, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MiniPlayer);

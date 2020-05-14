@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SongList.scss";
 import SongListItem from "./SongListItem";
 import { Song } from "types/Song";
@@ -8,6 +8,7 @@ import Option from "components/Option/Option";
 import { AppState } from "redux/store/configureStore";
 import { connect } from "react-redux";
 import { findIndex } from "lodash";
+import { useMeasure } from "react-use";
 
 type Props = PassingProps & StateProps;
 
@@ -26,10 +27,17 @@ const SongList: React.FC<Props> = ({
   resetPlaylist,
   collection,
 }: Props) => {
-  const height = 50;
+  const [contentHeight, setContentHeight] = useState(0);
+
+  const [ref, { height }] = useMeasure();
+
+  useEffect(() => {
+    setContentHeight(height);
+    console.log("H" + height);
+  }, [height]);
 
   const transitions = useTransition(
-    songs.map((data, i) => ({ ...data, y: i * height, x: 0 })),
+    songs.map((data, i) => ({ ...data, y: i * contentHeight, x: 0 })),
     (d) => d.id,
     {
       from: {
@@ -78,14 +86,16 @@ const SongList: React.FC<Props> = ({
               transform: y.interpolate((y) => `translate3d(0,${y}px,0)`),
             }}
           >
-            <SongListItem
-              index={index}
-              song={item}
-              resetPlaylist={resetPlaylist}
-              setOptionState={setOptionState}
-              like={like}
-              key={item.id}
-            />
+            <div ref={ref}>
+              <SongListItem
+                index={index}
+                song={item}
+                resetPlaylist={resetPlaylist}
+                setOptionState={setOptionState}
+                like={like}
+                key={item.id}
+              />
+            </div>
           </animated.div>
         );
       })}

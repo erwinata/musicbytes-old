@@ -3,7 +3,6 @@ import { Header } from "components/Header/Header";
 import { Navbar } from "components/Navbar/Navbar";
 import SearchBar from "components/SearchBar/SearchBar";
 import SongList from "components/SongList/SongList";
-import { Popup } from "components/Popup/Popup";
 import { SearchSong } from "api/Search";
 import { Song } from "types/Song";
 import { useDispatch, useSelector, connect } from "react-redux";
@@ -14,6 +13,8 @@ import { searchSong } from "redux/actions/discover";
 import { bindActionCreators } from "redux";
 import { OptionItemData } from "types/Option";
 import { addToNowPlaying } from "redux/actions/player";
+import { addingToPlaylist } from "redux/actions/app";
+import { likeSong } from "redux/actions/library";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -24,6 +25,8 @@ interface StateProps {
 }
 interface DispatchProps {
   addToNowPlaying: (song: Song) => any;
+  addingToPlaylist: (song: Song) => any;
+  likeSong: (song: Song, like: boolean) => any;
 }
 
 interface DiscoverState {}
@@ -32,29 +35,29 @@ export const Discover: React.FC<Props> = ({
   query,
   songs,
   addToNowPlaying,
+  addingToPlaylist,
+  likeSong,
 }: Props) => {
   const optionList: OptionItemData[] = [
     {
       index: 0,
       label: "Add to Now Playing",
       action: (item: Song) => {
-        console.log("plaaaaa");
-        console.log(item);
         addToNowPlaying(item);
       },
     },
     {
       index: 1,
       label: "Add to Playlist",
-      action: () => {
-        console.log("add playlist");
+      action: (item: Song) => {
+        addingToPlaylist(item);
       },
     },
     {
       index: 2,
       label: "Like Songs",
-      action: () => {
-        console.log("like songs");
+      action: (item: Song) => {
+        likeSong(item, true);
       },
     },
   ];
@@ -80,6 +83,8 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AppActionTypes>
 ) => ({
   addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch),
+  addingToPlaylist: bindActionCreators(addingToPlaylist, dispatch),
+  likeSong: bindActionCreators(likeSong, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Discover);

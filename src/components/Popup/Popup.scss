@@ -10,11 +10,21 @@
 }
 
 .Popup {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99;
+
   .container {
-    position: fixed;
+    position: absolute;
     z-index: 100;
-    width: 100vw;
     @extend .centerVertical;
+    width: 90vw;
+    max-width: 512px;
+    margin: 0 5vw;
+    padding: 1.5rem 5vw;
+    background: $color-black-transparent;
+    border-radius: 10px;
 
     > h1 {
       @extend .headingText;
@@ -22,12 +32,8 @@
       margin-bottom: 1rem;
     }
     .content {
-      border-radius: 10px;
-      width: 90%;
-      max-width: 512px;
-      margin: 0 auto;
-      padding: 1.5rem 1rem;
-      background: $color-black-transparent;
+      width: calc(80vw);
+      position: relative;
     }
   }
 }

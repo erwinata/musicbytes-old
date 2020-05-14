@@ -18,6 +18,8 @@ import { useTransition, animated } from "react-spring";
 import { NavigationTab } from "types/Navigation";
 import { changeTab } from "redux/actions/app";
 import PlaylistView from "pages/PlaylistView/PlaylistView";
+import Popup from "components/Popup/Popup";
+import Toast from "components/Toast/Toast";
 declare module "react-spring" {
   export const animated: any;
 }
@@ -102,6 +104,10 @@ const App: React.FC<Props> = ({
         <br></br>
         Direction {tabTransition.direction}
       </div> */}
+
+      <Toast />
+
+      <Popup />
 
       <Navbar />
 

@@ -87,7 +87,7 @@ export const playPlaylist = (playlist: Playlist) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionClearPlaylist());
 
-    var detailedSongsPromise = new Promise<Song[]>(async (resolve, reject) => {
+    new Promise<Song[]>(async (resolve) => {
       var detailedSongs: Song[] = [];
       for (const song of playlist.songs) {
         console.log(song);

@@ -3,6 +3,8 @@ import { Dispatch } from "redux";
 import { AppState } from "redux/store/configureStore";
 import { SearchSong } from "api/Search";
 import { Song } from "types/Song";
+import { actionShowToast } from "./app";
+import { findIndex } from "lodash";
 
 export const actionAddToPlaylist = (
   song: Song,
@@ -48,7 +50,18 @@ export const actionLikeSong = (song: Song, like: boolean): AllActions => ({
 
 export const addToPlaylist = (song: Song, playlistIndex: number) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    dispatch(actionAddToPlaylist(song, playlistIndex));
+    console.log();
+    var a = findIndex(
+      getState().library.playlists[playlistIndex].songs,
+      (item) => item.id == song!.id
+    );
+    console.log(a);
+    if (a > -1) {
+      dispatch(actionShowToast("Song already exists in this playlist"));
+    } else {
+      dispatch(actionAddToPlaylist(song, playlistIndex));
+      dispatch(actionShowToast("Song added to playlist"));
+    }
   };
 };
 
@@ -67,11 +80,13 @@ export const renamePlaylist = (title: string, playlistIndex: number) => {
 export const newPlaylist = (title: string, songs: Song[]) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionNewPlaylist(title, songs));
+    dispatch(actionShowToast("New Playlist created"));
   };
 };
 
 export const likeSong = (song: Song, like: boolean) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionLikeSong(song, like));
+    dispatch(actionShowToast("Added to Liked songs"));
   };
 };

@@ -193,11 +193,13 @@ export const playerReducer = (
       switch (state.repeat) {
         case Repeat.NO_REPEAT:
           index =
-            findIndex(state.songs, (el) => el.id == state.songPlaying!.id) + 1;
+            findIndex(state.songs, (song) => song.id == state.songPlaying!.id) +
+            1;
           break;
         case Repeat.REPEAT_ALL:
           index =
-            findIndex(state.songs, (el) => el.id == state.songPlaying!.id) + 1;
+            findIndex(state.songs, (song) => song.id == state.songPlaying!.id) +
+            1;
           break;
         case Repeat.REPEAT_ONE:
           index = findIndex(

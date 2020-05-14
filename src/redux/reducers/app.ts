@@ -1,12 +1,23 @@
-import { AppActionTypes, CHANGE_TAB, VIEW_PLAYLIST } from "redux/types/app";
+import {
+  AppActionTypes,
+  CHANGE_TAB,
+  VIEW_PLAYLIST,
+  ADDING_TO_PLAYLIST,
+} from "redux/types/app";
 import { Song } from "types/Song";
 import { NavigationTab } from "types/Navigation";
 import { Playlist } from "types/Playlist";
+import { ToastType } from "types/ToastType";
 
 export interface IAppState {
   currentTab: NavigationTab;
   transitionDirection: number;
   playlistViewing?: Playlist;
+  songAdding?: Song;
+  toastState: {
+    text: string;
+    toastType: ToastType;
+  };
 }
 
 const samplePlaylist = [
@@ -114,6 +125,11 @@ const appReducerDefaultState: IAppState = {
   //   updatedAt: 1589205857159,
   // },
   playlistViewing: undefined,
+  songAdding: undefined,
+  toastState: {
+    text: "Song added to playlist",
+    toastType: ToastType.NORMAL,
+  },
 };
 
 export const appReducer = (
@@ -121,7 +137,7 @@ export const appReducer = (
   action: AppActionTypes
 ): IAppState => {
   switch (action.type) {
-    case CHANGE_TAB:
+    case "CHANGE_TAB":
       // console.log("REDUCER" + action.query);
       let transitionDirection = 1;
       if (action.to == NavigationTab.LIBRARY) {
@@ -138,11 +154,25 @@ export const appReducer = (
         currentTab: action.to,
         transitionDirection: transitionDirection,
       };
-    case VIEW_PLAYLIST:
+    case "SHOW_TOAST":
+      const toastType = action.toastType ? action.toastType : ToastType.NORMAL;
+      return {
+        ...state,
+        toastState: {
+          text: action.text,
+          toastType: toastType,
+        },
+      };
+    case "VIEW_PLAYLIST":
       return {
         ...state,
         playlistViewing:
           action.playlistViewing !== null ? action.playlistViewing : undefined,
+      };
+    case "ADDING_TO_PLAYLIST":
+      return {
+        ...state,
+        songAdding: action.songAdding !== null ? action.songAdding : undefined,
       };
     default:
       return state;

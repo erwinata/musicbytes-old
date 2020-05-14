@@ -1,0 +1,18 @@
+@import "_base.scss";
+
+.Toast {
+  position: fixed;
+  overflow: hidden;
+  z-index: 1000;
+  bottom: 12vh;
+  padding: 1.5rem 2.25rem;
+  box-sizing: content-box;
+  border-radius: 8px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: $color-bg-black;
+  box-shadow: 0px 10px 20px $color-pitch-black-overlay-50;
+  text-align: center;
+  font-size: 1.1rem;
+  width: 60vw;
+}

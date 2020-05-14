@@ -5,7 +5,7 @@ import {
 } from "redux/types/library";
 import { Song } from "types/Song";
 import { Playlist } from "types/Playlist";
-import { now, filter } from "lodash";
+import { now, filter, findIndex } from "lodash";
 
 export interface ILibraryState {
   playlists: Playlist[];
@@ -111,6 +111,18 @@ const libraryReducerDefaultState: ILibraryState = {
   playlists: [
     {
       title: "Lagu saya",
+      songs: samplePlaylist,
+      createdAt: 1589043600000,
+      updatedAt: 1589205857159,
+    },
+    {
+      title: "Pop Music",
+      songs: samplePlaylist,
+      createdAt: 1589043600000,
+      updatedAt: 1589205857159,
+    },
+    {
+      title: "Chillin Dude",
       songs: samplePlaylist,
       createdAt: 1589043600000,
       updatedAt: 1589205857159,

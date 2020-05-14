@@ -59,7 +59,7 @@ const PlaylistView: React.FC<Props> = ({
   ];
 
   const slide = useSpring({
-    left: playlistViewing ? "0vw" : "100vh",
+    left: playlistViewing ? "0vw" : "100vw",
     opacity: playlistViewing ? 1 : 0,
   });
 
