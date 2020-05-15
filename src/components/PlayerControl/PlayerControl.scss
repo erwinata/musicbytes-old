@@ -6,7 +6,7 @@
 
   .PlayerTopButtonList {
     overflow: hidden;
-    padding: 0 2.5%;
+    padding: 0.5rem 2.5%;
 
     .ButtonVideo {
       float: left;
@@ -20,9 +20,13 @@
 
   .PlayerTitle {
     text-align: center;
+    padding: 0.5rem;
 
     h1 {
       font-size: 1.2rem;
+    }
+    h2 {
+      margin-top: 0.5rem;
     }
   }
 
@@ -53,17 +57,17 @@
     // }
 
     .ButtonPlay img {
-      width: 3.5rem;
+      width: 5rem;
     }
 
     .ButtonNext img,
     .ButtonPrev img {
-      width: 1.1rem;
+      width: 1.75rem;
     }
 
     .ButtonShuffle img,
     .ButtonRepeat img {
-      width: 0.9rem;
+      width: 1.15rem;
     }
   }
 }

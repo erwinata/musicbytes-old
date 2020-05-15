@@ -103,9 +103,7 @@ const PlayerThumbnail: React.FC<Props> = ({
           onReady={handleOnReady}
           onStateChange={handleOnStateChange}
         />
-      ) : (
-        ""
-      )}
+      ) : null}
       {/* <div className="image" style={thumbnailImageBackground}></div> */}
     </div>
   );

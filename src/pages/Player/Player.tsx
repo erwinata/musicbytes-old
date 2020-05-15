@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSpring } from "react-spring";
-import { Navbar } from "components/Navbar/Navbar";
 import PlayerThumbnail from "components/PlayerThumbnail/PlayerThumbnail";
 import PlayerControl from "components/PlayerControl/PlayerControl";
 import PlayerPlaylist from "components/PlayerPlaylist/PlayerPlaylist";

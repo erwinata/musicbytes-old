@@ -8,25 +8,57 @@ import { showPlayer } from "redux/actions/player";
 import { connect } from "react-redux";
 import { NavigationTab } from "types/Navigation";
 import NavbarItem from "./NavbarItem";
+import { AppState } from "redux/store/configureStore";
 
-type Props = DispatchProps;
+type Props = StateProps & DispatchProps;
 
+interface StateProps {
+  currentTab: NavigationTab;
+}
 interface DispatchProps {
-  showPlayer: (show: boolean) => any;
+  // showPlayer: (show: boolean) => any;
 }
 
-export const Navbar = () => {
+const Navbar: React.FC<Props> = ({ currentTab }) => {
   return (
     <div className="Navbar">
       <Link to="/Discover">
-        <NavbarItem type={NavigationTab.DISCOVER} />
+        <NavbarItem
+          active={currentTab == NavigationTab.DISCOVER}
+          type={NavigationTab.DISCOVER}
+        />
       </Link>
       <Link to="/">
-        <NavbarItem type={NavigationTab.LISTEN} />
+        <NavbarItem
+          active={currentTab == NavigationTab.LISTEN}
+          type={NavigationTab.LISTEN}
+        />
       </Link>
       <Link to="/Library">
-        <NavbarItem type={NavigationTab.LIBRARY} />
+        <NavbarItem
+          active={currentTab == NavigationTab.LIBRARY}
+          type={NavigationTab.LIBRARY}
+        />
       </Link>
     </div>
   );
 };
+
+const mapStateToProps = (state: AppState) => {
+  return {
+    currentTab: state.app.currentTab,
+  };
+};
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<any, any, AllActions>
+  // ownProps: DiscoverProps
+) => ({
+  // togglePlaying: bindActionCreators(togglePlaying, dispatch),
+  // nextSong: bindActionCreators(nextSong, dispatch),
+  // prevSong: bindActionCreators(prevSong, dispatch),
+  // toggleShuffle: bindActionCreators(toggleShuffle, dispatch),
+  // toggleRepeat: bindActionCreators(toggleRepeat, dispatch),
+  // seekTo: bindActionCreators(seekTo, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

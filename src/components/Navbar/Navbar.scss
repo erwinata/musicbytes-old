@@ -7,7 +7,7 @@
   width: 100%;
   background: $color-bg-black-blue;
   height: 8vh;
-  padding: 1vh 0 0;
+  padding: 1.5vh 0 0;
 
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -19,13 +19,17 @@
   div {
     display: block;
     margin: 0 auto;
-    height: 1.25rem;
+    height: 1.75rem;
   }
   img {
-    min-height: 1rem;
+    min-height: 1.5rem;
   }
   span {
     font-size: 0.8rem;
     color: $color-blue;
+
+    &.active {
+      color: $color-white;
+    }
   }
 }

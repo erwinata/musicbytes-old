@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Header } from "components/Header/Header";
-import { Navbar } from "components/Navbar/Navbar";
 import SearchBar from "components/SearchBar/SearchBar";
 import SongList from "components/SongList/SongList";
 import { SearchSong } from "api/Search";

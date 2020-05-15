@@ -15,7 +15,7 @@ $color-pitch-black-overlay-50: rgba(0, 0, 0, 0.5);
 $color-pitch-black-overlay: rgba(0, 0, 0, 0.8);
 
 $font-default: Segoe UI, sans serif;
-$font-default: "Varela Round", sans-serif;
+$font-default: "Poppins", sans-serif;
 
 a {
   text-decoration: none;
@@ -46,12 +46,12 @@ input {
   color: $color-white;
 }
 .regularText {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: normal;
   color: $color-white;
 }
 .subText {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: normal;
   color: $color-blue;
 }
