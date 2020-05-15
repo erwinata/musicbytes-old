@@ -9,6 +9,8 @@ import { connect } from "react-redux";
 import { NavigationTab } from "types/Navigation";
 import NavbarItem from "./NavbarItem";
 import { AppState } from "redux/store/configureStore";
+import { viewPlaylist } from "redux/actions/app";
+import { Playlist } from "types/Playlist";
 
 type Props = StateProps & DispatchProps;
 
@@ -16,12 +18,17 @@ interface StateProps {
   currentTab: NavigationTab;
 }
 interface DispatchProps {
-  // showPlayer: (show: boolean) => any;
+  viewPlaylist: (playlist: Playlist) => any;
 }
 
-const Navbar: React.FC<Props> = ({ currentTab }) => {
+const Navbar: React.FC<Props> = ({ currentTab, viewPlaylist }) => {
   return (
-    <div className="Navbar">
+    <div
+      className="Navbar"
+      onClick={() => {
+        viewPlaylist(undefined!);
+      }}
+    >
       <Link to="/Discover">
         <NavbarItem
           active={currentTab == NavigationTab.DISCOVER}
@@ -53,12 +60,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AllActions>
   // ownProps: DiscoverProps
 ) => ({
-  // togglePlaying: bindActionCreators(togglePlaying, dispatch),
-  // nextSong: bindActionCreators(nextSong, dispatch),
-  // prevSong: bindActionCreators(prevSong, dispatch),
-  // toggleShuffle: bindActionCreators(toggleShuffle, dispatch),
-  // toggleRepeat: bindActionCreators(toggleRepeat, dispatch),
-  // seekTo: bindActionCreators(seekTo, dispatch),
+  viewPlaylist: bindActionCreators(viewPlaylist, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

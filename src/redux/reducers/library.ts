@@ -190,7 +190,7 @@ export const libraryReducer = (
       };
     case "LIKE_SONG":
       var newCollection = [...state.collection];
-      if (action.like) {
+      if (!action.isExist) {
         newCollection = [...newCollection, action.song];
       } else {
         newCollection = filter(newCollection, function (currentObject) {

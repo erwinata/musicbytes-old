@@ -3,7 +3,7 @@ import "./SongList.scss";
 import SongListItem from "./SongListItem";
 import { Song } from "types/Song";
 import { useTransition, animated, config } from "react-spring";
-import { OptionItemData } from "types/Option";
+import { OptionAction, OptionActionType } from "types/Option";
 import Option from "components/Option/Option";
 import { AppState } from "redux/store/configureStore";
 import { connect } from "react-redux";
@@ -15,7 +15,7 @@ type Props = PassingProps & StateProps;
 interface PassingProps {
   songs: Song[];
   resetPlaylist: boolean;
-  optionList: OptionItemData[];
+  optionList: OptionActionType[];
 }
 interface StateProps {
   collection: Song[];
@@ -52,9 +52,20 @@ const SongList: React.FC<Props> = ({
     }
   );
 
-  const [optionState, setOptionState] = useState({
+  const [optionState, setOptionState] = useState<{
+    index: number;
+    song?: Song;
+  }>({
     index: -1,
+    song: undefined,
   });
+
+  const clickButtonOption = (index: number, song: Song) => {
+    setOptionState({
+      index,
+      song,
+    });
+  };
 
   const dismissOption = () => {
     setOptionState({
@@ -62,16 +73,10 @@ const SongList: React.FC<Props> = ({
     });
   };
 
-  const clickOptionItem = (index: number) => {
-    console.log("lewat");
-    optionList[index].action(songs[optionState.index]);
-  };
-
   return (
     <div className="SongList">
       <Option
         dismissOption={dismissOption}
-        clickOptionItem={clickOptionItem}
         optionList={optionList}
         optionState={optionState}
       />
@@ -91,7 +96,7 @@ const SongList: React.FC<Props> = ({
                 index={index}
                 song={item}
                 resetPlaylist={resetPlaylist}
-                setOptionState={setOptionState}
+                clickButtonOption={clickButtonOption}
                 like={like}
                 key={item.id}
               />

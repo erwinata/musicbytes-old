@@ -42,10 +42,10 @@ export const actionNewPlaylist = (
   songs,
 });
 
-export const actionLikeSong = (song: Song, like: boolean): AllActions => ({
+export const actionLikeSong = (song: Song, isExist: boolean): AllActions => ({
   type: "LIKE_SONG",
   song,
-  like,
+  isExist,
 });
 
 export const addToPlaylist = (song: Song, playlistIndex: number) => {
@@ -84,9 +84,17 @@ export const newPlaylist = (title: string, songs: Song[]) => {
   };
 };
 
-export const likeSong = (song: Song, like: boolean) => {
+export const likeSong = (song: Song) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    dispatch(actionLikeSong(song, like));
-    dispatch(actionShowToast("Added to Liked songs"));
+    var isExist =
+      findIndex(getState().library.collection, (item) => item.id == song!.id) >
+      -1;
+    dispatch(actionLikeSong(song, isExist));
+
+    dispatch(
+      actionShowToast(
+        !isExist ? "Added to Liked songs" : "Removed from Liked songs"
+      )
+    );
   };
 };

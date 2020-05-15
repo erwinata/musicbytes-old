@@ -9,7 +9,7 @@ import { AppActionTypes } from "redux/types/app";
 import { AppState } from "redux/store/configureStore";
 import SongList from "components/SongList/SongList";
 import { Song } from "types/Song";
-import { OptionItemData } from "types/Option";
+import { OptionAction, OptionActionType } from "types/Option";
 import { addToNowPlaying, playSong } from "redux/actions/player";
 import { Playlist } from "types/Playlist";
 import "./PlaylistView.scss";
@@ -32,30 +32,10 @@ const PlaylistView: React.FC<Props> = ({
   collection,
   addToNowPlaying,
 }) => {
-  const optionList: OptionItemData[] = [
-    {
-      index: 0,
-      label: "Add to Now Playing",
-      action: (item: Song) => {
-        console.log("plaaaaa");
-        console.log(item);
-        addToNowPlaying(item);
-      },
-    },
-    {
-      index: 1,
-      label: "Add to Playlist",
-      action: () => {
-        console.log("add playlist");
-      },
-    },
-    {
-      index: 2,
-      label: "Like Songs",
-      action: () => {
-        console.log("like songs");
-      },
-    },
+  const optionList: OptionActionType[] = [
+    OptionActionType.ADD_TO_NOW_PLAYING,
+    OptionActionType.ADD_TO_PLAYLIST,
+    OptionActionType.LIKE_SONG,
   ];
 
   const slide = useSpring({

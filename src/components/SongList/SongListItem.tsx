@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { playSong, addToNowPlaying, removeSong } from "redux/actions/player";
 import Option from "components/Option/Option";
 import { ButtonLike, ButtonOption } from "components/Buttons/Buttons";
-import { OptionItemData } from "types/Option";
+import { OptionAction, OptionActionType } from "types/Option";
 import { likeSong } from "redux/actions/library";
 
 type Props = PassingProps & StateProps & DispatchProps;
@@ -19,7 +19,7 @@ interface PassingProps {
   index: number;
   song: Song;
   resetPlaylist: boolean;
-  setOptionState: any;
+  clickButtonOption: (index: number, song: Song) => any;
   like: boolean;
 }
 interface StateProps {
@@ -29,7 +29,7 @@ interface DispatchProps {
   playSong: (song: Song, resetPlaylist: boolean) => any;
   addToNowPlaying: (song: Song) => any;
   removeSong: (song: Song) => any;
-  likeSong: (song: Song, like: boolean) => any;
+  likeSong: (song: Song) => any;
 }
 
 export interface StateSongListItem {
@@ -41,7 +41,7 @@ const SongListItem: React.FC<Props> = ({
   index,
   song,
   resetPlaylist,
-  setOptionState,
+  clickButtonOption,
   like,
   songPlaying,
   playSong,
@@ -49,21 +49,6 @@ const SongListItem: React.FC<Props> = ({
   removeSong,
   likeSong,
 }) => {
-  const clickSongListItem = () => {
-    playSong(song, resetPlaylist);
-  };
-
-  const clickButtonLike = () => {
-    likeSong(song, !like);
-  };
-
-  const clickButtonOption = () => {
-    setOptionState({
-      index: index,
-    });
-    // removeSong(song);
-  };
-
   const [state, setState] = useState<StateSongListItem>({
     song: song,
     active: false,
@@ -85,7 +70,13 @@ const SongListItem: React.FC<Props> = ({
 
   const classActive = state.active ? "active" : "";
 
-  console.log(like);
+  const clickSongListItem = () => {
+    playSong(song, resetPlaylist);
+  };
+
+  const clickButtonLike = () => {
+    likeSong(song);
+  };
 
   return (
     <div className={`SongListItem ${classActive}`}>
@@ -98,7 +89,11 @@ const SongListItem: React.FC<Props> = ({
       </div>
       <div className="option">
         <ButtonLike like={like} onClick={clickButtonLike} />
-        <ButtonOption onClick={clickButtonOption} />
+        <ButtonOption
+          onClick={() => {
+            clickButtonOption(index, song);
+          }}
+        />
       </div>
     </div>
   );

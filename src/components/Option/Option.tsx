@@ -8,49 +8,62 @@ import { connect } from "react-redux";
 import { Song } from "types/Song";
 import { addToNowPlaying } from "redux/actions/player";
 import { bindActionCreators } from "redux";
-import { OptionItemData } from "types/Option";
+import { OptionAction, OptionActionType } from "types/Option";
 import { useSpring, animated, config } from "react-spring";
+import { addingToPlaylist } from "redux/actions/app";
+import { likeSong } from "redux/actions/library";
+import { findIndex } from "lodash";
 
-type Props = PassingProps & StateProps;
+type Props = PassingProps & StateProps & DispatchProps;
+interface PassingProps {
+  dismissOption: () => any;
+  optionList: OptionActionType[];
+  optionState: any;
+}
 interface StateProps {
   songPlaying: Song | null;
   songs: Song[];
 }
-interface PassingProps {
-  dismissOption: () => any;
-  clickOptionItem: (index: number) => any;
-  optionList: OptionItemData[];
-  optionState: any;
+interface DispatchProps {
+  addToNowPlaying: (song: Song) => any;
+  addingToPlaylist: (song: Song) => any;
+  likeSong: (song: Song) => any;
 }
-
-// interface TooltipDataType {
-//   index: number;
-//   label: string;
-// }
-
-// const tooltipList: TooltipDataType[] = [
-//   {
-//     index: 1,
-//     label: "Add to Now Playing",
-//   },
-//   {
-//     index: 2,
-//     label: "Add to Playlist",
-//   },
-//   {
-//     index: 3,
-//     label: "Like Songs",
-//   },
-// ];
 
 const Option: React.FC<Props> = ({
   dismissOption,
-  clickOptionItem,
   optionList,
   optionState,
   songPlaying,
   songs,
+  addToNowPlaying,
+  addingToPlaylist,
+  likeSong,
 }) => {
+  const optionActions: OptionAction[] = [
+    {
+      type: OptionActionType.ADD_TO_NOW_PLAYING,
+      label: "Add to Now Playing",
+      action: (item: Song) => {
+        addToNowPlaying(item);
+      },
+    },
+    {
+      type: OptionActionType.ADD_TO_PLAYLIST,
+      label: "Add to Playlist",
+      action: (item: Song) => {
+        addingToPlaylist(item);
+      },
+    },
+    {
+      type: OptionActionType.LIKE_SONG,
+      label: "Like Songs",
+      action: (item: Song) => {
+        likeSong(item);
+      },
+    },
+  ];
+
   const optionStyle = useSpring({
     to: {
       opacity: optionState.index == -1 ? 0 : 1,
@@ -63,17 +76,26 @@ const Option: React.FC<Props> = ({
 
   return (
     <animated.div className="Option" style={optionStyle}>
-      {optionList.map((optionItem) => {
-        if (optionItem.index == 1 && songs.length == 0) {
+      {optionList.map((optionListItem, index) => {
+        if (
+          optionListItem == OptionActionType.ADD_TO_NOW_PLAYING &&
+          songs.length == 0
+        ) {
           return null;
         }
+        var optionItemDataIndex = findIndex(
+          optionActions,
+          (el) => el.type == optionListItem
+        );
+        var optionItemData = optionActions[optionItemDataIndex];
         return (
           <OptionItem
-            index={optionItem.index}
-            label={optionItem.label}
+            index={index}
+            label={optionItemData.label}
             dismissOption={dismissOption}
-            clickOptionItem={clickOptionItem}
-            key={optionItem.index}
+            clickOptionItem={optionItemData.action}
+            songSelected={optionState.song}
+            key={index}
           />
         );
       })}
@@ -85,19 +107,21 @@ interface OptionItemProps {
   index: number;
   label: string;
   dismissOption: () => any;
-  clickOptionItem: (index: number) => any;
+  clickOptionItem: (song: Song) => any;
+  songSelected: Song;
 }
 const OptionItem: React.FC<OptionItemProps> = ({
   index,
   label,
   dismissOption,
   clickOptionItem,
+  songSelected,
 }) => {
   return (
     <div
       className="OptionItem"
       onClick={() => {
-        clickOptionItem(index);
+        clickOptionItem(songSelected);
         dismissOption();
       }}
     >
@@ -117,7 +141,9 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AllActions>
   // ownProps: DiscoverProps
 ) => ({
-  // addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch)
+  addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch),
+  addingToPlaylist: bindActionCreators(addingToPlaylist, dispatch),
+  likeSong: bindActionCreators(likeSong, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Option);

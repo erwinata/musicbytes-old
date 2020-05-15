@@ -31,7 +31,7 @@ export interface NewPlaylistAction {
 export interface LikeSongAction {
   type: typeof LIKE_SONG;
   song: Song;
-  like: boolean;
+  isExist: boolean;
 }
 
 export type LibraryActionTypes =

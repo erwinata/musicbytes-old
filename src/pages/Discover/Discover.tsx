@@ -10,7 +10,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { AllActions, AppActionTypes } from "redux/types/app";
 import { searchSong } from "redux/actions/discover";
 import { bindActionCreators } from "redux";
-import { OptionItemData } from "types/Option";
+import { OptionAction, OptionActionType } from "types/Option";
 import { addToNowPlaying } from "redux/actions/player";
 import { addingToPlaylist } from "redux/actions/app";
 import { likeSong } from "redux/actions/library";
@@ -25,7 +25,7 @@ interface StateProps {
 interface DispatchProps {
   addToNowPlaying: (song: Song) => any;
   addingToPlaylist: (song: Song) => any;
-  likeSong: (song: Song, like: boolean) => any;
+  likeSong: (song: Song) => any;
 }
 
 interface DiscoverState {}
@@ -37,28 +37,10 @@ export const Discover: React.FC<Props> = ({
   addingToPlaylist,
   likeSong,
 }: Props) => {
-  const optionList: OptionItemData[] = [
-    {
-      index: 0,
-      label: "Add to Now Playing",
-      action: (item: Song) => {
-        addToNowPlaying(item);
-      },
-    },
-    {
-      index: 1,
-      label: "Add to Playlist",
-      action: (item: Song) => {
-        addingToPlaylist(item);
-      },
-    },
-    {
-      index: 2,
-      label: "Like Songs",
-      action: (item: Song) => {
-        likeSong(item, true);
-      },
-    },
+  const optionList: OptionActionType[] = [
+    OptionActionType.ADD_TO_NOW_PLAYING,
+    OptionActionType.ADD_TO_PLAYLIST,
+    OptionActionType.LIKE_SONG,
   ];
 
   return (
