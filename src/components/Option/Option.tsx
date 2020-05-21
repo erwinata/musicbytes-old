@@ -10,9 +10,10 @@ import { addToNowPlaying } from "redux/actions/player";
 import { bindActionCreators } from "redux";
 import { OptionAction, OptionActionType } from "types/Option";
 import { useSpring, animated, config } from "react-spring";
-import { addingToPlaylist } from "redux/actions/app";
+import { setPopupMenu } from "redux/actions/app";
 import { likeSong } from "redux/actions/library";
 import { findIndex } from "lodash";
+import { PopupMenuType } from "types/PopupMenuType";
 
 type Props = PassingProps & StateProps & DispatchProps;
 interface PassingProps {
@@ -21,12 +22,11 @@ interface PassingProps {
   optionState: any;
 }
 interface StateProps {
-  songPlaying: Song | null;
-  songs: Song[];
+  songs?: { list: Song[]; playing: Song };
 }
 interface DispatchProps {
   addToNowPlaying: (song: Song) => any;
-  addingToPlaylist: (song: Song) => any;
+  setPopupMenu: (menuState: PopupMenuType, songAdding: Song) => any;
   likeSong: (song: Song) => any;
 }
 
@@ -34,10 +34,9 @@ const Option: React.FC<Props> = ({
   dismissOption,
   optionList,
   optionState,
-  songPlaying,
   songs,
   addToNowPlaying,
-  addingToPlaylist,
+  setPopupMenu,
   likeSong,
 }) => {
   const optionActions: OptionAction[] = [
@@ -52,7 +51,7 @@ const Option: React.FC<Props> = ({
       type: OptionActionType.ADD_TO_PLAYLIST,
       label: "Add to Playlist",
       action: (item: Song) => {
-        addingToPlaylist(item);
+        setPopupMenu(PopupMenuType.ADDING_SONG_TO_PLAYLIST, item);
       },
     },
     {
@@ -79,7 +78,7 @@ const Option: React.FC<Props> = ({
       {optionList.map((optionListItem, index) => {
         if (
           optionListItem == OptionActionType.ADD_TO_NOW_PLAYING &&
-          songs.length == 0
+          songs!.list.length == 0
         ) {
           return null;
         }
@@ -132,7 +131,6 @@ const OptionItem: React.FC<OptionItemProps> = ({
 
 const mapStateToProps = (state: AppState) => {
   return {
-    songPlaying: state.player.songPlaying,
     songs: state.player.songs,
   };
 };
@@ -142,7 +140,7 @@ const mapDispatchToProps = (
   // ownProps: DiscoverProps
 ) => ({
   addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch),
-  addingToPlaylist: bindActionCreators(addingToPlaylist, dispatch),
+  setPopupMenu: bindActionCreators(setPopupMenu, dispatch),
   likeSong: bindActionCreators(likeSong, dispatch),
 });
 

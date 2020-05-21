@@ -18,7 +18,10 @@ export const actionPlaySong = (
   song,
   resetPlaylist,
 });
-export const actionPlayPlaylist = (playlist: Playlist): AllActions => ({
+export const actionPlayPlaylist = (playlist: {
+  index: number;
+  data: Playlist;
+}): AllActions => ({
   type: "PLAY_PLAYLIST",
   playlist,
 });
@@ -83,26 +86,25 @@ export const playSong = (song: Song, resetPlaylist: boolean) => {
   };
 };
 
-export const playPlaylist = (playlist: Playlist) => {
+export const playPlaylist = (playlist: { index: number; data: Playlist }) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    const songs = playlist.data.songs;
+
     dispatch(actionClearPlaylist());
 
     new Promise<Song[]>(async (resolve) => {
       var detailedSongs: Song[] = [];
-      for (const song of playlist.songs) {
-        console.log(song);
+      for (const song of songs) {
         const detailedSong = await SongDetail(song);
         detailedSongs.push(detailedSong);
-        console.log("EA");
       }
       resolve(detailedSongs);
     }).then(async (detailedSongs) => {
       // console.log(detailedSongs);
-      console.log("FINISH");
       detailedSongs.forEach((song) => {
         dispatch(actionAddToNowPlaying(song));
       });
-      dispatch(actionPlaySong(playlist.songs[0], false));
+      dispatch(actionPlaySong(songs[0], false));
       dispatch(actionShowPlayer(true));
     });
   };

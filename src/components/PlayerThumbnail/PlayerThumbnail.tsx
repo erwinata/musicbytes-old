@@ -13,10 +13,12 @@ import { PlayState } from "types/PlayState";
 type Props = StateProps & DispatchProps;
 
 interface StateProps {
-  song: Song | null;
+  songs?: { list: Song[]; playing: Song };
   playState: PlayState;
-  seeking: boolean;
-  timeCurrent: number;
+  time: {
+    seeking: boolean;
+    current: number;
+  };
 }
 interface DispatchProps {
   autoNextSong: () => any;
@@ -29,10 +31,9 @@ interface IPlayerThumbnail {
   ready: boolean;
 }
 const PlayerThumbnail: React.FC<Props> = ({
-  song,
+  songs,
   playState,
-  seeking,
-  timeCurrent,
+  time,
   togglePlaying,
   seekDone,
   autoNextSong,
@@ -87,18 +88,20 @@ const PlayerThumbnail: React.FC<Props> = ({
     } else if (playState == PlayState.PAUSED && state.ready) {
       state.youtubePlayer.pauseVideo();
     }
+  }, [playState]);
 
-    if (state.ready && seeking) {
-      state.youtubePlayer.seekTo(timeCurrent, true);
+  useEffect(() => {
+    if (state.ready && time.seeking) {
+      state.youtubePlayer.seekTo(time.current, true);
       seekDone();
     }
-  }, [playState, seeking]);
+  }, [time.seeking]);
 
   return (
     <div className="PlayerThumbnail">
-      {song != null ? (
+      {songs ? (
         <YouTube
-          videoId={song?.id}
+          videoId={songs.playing!.id}
           opts={opts}
           onReady={handleOnReady}
           onStateChange={handleOnStateChange}
@@ -111,10 +114,9 @@ const PlayerThumbnail: React.FC<Props> = ({
 
 const mapStateToProps = (state: AppState) => {
   return {
-    song: state.player.songPlaying,
+    songs: state.player.songs,
     playState: state.player.playState,
-    seeking: state.player.seeking,
-    timeCurrent: state.player.timeCurrent,
+    time: state.player.time,
   };
 };
 

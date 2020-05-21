@@ -5,6 +5,7 @@ import { Song } from "types/Song";
 import { NavigationTab } from "types/Navigation";
 import { Playlist } from "types/Playlist";
 import { ToastType } from "types/ToastType";
+import { PopupMenuType } from "types/PopupMenuType";
 
 export const actionChangeTab = (to: NavigationTab): AllActions => ({
   type: "CHANGE_TAB",
@@ -22,8 +23,12 @@ export const actionViewPlaylist = (playlistViewing: Playlist): AllActions => ({
   type: "VIEW_PLAYLIST",
   playlistViewing,
 });
-export const actionAddingToPlaylist = (songAdding: Song): AllActions => ({
-  type: "ADDING_TO_PLAYLIST",
+export const actionSetPopupMenu = (
+  menuState: PopupMenuType,
+  songAdding?: Song
+): AllActions => ({
+  type: "SET_POPUP_MENU",
+  menuState,
   songAdding,
 });
 
@@ -45,8 +50,8 @@ export const viewPlaylist = (playlistViewing: Playlist) => {
     dispatch(actionViewPlaylist(playlistViewing));
   };
 };
-export const addingToPlaylist = (songAdding: Song) => {
+export const setPopupMenu = (menuState: PopupMenuType, songAdding?: Song) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    dispatch(actionAddingToPlaylist(songAdding));
+    dispatch(actionSetPopupMenu(menuState, songAdding));
   };
 };

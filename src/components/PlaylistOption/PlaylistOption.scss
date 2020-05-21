@@ -1,0 +1,45 @@
+@import "_base.scss";
+
+.PlaylistList {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 1fr;
+  // grid-gap: 0.5rem;
+}
+
+.PlaylistListItem {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  padding: 1rem 1rem;
+  border-bottom: 1px solid $color-bg-black;
+  grid-gap: 0.5rem;
+  align-items: center;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: $color-bg-black;
+    transition: 0.3s ease;
+  }
+
+  &.Add {
+    padding: 1.5rem 1rem;
+    border-bottom: none;
+  }
+
+  img {
+    width: 1.25rem;
+    float: left;
+  }
+
+  .info {
+    // padding-left: 2rem;
+
+    h1 {
+      @extend .regularText;
+      font-size: 1.1rem;
+    }
+  }
+}

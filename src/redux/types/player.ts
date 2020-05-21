@@ -35,7 +35,10 @@ export interface PlaySongAction {
 }
 export interface PlayPlaylistAction {
   type: typeof PLAY_PLAYLIST;
-  playlist: Playlist;
+  playlist: {
+    index: number;
+    data: Playlist;
+  };
 }
 export interface ClearPlaylistAction {
   type: typeof CLEAR_PLAYLIST;

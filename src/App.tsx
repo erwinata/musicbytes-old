@@ -27,10 +27,11 @@ declare module "react-spring" {
 type Props = StateProps;
 
 interface StateProps {
-  currentTab: NavigationTab;
-  transitionDirection: number;
-  songPlaying: Song | null;
-  songs: Song[];
+  tabState: {
+    currentTab: NavigationTab;
+    transitionDirection: number;
+  };
+  songs?: { list: Song[]; playing: Song };
   showPlayer: boolean;
 }
 
@@ -39,13 +40,7 @@ interface ITabTransition {
   direction: number;
 }
 
-const App: React.FC<Props> = ({
-  currentTab,
-  transitionDirection,
-  songPlaying,
-  songs,
-  showPlayer,
-}) => {
+const App: React.FC<Props> = ({ tabState, songs, showPlayer }) => {
   // useEffect(() => {
   //   console.log("F " + tabTransition.lastTab);
 
@@ -77,12 +72,14 @@ const App: React.FC<Props> = ({
   const transitions = useTransition(location, (location) => location.pathname, {
     from: {
       opacity: 0,
-      transform: "translate3d(" + 100 * -transitionDirection + "%,0,0)",
+      transform:
+        "translate3d(" + 100 * -tabState.transitionDirection + "%,0,0)",
     },
     enter: { opacity: 1, transform: "translate3d(0%,0,0)" },
     leave: {
       opacity: 0,
-      transform: "translate3d(" + -50 * -transitionDirection + "%,0,0)",
+      transform:
+        "translate3d(" + -50 * -tabState.transitionDirection + "%,0,0)",
     },
   });
 
@@ -92,7 +89,7 @@ const App: React.FC<Props> = ({
         <Route path="/" exact component={Listen} />
         <Route path="/discover" exact component={Discover} />
         <Route path="/library" exact component={Library} />
-        <Route path="/" render={() => <div>{currentTab}</div>} />
+        <Route path="/" render={() => <div>{tabState.currentTab}</div>} />
       </Switch>
     </animated.div>
   ));
@@ -111,39 +108,18 @@ const App: React.FC<Props> = ({
 
       <Navbar />
 
-      {songs.length > 0 ? <MiniPlayer /> : null}
+      {songs!.list.length > 0 ? <MiniPlayer /> : null}
 
       <Player />
       <PlaylistView />
       {page}
     </div>
   );
-
-  // return (
-  //   <div className="App">
-  //     <BrowserRouter>
-  //       <Navbar />
-
-  //       {songs.length > 0 ? <MiniPlayer /> : null}
-
-  //       <Player />
-
-  //       <Switch>
-  //         <Route path="/" exact component={Listen} />
-  //         {/* <Route path="/" exact component={Discover} /> */}
-  //         <Route path="/discover" exact component={Discover} />
-  //         <Route path="/" render={() => <div>404</div>} />
-  //       </Switch>
-  //     </BrowserRouter>
-  //   </div>
-  // );
 };
 
 const mapStateToProps = (state: AppState) => {
   return {
-    currentTab: state.app.currentTab,
-    transitionDirection: state.app.transitionDirection,
-    songPlaying: state.player.songPlaying,
+    tabState: state.app.tabState,
     songs: state.player.songs,
     showPlayer: state.player.showPlayer,
   };

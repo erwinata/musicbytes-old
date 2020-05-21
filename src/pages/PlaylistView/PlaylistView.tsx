@@ -20,7 +20,7 @@ type Props = PassingProps & StateProps & DispatchProps;
 
 interface PassingProps {}
 interface StateProps {
-  playlistViewing?: Playlist;
+  playlistViewing?: number;
   collection: Song[];
 }
 interface DispatchProps {
@@ -49,11 +49,11 @@ const PlaylistView: React.FC<Props> = ({
         <div>
           <PlaylistViewHeader />
 
-          <SongList
+          {/* <SongList
             songs={playlistViewing!.songs}
             optionList={optionList}
             resetPlaylist={true}
-          />
+          /> */}
         </div>
       ) : null}
     </animated.div>

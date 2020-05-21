@@ -6,6 +6,7 @@ import { AppActionTypes } from "redux/types/app";
 import { AppState } from "redux/store/configureStore";
 import { Playlist } from "types/Playlist";
 import { animated } from "react-spring";
+import { PopupMenuType } from "types/PopupMenuType";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -13,6 +14,7 @@ interface PassingProps {
   playlistListStyle: any;
   onClickPlaylist: (playlistIndex: number) => any;
   onClickNewPlaylist: () => any;
+  popupMenuState: PopupMenuType;
 }
 interface StateProps {
   playlists?: Playlist[];
@@ -25,6 +27,7 @@ const PlaylistList: React.FC<Props> = ({
   playlistListStyle,
   onClickPlaylist,
   onClickNewPlaylist,
+  popupMenuState,
   playlists,
 }) => {
   return (
@@ -41,7 +44,9 @@ const PlaylistList: React.FC<Props> = ({
           </div>
         );
       })}
-      <PlaylistListAdd onClick={onClickNewPlaylist} />
+      {popupMenuState === PopupMenuType.ADDING_SONG_TO_PLAYLIST ? (
+        <PlaylistListAdd onClick={onClickNewPlaylist} />
+      ) : null}
     </animated.div>
   );
 };

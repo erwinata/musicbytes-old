@@ -23,7 +23,10 @@ interface PassingProps {
   like: boolean;
 }
 interface StateProps {
-  songPlaying: Song | null;
+  songs?: {
+    list: Song[];
+    playing: Song;
+  };
 }
 interface DispatchProps {
   playSong: (song: Song, resetPlaylist: boolean) => any;
@@ -43,7 +46,7 @@ const SongListItem: React.FC<Props> = ({
   resetPlaylist,
   clickButtonOption,
   like,
-  songPlaying,
+  songs,
   playSong,
   addToNowPlaying,
   removeSong,
@@ -55,10 +58,10 @@ const SongListItem: React.FC<Props> = ({
   });
 
   useEffect(() => {
-    if (songPlaying !== null) {
+    if (songs?.playing) {
       setState({
         ...state,
-        active: songPlaying.id == state.song.id,
+        active: songs.playing.id == state.song.id,
       });
     } else {
       setState({
@@ -66,7 +69,7 @@ const SongListItem: React.FC<Props> = ({
         active: false,
       });
     }
-  }, [songPlaying]);
+  }, [songs?.playing]);
 
   const classActive = state.active ? "active" : "";
 
@@ -101,7 +104,7 @@ const SongListItem: React.FC<Props> = ({
 
 const mapStateToProps = (state: AppState) => {
   return {
-    songPlaying: state.player.songPlaying,
+    songs: state.player.songs,
   };
 };
 

@@ -5,7 +5,7 @@ import {
 } from "redux/types/library";
 import { Song } from "types/Song";
 import { Playlist } from "types/Playlist";
-import { now, filter, findIndex } from "lodash";
+import { now, filter, concat, uniqBy } from "lodash";
 
 export interface ILibraryState {
   playlists: Playlist[];
@@ -137,16 +137,19 @@ export const libraryReducer = (
 ): ILibraryState => {
   switch (action.type) {
     case "ADD_TO_PLAYLIST":
+      var mergedSongs = concat(
+        state.playlists[action.playlistIndex].songs,
+        action.songs
+      );
+      mergedSongs = uniqBy(mergedSongs, "id");
+
       return {
         ...state,
         playlists: [
           ...state.playlists.slice(0, action.playlistIndex),
           {
             ...state.playlists[action.playlistIndex],
-            songs: [
-              ...state.playlists[action.playlistIndex].songs,
-              action.song,
-            ],
+            songs: mergedSongs,
           },
           ...state.playlists.slice(action.playlistIndex + 1),
         ],

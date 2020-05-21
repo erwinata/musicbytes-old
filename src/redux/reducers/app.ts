@@ -8,12 +8,18 @@ import { Song } from "types/Song";
 import { NavigationTab } from "types/Navigation";
 import { Playlist } from "types/Playlist";
 import { ToastType } from "types/ToastType";
+import { PopupMenuType } from "types/PopupMenuType";
 
 export interface IAppState {
-  currentTab: NavigationTab;
-  transitionDirection: number;
-  playlistViewing?: Playlist;
-  songAdding?: Song;
+  tabState: {
+    currentTab: NavigationTab;
+    transitionDirection: number;
+  };
+  playlistViewing?: number;
+  popupState: {
+    menuState: PopupMenuType;
+    songAdding?: Song;
+  };
   toastState: {
     text: string;
     toastType: ToastType;
@@ -116,8 +122,10 @@ const samplePlaylist = [
 ];
 
 const appReducerDefaultState: IAppState = {
-  currentTab: NavigationTab.LISTEN,
-  transitionDirection: 1,
+  tabState: {
+    currentTab: NavigationTab.LISTEN,
+    transitionDirection: 1,
+  },
   // playlistViewing: {
   //   title: "Lagu saya",
   //   songs: samplePlaylist,
@@ -125,7 +133,10 @@ const appReducerDefaultState: IAppState = {
   //   updatedAt: 1589205857159,
   // },
   playlistViewing: undefined,
-  songAdding: undefined,
+  popupState: {
+    menuState: PopupMenuType.NONE,
+    songAdding: undefined,
+  },
   toastState: {
     text: "Song added to playlist",
     toastType: ToastType.NORMAL,
@@ -146,13 +157,16 @@ export const appReducer = (
         transitionDirection = 1;
       } else {
         transitionDirection =
-          state.currentTab == NavigationTab.DISCOVER ? -1 : 1;
+          state.tabState.currentTab == NavigationTab.DISCOVER ? -1 : 1;
       }
 
       return {
         ...state,
-        currentTab: action.to,
-        transitionDirection: transitionDirection,
+        tabState: {
+          ...state.tabState,
+          currentTab: action.to,
+          transitionDirection: transitionDirection,
+        },
       };
     case "SHOW_TOAST":
       const toastType = action.toastType ? action.toastType : ToastType.NORMAL;
@@ -166,13 +180,22 @@ export const appReducer = (
     case "VIEW_PLAYLIST":
       return {
         ...state,
-        playlistViewing:
-          action.playlistViewing !== null ? action.playlistViewing : undefined,
+        // playlistViewing:
+        //   action.playlistViewing !== null ? action.playlistViewing : undefined,
       };
-    case "ADDING_TO_PLAYLIST":
+    case "SET_POPUP_MENU":
+      var songAdding = state.popupState.songAdding;
+      if (action.menuState === PopupMenuType.NONE) {
+        songAdding = undefined;
+      } else if (action.songAdding !== undefined) {
+        songAdding = action.songAdding;
+      }
       return {
         ...state,
-        songAdding: action.songAdding !== null ? action.songAdding : undefined,
+        popupState: {
+          menuState: action.menuState,
+          songAdding: songAdding,
+        },
       };
     default:
       return state;

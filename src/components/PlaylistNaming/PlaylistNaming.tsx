@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./PlaylistNaming.scss";
 import { animated, useSpring } from "react-spring";
 import { AppState } from "redux/store/configureStore";
@@ -26,16 +26,28 @@ const PlaylistNaming: React.FC<Props> = ({
 
   const handleSaveNewPlaylist = () => {
     saveNewPlaylist(playlistTitle);
+    textInput.current!.value = "";
   };
 
   const handleChange = (e: any) => {
     setPlaylistTitle(e.target.value);
   };
 
+  var textInput: React.RefObject<HTMLInputElement> = React.createRef();
+
+  useEffect(() => {
+    textInput.current!.focus();
+  }, [saveNewPlaylist]);
+
   return (
     <animated.div className="PlaylistNaming" style={playlistNamingStyle}>
       <h2>Playlist Name</h2>
-      <input type="text" defaultValue={playlistTitle} onChange={handleChange} />
+      <input
+        type="text"
+        defaultValue={playlistTitle}
+        onChange={handleChange}
+        ref={textInput}
+      />
       <button onClick={handleSaveNewPlaylist}>Save Playlist</button>
     </animated.div>
   );

@@ -248,9 +248,9 @@ export const ButtonRepeat: React.FC<{ onClick: any; repeat: Repeat }> = ({
   );
 };
 
-export const ButtonSave = () => {
+export const ButtonSave: React.FC<any> = ({ onClick }: any) => {
   return (
-    <div className="Button ButtonSave">
+    <div className="Button ButtonSave" onClick={onClick}>
       <img src="/res/save.svg" alt="Save Playlist" />
     </div>
   );

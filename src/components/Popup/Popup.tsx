@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Popup.scss";
 import PlaylistList from "components/PlaylistList/PlaylistList";
+import PlaylistOption from "components/PlaylistOption/PlaylistOption";
 import PlaylistNaming from "components/PlaylistNaming/PlaylistNaming";
 import { AppState } from "redux/store/configureStore";
 import { ThunkDispatch } from "redux-thunk";
@@ -10,108 +11,223 @@ import { Song } from "types/Song";
 import { animated, useSpring } from "react-spring";
 import { useMeasure } from "react-use";
 import { bindActionCreators } from "redux";
-import { addingToPlaylist, showToast } from "redux/actions/app";
-import { addToPlaylist, newPlaylist } from "redux/actions/library";
+import { showToast, setPopupMenu } from "redux/actions/app";
+import {
+  addToPlaylist,
+  newPlaylist,
+  savePlaylist,
+} from "redux/actions/library";
 import { ToastType } from "types/ToastType";
+import { PopupMenuType } from "types/PopupMenuType";
+import { Playlist } from "types/Playlist";
+import { concat } from "lodash";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
 interface PassingProps {}
 interface StateProps {
-  songAdding?: Song;
+  popupState: {
+    menuState: PopupMenuType;
+    songAdding?: Song;
+  };
+  songs?: { list: Song[]; playing: Song };
+  playlist?: {
+    index: number;
+    data: Playlist;
+  };
+  // playlistPlaying?: Playlist;
 }
 interface DispatchProps {
-  addingToPlaylist: (song: Song) => any;
-  addToPlaylist: (song: Song, playlistIndex: number) => any;
+  setPopupMenu: (menuState: PopupMenuType, songAdding?: Song) => any;
+  addToPlaylist: (songs: Song[], playlistIndex: number) => any;
   newPlaylist: (title: string, songs: Song[]) => any;
-  showToast: (text: string, toastType?: ToastType) => any;
+
+  savePlaylist: (songs: Song[], playlistIndex: number) => any;
 }
 
 const Popup: React.FC<Props> = ({
-  songAdding,
-  addingToPlaylist,
+  popupState,
+  songs,
+  playlist,
+  // playlistPlaying,
+  setPopupMenu,
   addToPlaylist,
   newPlaylist,
-  showToast,
+  savePlaylist,
 }) => {
-  console.log(songAdding);
+  // console.log(popupState);
 
-  const [viewNewPlaylist, setViewNewPlaylist] = useState(false);
-  const [contentHeight, setContentHeight] = useState(0);
+  const [popupHeaderText, setPopupHeaderText] = useState("");
 
+  const [contentHeight, setContentHeight] = useState(500);
   const [ref, { height }] = useMeasure();
 
+  const playlistOptionListDefault = [
+    {
+      icon: "save",
+      label: "Save Playlist",
+      action: () => {
+        savePlaylist(songs!.list, playlist!.index);
+        setPopupMenu(PopupMenuType.NONE);
+      },
+    },
+    {
+      icon: "edit",
+      label: "Save as New Playlist",
+      action: () => {
+        setPopupMenu(PopupMenuType.PLAYLIST_SAVING_SAVE_NEW);
+      },
+    },
+    {
+      icon: "merge",
+      label: "Merge to Playlist",
+      action: () => {
+        setPopupMenu(PopupMenuType.PLAYLIST_SAVING_MERGE);
+        // mergeToPlaylist(songs!.list, playlist!.index);
+      },
+    },
+  ];
+
+  const [playlistOptionList, setPlaylistOptionList] = useState(
+    playlistOptionListDefault
+  );
+
   const closePopup = () => {
-    setViewNewPlaylist(false);
-    addingToPlaylist(undefined!);
+    setPopupMenu(PopupMenuType.NONE);
+    setPopupHeaderText("");
   };
 
   useEffect(() => {
-    //Sets initial height
+    switch (popupState.menuState) {
+      case PopupMenuType.ADDING_SONG_TO_PLAYLIST:
+        setPopupHeaderText("Add Song to Playlist");
+        break;
+      case PopupMenuType.PLAYLIST_SAVING:
+        setPopupHeaderText("Save Playlist");
+        if (playlist !== undefined) {
+          setPlaylistOptionList(
+            concat(
+              playlistOptionListDefault.slice(0, 1),
+              playlistOptionListDefault.slice(2, 3)
+            )
+            // playlistOptionListDefault.slice(
+            // 2,
+            // playlistOptionListDefault.length
+            // )
+            // )
+          );
+        } else {
+          setPlaylistOptionList(
+            playlistOptionListDefault.slice(1, playlistOptionListDefault.length)
+          );
+        }
+        break;
+      case PopupMenuType.PLAYLIST_SAVING_MERGE:
+        setPopupHeaderText("Merge to Playlist");
+        break;
+    }
+  }, [popupState]);
+
+  useEffect(() => {
+    console.log("HEI");
+    console.log(height);
     setContentHeight(height);
-
-    //Adds resize event listener
-    // window.addEventListener("resize", setContentHeight(height));
-
-    // Clean-up
-    // return window.removeEventListener("resize", setContentHeight(height));
   }, [height]);
 
-  const slide = useSpring({
-    top: songAdding ? "0vh" : "100vh",
-    // opacity: songAdding ? 1 : 0,
-  });
-  const overlayStyle = useSpring({
-    opacity: songAdding ? 1 : 0,
-  });
-  const contentStyle = useSpring({
-    height: `${contentHeight + 75}px`,
-    opacity: songAdding ? 1 : 0,
-    // left: !newPlaylist ? "0vw" : "-80vw",
-  });
-  const playlistListStyle = useSpring({
-    // left: !newPlaylist ? "0vw" : "-100vw",
-    display: !viewNewPlaylist ? "block" : "none",
-    opacity: !viewNewPlaylist ? 1 : 0,
-  });
-  const playlistNamingStyle = useSpring({
-    // left: newPlaylist ? "0vw" : "100vw",
-    display: viewNewPlaylist ? "block" : "none",
-    opacity: viewNewPlaylist ? 1 : 0,
-  });
+  // useEffect(() => {
+  //   console.log("HEIasd");
+  //   console.log(height);
+  //   // setContentHeight(height);
+  // }, [height]);
 
-  const handleClickPlaylist = (playlistIndex: number) => {
-    addToPlaylist(songAdding!, playlistIndex);
-    closePopup();
+  const style = {
+    popup: {
+      top: popupState.menuState !== PopupMenuType.NONE ? "0vh" : "100vh",
+    },
+    overlay: useSpring({
+      opacity: popupState.menuState !== PopupMenuType.NONE ? 1 : 0,
+    }),
+    content: useSpring({
+      height: `${contentHeight + 75}px`,
+      display: popupState.menuState !== PopupMenuType.NONE ? "block" : "none",
+    }),
+    playlistOption: useSpring({
+      display:
+        popupState.menuState == PopupMenuType.PLAYLIST_SAVING
+          ? "block"
+          : "none",
+    }),
+    playlistList: {
+      display:
+        popupState.menuState == PopupMenuType.ADDING_SONG_TO_PLAYLIST ||
+        popupState.menuState == PopupMenuType.PLAYLIST_SAVING_MERGE
+          ? "block"
+          : "none",
+    },
+    playlistNaming: {
+      display:
+        popupState.menuState == PopupMenuType.ADDING_SONG_NEW_PLAYLIST ||
+        popupState.menuState == PopupMenuType.PLAYLIST_SAVING_SAVE_NEW
+          ? "block"
+          : "none",
+    },
   };
 
-  const handleClickNewPlaylist = () => {
-    setViewNewPlaylist(true);
-  };
+  const handle = {
+    clickPlaylist: (playlistIndex: number) => {
+      var songsToBeMerged: Song[] = [];
+      if (popupState.menuState === PopupMenuType.ADDING_SONG_TO_PLAYLIST)
+        songsToBeMerged = [popupState.songAdding!];
+      else if (popupState.menuState === PopupMenuType.PLAYLIST_SAVING_MERGE) {
+        console.log("mwe");
+        songsToBeMerged = songs!.list;
+      }
 
-  const saveNewPlaylist = (title: string) => {
-    newPlaylist(title, [songAdding!]);
-    closePopup();
+      addToPlaylist(songsToBeMerged, playlistIndex);
+
+      closePopup();
+    },
+
+    clickNewPlaylist: () => {
+      setPopupMenu(PopupMenuType.ADDING_SONG_NEW_PLAYLIST);
+    },
+
+    clickSaveNewPlaylist: (title: string) => {
+      var songsToBeSaved: Song[] = [];
+      if (popupState.menuState === PopupMenuType.ADDING_SONG_NEW_PLAYLIST)
+        songsToBeSaved = [popupState.songAdding!];
+      else if (popupState.menuState === PopupMenuType.PLAYLIST_SAVING_SAVE_NEW)
+        songsToBeSaved = songs!.list;
+
+      newPlaylist(title, songsToBeSaved);
+
+      closePopup();
+    },
   };
 
   return (
-    <div className="Popup" style={{ top: songAdding ? "0vh" : "100vh" }}>
+    <div className="Popup" style={style.popup}>
       <animated.div
         className="BlackOverlay"
-        style={overlayStyle}
+        style={style.overlay}
         onClick={closePopup}
       ></animated.div>
-      <animated.div className="container" style={contentStyle}>
-        <h1>{newPlaylist ? "Create New Playlist" : "Add to Playlist"}</h1>
+      <animated.div className="container" style={style.content}>
+        <h1>{popupHeaderText}</h1>
         <div className="content" ref={ref}>
+          <PlaylistOption
+            playlistOptionStyle={style.playlistOption}
+            playlistOptionList={playlistOptionList}
+          />
           <PlaylistList
-            playlistListStyle={playlistListStyle}
-            onClickPlaylist={handleClickPlaylist}
-            onClickNewPlaylist={handleClickNewPlaylist}
+            playlistListStyle={style.playlistList}
+            onClickPlaylist={handle.clickPlaylist}
+            onClickNewPlaylist={handle.clickNewPlaylist}
+            popupMenuState={popupState.menuState}
           />
           <PlaylistNaming
-            playlistNamingStyle={playlistNamingStyle}
-            saveNewPlaylist={saveNewPlaylist}
+            playlistNamingStyle={style.playlistNaming}
+            saveNewPlaylist={handle.clickSaveNewPlaylist}
           />
         </div>
       </animated.div>
@@ -121,17 +237,24 @@ const Popup: React.FC<Props> = ({
 
 const mapStateToProps = (state: AppState) => {
   return {
-    songAdding: state.app.songAdding,
+    popupState: state.app.popupState,
+    songs: state.player.songs,
+    playlist: state.player.playlist,
+    // playlistPlaying: state.library.playlists.slice(
+    //   state.player.playlistIndexPlaying,
+    //   1
+    // )[0],
   };
 };
 
 const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AppActionTypes>
 ) => ({
-  addingToPlaylist: bindActionCreators(addingToPlaylist, dispatch),
+  setPopupMenu: bindActionCreators(setPopupMenu, dispatch),
   addToPlaylist: bindActionCreators(addToPlaylist, dispatch),
   newPlaylist: bindActionCreators(newPlaylist, dispatch),
-  showToast: bindActionCreators(showToast, dispatch),
+
+  savePlaylist: bindActionCreators(savePlaylist, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Popup);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./PlaylistViewHeader.scss";
 import { AppState } from "redux/store/configureStore";
 import { ThunkDispatch } from "redux-thunk";
@@ -15,11 +15,12 @@ type Props = PassingProps & StateProps & DispatchProps;
 
 interface PassingProps {}
 interface StateProps {
-  playlistViewing?: Playlist;
+  playlistViewing?: number;
+  playlists: Playlist[];
   collection: Song[];
 }
 interface DispatchProps {
-  playPlaylist: (playlist: Playlist) => any;
+  playPlaylist: (playlist: { index: number; data: Playlist }) => any;
   viewPlaylist: (playlist: Playlist) => any;
 }
 
@@ -29,8 +30,16 @@ const PlaylistViewHeader: React.FC<Props> = ({
   playPlaylist,
   viewPlaylist,
 }) => {
+  const [playlist, setPlaylist] = useState<Playlist[]>([]);
+
+  // useEffect(() => {
+  //   if (playlistViewing !== undefined) {
+  //     setPlaylist(state.library.playlists[state.app.playlistIndexViewing!]);
+  //   }
+  // }, [playlistViewing]);
+
   const handleClickPlayNow = () => {
-    playPlaylist(playlistViewing!);
+    // playPlaylist(playlistIndexViewing!);
   };
   const handleClickClose = () => {
     viewPlaylist(undefined!);
@@ -39,12 +48,12 @@ const PlaylistViewHeader: React.FC<Props> = ({
   return (
     <div className="PlaylistViewHeader">
       <ButtonClose onClick={handleClickClose} />
-      <img
+      {/* <img
         src={playlistViewing?.songs[0].thumbnails!.default}
         alt="Thumbnail image"
       />
       <h1>{playlistViewing?.title}</h1>
-      <h2>{playlistViewing?.songs.length} songs</h2>
+      <h2>{playlistViewing?.songs.length} songs</h2> */}
       <ButtonCapsuleText text={"Play Now"} onClick={handleClickPlayNow} />
     </div>
   );
@@ -53,6 +62,7 @@ const PlaylistViewHeader: React.FC<Props> = ({
 const mapStateToProps = (state: AppState) => {
   return {
     playlistViewing: state.app.playlistViewing,
+    playlists: state.library.playlists,
     collection: state.library.collection,
   };
 };

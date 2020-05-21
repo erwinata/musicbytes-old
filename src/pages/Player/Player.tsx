@@ -7,27 +7,37 @@ import { connect } from "react-redux";
 import { AppState } from "redux/store/configureStore";
 import { Song } from "types/Song";
 import { Repeat } from "types/Repeat";
-import { durationIncrement, togglePlaying } from "redux/actions/player";
+import {
+  durationIncrement,
+  togglePlaying,
+  addToNowPlaying,
+} from "redux/actions/player";
 import { ThunkDispatch } from "redux-thunk";
 import { AllActions } from "redux/types/app";
 import { bindActionCreators } from "redux";
 import { PlayState } from "types/PlayState";
 import { animated } from "react-spring";
 import "./Player.scss";
+import { Playlist } from "types/Playlist";
 
 type Props = StateProps & DispatchProps;
 interface StateProps {
   showPlayer: boolean;
-  songs: Song[];
-  songPlaying: Song | null;
   playState: PlayState;
-  shuffle: boolean;
-  repeat: Repeat;
-  timeCurrent: number;
-  timeTotal: number;
+  songs?: { list: Song[]; playing: Song };
+  playlist?: { index: number; data: Playlist };
+  setting: {
+    shuffle: boolean;
+    repeat: Repeat;
+  };
+  time: {
+    current: number;
+    total: number;
+  };
 }
 interface DispatchProps {
   durationIncrement: () => any;
+  addToNowPlaying: (song: Song) => any;
 }
 
 interface StatePlayer {
@@ -36,13 +46,12 @@ interface StatePlayer {
 const Player: React.FC<Props> = ({
   showPlayer,
   songs,
-  songPlaying,
+  playlist,
   playState,
-  shuffle,
-  repeat,
-  timeCurrent,
-  timeTotal,
+  setting,
+  time,
   durationIncrement,
+  addToNowPlaying,
 }: Props) => {
   const [state, setState] = useState<StatePlayer>({
     durationInterval: undefined,
@@ -59,6 +68,14 @@ const Player: React.FC<Props> = ({
       clearInterval(state.durationInterval);
     }
   }, [playState]);
+
+  // useEffect(() => {
+
+  // 	if (playlist){
+  // 		addToNowPlaying()
+  // 	}
+
+  // }, [playlist?.data.songs])
 
   const slide = useSpring({
     top: showPlayer ? "0vh" : "100vh",
@@ -77,13 +94,11 @@ const Player: React.FC<Props> = ({
 const mapStateToProps = (state: AppState) => {
   return {
     showPlayer: state.player.showPlayer,
-    songPlaying: state.player.songPlaying,
     songs: state.player.songs,
+    playlist: state.player.playlist,
     playState: state.player.playState,
-    shuffle: state.player.shuffle,
-    repeat: state.player.repeat,
-    timeCurrent: state.player.timeCurrent,
-    timeTotal: state.player.timeTotal,
+    setting: state.player.setting,
+    time: state.player.time,
   };
 };
 
@@ -92,6 +107,7 @@ const mapDispatchToProps = (
   // ownProps: DiscoverProps
 ) => ({
   durationIncrement: bindActionCreators(durationIncrement, dispatch),
+  addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Player);

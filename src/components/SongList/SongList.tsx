@@ -27,7 +27,7 @@ const SongList: React.FC<Props> = ({
   resetPlaylist,
   collection,
 }: Props) => {
-  const [contentHeight, setContentHeight] = useState(0);
+  const [contentHeight, setContentHeight] = useState(50);
 
   const [ref, { height }] = useMeasure();
 

@@ -12,8 +12,9 @@ import { searchSong } from "redux/actions/discover";
 import { bindActionCreators } from "redux";
 import { OptionAction, OptionActionType } from "types/Option";
 import { addToNowPlaying } from "redux/actions/player";
-import { addingToPlaylist } from "redux/actions/app";
+import { setPopupMenu } from "redux/actions/app";
 import { likeSong } from "redux/actions/library";
+import { PopupMenuType } from "types/PopupMenuType";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -24,7 +25,7 @@ interface StateProps {
 }
 interface DispatchProps {
   addToNowPlaying: (song: Song) => any;
-  addingToPlaylist: (song: Song) => any;
+  setPopupMenu: (menuState: PopupMenuType, songAdding?: Song) => any;
   likeSong: (song: Song) => any;
 }
 
@@ -34,7 +35,7 @@ export const Discover: React.FC<Props> = ({
   query,
   songs,
   addToNowPlaying,
-  addingToPlaylist,
+  setPopupMenu,
   likeSong,
 }: Props) => {
   const optionList: OptionActionType[] = [
@@ -64,7 +65,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AppActionTypes>
 ) => ({
   addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch),
-  addingToPlaylist: bindActionCreators(addingToPlaylist, dispatch),
+  setPopupMenu: bindActionCreators(setPopupMenu, dispatch),
   likeSong: bindActionCreators(likeSong, dispatch),
 });
 

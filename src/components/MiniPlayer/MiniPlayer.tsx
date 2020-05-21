@@ -44,10 +44,8 @@ const MiniPlayer: React.FC<Props> = ({ showPlayer, showToast }) => {
 
 const mapStateToProps = (state: AppState) => {
   return {
-    songPlaying: state.player.songPlaying,
     songs: state.player.songs,
-    timeCurrent: state.player.timeCurrent,
-    timeTotal: state.player.timeTotal,
+    time: state.player.time,
   };
 };
 

@@ -10,7 +10,6 @@ import { Song } from "types/Song";
 import { animated, useSpring, config } from "react-spring";
 import { useMeasure } from "react-use";
 import { bindActionCreators } from "redux";
-import { addingToPlaylist } from "redux/actions/app";
 import { addToPlaylist, newPlaylist } from "redux/actions/library";
 import { ToastType } from "types/ToastType";
 

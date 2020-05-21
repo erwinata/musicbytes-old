@@ -5,12 +5,14 @@ export const SAVE_PLAYLIST = "SAVE_PLAYLIST";
 export const RENAME_PLAYLIST = "RENAME_PLAYLIST";
 export const NEW_PLAYLIST = "NEW_PLAYLIST";
 
+export const MERGE_TO_PLAYLIST = "MERGE_TO_PLAYLIST";
+
 export const LIKE_SONG = "LIKE_SONG";
 
 export interface AddToPlaylistAction {
   type: typeof ADD_TO_PLAYLIST;
   playlistIndex: number;
-  song: Song;
+  songs: Song[];
 }
 export interface SavePlaylistAction {
   type: typeof SAVE_PLAYLIST;

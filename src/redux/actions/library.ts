@@ -5,13 +5,14 @@ import { SearchSong } from "api/Search";
 import { Song } from "types/Song";
 import { actionShowToast } from "./app";
 import { findIndex } from "lodash";
+import { actionPlayPlaylist, playPlaylist } from "./player";
 
 export const actionAddToPlaylist = (
-  song: Song,
+  songs: Song[],
   playlistIndex: number
 ): AllActions => ({
   type: "ADD_TO_PLAYLIST",
-  song,
+  songs,
   playlistIndex,
 });
 
@@ -48,19 +49,36 @@ export const actionLikeSong = (song: Song, isExist: boolean): AllActions => ({
   isExist,
 });
 
-export const addToPlaylist = (song: Song, playlistIndex: number) => {
+export const addToPlaylist = (songs: Song[], playlistIndex: number) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    console.log();
-    var a = findIndex(
-      getState().library.playlists[playlistIndex].songs,
-      (item) => item.id == song!.id
-    );
-    console.log(a);
-    if (a > -1) {
-      dispatch(actionShowToast("Song already exists in this playlist"));
+    if (songs.length == 1) {
+      var songExist = findIndex(
+        getState().library.playlists[playlistIndex].songs,
+        (item) => item.id == songs[0]!.id
+      );
+      if (songExist > -1) {
+        dispatch(actionShowToast("Song already exists in this playlist"));
+      } else {
+        dispatch(actionAddToPlaylist(songs, playlistIndex));
+        dispatch(actionShowToast("Song added to playlist"));
+
+        var playlist = {
+          index: playlistIndex,
+          data: getState().library.playlists[playlistIndex],
+        };
+
+        if (getState().player.playlist?.index === playlist.index) {
+          dispatch(actionPlayPlaylist(playlist));
+        }
+      }
     } else {
-      dispatch(actionAddToPlaylist(song, playlistIndex));
-      dispatch(actionShowToast("Song added to playlist"));
+      dispatch(actionAddToPlaylist(songs, playlistIndex));
+      var playlist = {
+        index: playlistIndex,
+        data: getState().library.playlists[playlistIndex],
+      };
+      dispatch(actionPlayPlaylist(playlist));
+      dispatch(actionShowToast("Songs merged to playlist"));
     }
   };
 };
@@ -68,6 +86,14 @@ export const addToPlaylist = (song: Song, playlistIndex: number) => {
 export const savePlaylist = (songs: Song[], playlistIndex: number) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionSavePlaylist(songs, playlistIndex));
+    var playlist = {
+      index: playlistIndex,
+      data: getState().library.playlists[playlistIndex],
+    };
+    if (getState().player.playlist?.index === playlist.index) {
+      dispatch(actionPlayPlaylist(playlist));
+    }
+    dispatch(actionShowToast("Playlist saved"));
   };
 };
 
@@ -80,6 +106,16 @@ export const renamePlaylist = (title: string, playlistIndex: number) => {
 export const newPlaylist = (title: string, songs: Song[]) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionNewPlaylist(title, songs));
+
+    if (songs.length > 1) {
+      const newPlaylistIndex = getState().library.playlists.length - 1;
+      const newPlaylist = {
+        index: newPlaylistIndex,
+        data: getState().library.playlists[newPlaylistIndex],
+      };
+
+      dispatch(actionPlayPlaylist(newPlaylist));
+    }
     dispatch(actionShowToast("New Playlist created"));
   };
 };

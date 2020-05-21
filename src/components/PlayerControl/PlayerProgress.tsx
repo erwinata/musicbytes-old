@@ -4,58 +4,48 @@ import {
   ToMinutes,
   ToSeconds,
   DurationToPercentage,
-  PercentageToDuration
+  PercentageToDuration,
 } from "helpers/duration";
 
 interface TimeProps {
-  timeCurrent: number;
-  timeTotal: number;
+  time: {
+    current: number;
+    total: number;
+  };
   seekTo?: (to: number) => any;
 }
 
-const PlayerProgress: React.FC<TimeProps> = ({
-  timeCurrent,
-  timeTotal,
-  seekTo
-}) => {
+const PlayerProgress: React.FC<TimeProps> = ({ time, seekTo }) => {
   return (
     <div className="PlayerProgress">
-      <PlayerTime timeCurrent={timeCurrent} timeTotal={timeTotal} />
-      <PlayerProgressBar
-        timeCurrent={timeCurrent}
-        timeTotal={timeTotal}
-        seekTo={seekTo}
-      />
+      <PlayerTime time={time} />
+      <PlayerProgressBar time={time} seekTo={seekTo} />
     </div>
   );
 };
 
-const PlayerTime: React.FC<TimeProps> = ({ timeCurrent, timeTotal }) => {
+const PlayerTime: React.FC<TimeProps> = ({ time }) => {
   return (
     <div className="PlayerTime">
       <span className="current">
-        {ToMinutes(timeCurrent) + ":" + ToSeconds(timeCurrent)}
+        {ToMinutes(time.current) + ":" + ToSeconds(time.current)}
       </span>
       <span className="total">
-        {ToMinutes(timeTotal) + ":" + ToSeconds(timeTotal)}
+        {ToMinutes(time.total) + ":" + ToSeconds(time.total)}
       </span>
     </div>
   );
 };
 
-const PlayerProgressBar: React.FC<TimeProps> = ({
-  timeCurrent,
-  timeTotal,
-  seekTo
-}) => {
-  var percentage = DurationToPercentage(timeCurrent, timeTotal);
+const PlayerProgressBar: React.FC<TimeProps> = ({ time, seekTo }) => {
+  var percentage = DurationToPercentage(time.current, time.total);
 
   const handleOnClick = (event: any) => {
     let currentTargetRect = event.currentTarget.getBoundingClientRect();
     const offsetX = event.pageX - currentTargetRect.left;
 
     var percentage = (offsetX / currentTargetRect.right) * 100;
-    var newTimeCurrent = PercentageToDuration(percentage, timeTotal);
+    var newTimeCurrent = PercentageToDuration(percentage, time.total);
     console.log("%" + newTimeCurrent);
     seekTo!(newTimeCurrent);
   };
