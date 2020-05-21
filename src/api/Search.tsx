@@ -4,7 +4,7 @@ import { Song } from "types/Song";
 import { decodeText } from "helpers/decode";
 
 export const SearchSong = (query: string, total: number): Promise<Song[]> => {
-  const API_KEY = "AIzaSyAMh_GjYIGO20KiaxYR9-eCAk2ROY8vxk0";
+  const API_KEY = "AIzaSyBQ5KGEWWK9-A0O87RLepRrmX3yz7kU4iA";
   const api = new YoutubeDataAPI(API_KEY);
 
   var result: Song[] = [];
@@ -21,8 +21,6 @@ export const SearchSong = (query: string, total: number): Promise<Song[]> => {
           var snippet: any = video.snippet;
 
           var item: Song = {
-            index: -1,
-            playOrder: -1,
             id: video.id.videoId,
             title: decodeText(snippet.title),
             channel: decodeText(snippet.channelTitle),

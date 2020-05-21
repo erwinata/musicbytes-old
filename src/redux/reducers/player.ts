@@ -88,8 +88,6 @@ const samplePlaylist: Song[] = [
   //     duration: 383,
   //   },
   {
-    index: 0,
-    playOrder: -1,
     id: "je9okpHFZp0",
     title: "HIVI! - Bumi dan Bulan (Official Music Video)",
     channel: "HIVI!",
@@ -101,8 +99,6 @@ const samplePlaylist: Song[] = [
     duration: 0,
   },
   {
-    index: 1,
-    playOrder: -1,
     id: "kX1O93X77d4",
     title: "HIVI! - Siapkah Kau 'Tuk Jatuh Cinta Lagi (Official Lyric Video)",
     channel: "HIVI!",
@@ -114,8 +110,6 @@ const samplePlaylist: Song[] = [
     duration: 0,
   },
   {
-    index: 2,
-    playOrder: -1,
     id: "tUJAxxm1y1I",
     title: "HIVI! - Remaja (Official Lyric Video)",
     channel: "HIVI!",
@@ -128,8 +122,6 @@ const samplePlaylist: Song[] = [
   },
 ];
 const sampleSongPlaying: Song = {
-  index: 0,
-  playOrder: -1,
   id: "tUJAxxm1y1I",
   title: "HIVI! - Remaja (Official Lyric Video)",
   channel: "HIVI!",
@@ -171,7 +163,6 @@ export const playerReducer = (
     case "PLAY_SONG":
       let songs = state.songs!.list;
       if (action.resetPlaylist) {
-        action.song.playOrder = 0;
         songs = [action.song];
       }
       return {
@@ -305,22 +296,22 @@ export const playerReducer = (
       };
 
     case "REMOVE_SONG":
-      var playOrder = action.song.playOrder;
+    // var playOrder = action.song.playOrder;
 
-      var updatedSongs = state.songs!.list.filter(
-        (song) => song.playOrder !== action.song.playOrder
-      );
+    // var updatedSongs = state.songs!.list.filter(
+    //   (song) => song.playOrder !== action.song.playOrder
+    // );
 
-      updatedSongs.forEach((song) => {
-        if (song.playOrder > playOrder) {
-          song.playOrder -= 1;
-        }
-      });
+    // updatedSongs.forEach((song) => {
+    //   if (song.playOrder > playOrder) {
+    //     song.playOrder -= 1;
+    //   }
+    // });
 
-      return {
-        ...state,
-        songs: { ...state.songs!, list: updatedSongs },
-      };
+    // return {
+    //   ...state,
+    //   songs: { ...state.songs!, list: updatedSongs },
+    // };
 
     case "TOGGLE_SHUFFLE":
       var shuffledSongs;
