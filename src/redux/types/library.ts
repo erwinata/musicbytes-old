@@ -13,6 +13,7 @@ export interface AddToPlaylistAction {
   type: typeof ADD_TO_PLAYLIST;
   playlistIndex: number;
   songs: Song[];
+  isMergeTo?: boolean;
 }
 export interface SavePlaylistAction {
   type: typeof SAVE_PLAYLIST;

@@ -2,13 +2,26 @@
 
 .PlayerProgress {
   .PlayerProgressBar {
-    height: 2px;
-    background: $color-black-transparent;
+    height: 16px;
     position: relative;
+    transition: 0.2s ease;
+    // margin-top: calc(0px + 7px);
+
+    .total {
+      top: 12px;
+      height: 4px;
+      background: $color-black-transparent;
+      position: absolute;
+      width: 100%;
+    }
 
     .current {
+      position: absolute;
+      top: 12px;
       height: 4px;
       background: linear-gradient(90deg, $color-red 0%, $color-violet 100%);
+      transition: 0.2s ease;
+      z-index: 1;
     }
 
     .pointer {
@@ -16,8 +29,30 @@
       position: absolute;
       width: 16px;
       height: 16px;
-      top: -6px;
+      top: 6px;
       background: $color-violet;
+      transition: 0.2s ease;
+      z-index: 2;
+    }
+
+    &:hover {
+      // margin-top: calc(0px + 5px);
+
+      .total {
+        top: 10px;
+        height: 6px;
+      }
+
+      .current {
+        top: 10px;
+        height: 6px;
+      }
+
+      .pointer {
+        width: 20px;
+        height: 20px;
+        top: 2px;
+      }
     }
   }
 

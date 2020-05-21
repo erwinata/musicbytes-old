@@ -1,3 +1,10 @@
+export const ConvertDurationToNumber = (durationRaw: string) => {
+  var durationRawSplit = durationRaw.split("M");
+  var minute = parseInt(durationRawSplit[0].toString().replace(/\D/g, ""));
+  var second = parseInt(durationRawSplit[1].toString().replace(/\D/g, ""));
+  return minute * 60 + second;
+};
+
 export const ToMinutes = (duration: number) => {
   var result = "";
   var minutes = Math.floor(duration / 60);

@@ -23,7 +23,10 @@ import { Playlist } from "types/Playlist";
 type Props = StateProps & DispatchProps;
 interface StateProps {
   showPlayer: boolean;
-  playState: PlayState;
+  playerState: {
+    playState: PlayState;
+    videoIsRunning: boolean;
+  };
   songs?: { list: Song[]; playing: Song };
   playlist?: { index: number; data: Playlist };
   setting: {
@@ -47,7 +50,7 @@ const Player: React.FC<Props> = ({
   showPlayer,
   songs,
   playlist,
-  playState,
+  playerState,
   setting,
   time,
   durationIncrement,
@@ -58,16 +61,25 @@ const Player: React.FC<Props> = ({
   });
 
   useEffect(() => {
-    if (playState == PlayState.PLAYING) {
-      var interval = setInterval(durationIncrement, 1000);
-      setState({
-        ...state,
-        durationInterval: interval,
-      });
+    if (
+      playerState.playState == PlayState.PLAYING &&
+      playerState.videoIsRunning
+    ) {
+      if (!state.durationInterval) {
+        var interval = setInterval(durationIncrement, 1000);
+        setState({
+          ...state,
+          durationInterval: interval,
+        });
+      }
     } else {
       clearInterval(state.durationInterval);
+      setState({
+        ...state,
+        durationInterval: undefined,
+      });
     }
-  }, [playState]);
+  }, [playerState]);
 
   // useEffect(() => {
 
@@ -96,7 +108,7 @@ const mapStateToProps = (state: AppState) => {
     showPlayer: state.player.showPlayer,
     songs: state.player.songs,
     playlist: state.player.playlist,
-    playState: state.player.playState,
+    playerState: state.player.playerState,
     setting: state.player.setting,
     time: state.player.time,
   };

@@ -52,8 +52,12 @@ const PlayerProgressBar: React.FC<TimeProps> = ({ time, seekTo }) => {
 
   return (
     <div className="PlayerProgressBar" onClick={handleOnClick}>
-      <div className="pointer" style={{ left: `${percentage}%` }}></div>
+      <div
+        className="pointer"
+        style={{ left: `calc(${percentage}% - 8px)` }}
+      ></div>
       <div className="current" style={{ width: `${percentage}%` }}></div>
+      <div className="total"></div>
     </div>
   );
 };

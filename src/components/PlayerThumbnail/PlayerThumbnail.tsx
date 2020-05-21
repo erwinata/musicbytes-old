@@ -7,14 +7,22 @@ import { bindActionCreators } from "redux";
 import { AppState } from "redux/store/configureStore";
 import { Song } from "types/Song";
 import { AllActions } from "redux/types/app";
-import { togglePlaying, seekDone, autoNextSong } from "redux/actions/player";
+import {
+  togglePlaying,
+  seekDone,
+  autoNextSong,
+  setVideoIsRunning,
+} from "redux/actions/player";
 import { PlayState } from "types/PlayState";
 
 type Props = StateProps & DispatchProps;
 
 interface StateProps {
   songs?: { list: Song[]; playing: Song };
-  playState: PlayState;
+  playerState: {
+    playState: PlayState;
+    videoIsRunning: boolean;
+  };
   time: {
     seeking: boolean;
     current: number;
@@ -23,6 +31,7 @@ interface StateProps {
 interface DispatchProps {
   autoNextSong: () => any;
   togglePlaying: (state?: PlayState) => any;
+  setVideoIsRunning: (videoIsRunning?: boolean) => any;
   seekDone: () => any;
 }
 
@@ -32,9 +41,10 @@ interface IPlayerThumbnail {
 }
 const PlayerThumbnail: React.FC<Props> = ({
   songs,
-  playState,
+  playerState,
   time,
   togglePlaying,
+  setVideoIsRunning,
   seekDone,
   autoNextSong,
 }: Props) => {
@@ -61,8 +71,7 @@ const PlayerThumbnail: React.FC<Props> = ({
       youtubePlayer: event.target,
       ready: true,
     });
-    event.target.playVideo();
-    togglePlaying();
+    togglePlaying(PlayState.PLAYING);
   };
 
   const handleOnStateChange = (event: any) => {
@@ -72,23 +81,26 @@ const PlayerThumbnail: React.FC<Props> = ({
         autoNextSong();
         break;
       case 1:
-        togglePlaying(PlayState.PLAYING);
+        console.log("123123");
+        setVideoIsRunning(true);
         break;
       case 2:
-        togglePlaying(PlayState.PAUSED);
+        setVideoIsRunning(false);
         break;
     }
   };
 
   useEffect(() => {
     // console.log("FX " + playing + " " + ready);
-    if (playState == PlayState.PLAYING && state.ready) {
-      state.youtubePlayer.playVideo();
-      console.log(state.youtubePlayer.getCurrentTime());
-    } else if (playState == PlayState.PAUSED && state.ready) {
-      state.youtubePlayer.pauseVideo();
+    if (state.ready) {
+      if (playerState.playState == PlayState.PLAYING) {
+        state.youtubePlayer.playVideo();
+        console.log(state.youtubePlayer.getCurrentTime());
+      } else if (playerState.playState == PlayState.PAUSED) {
+        state.youtubePlayer.pauseVideo();
+      }
     }
-  }, [playState]);
+  }, [playerState.playState]);
 
   useEffect(() => {
     if (state.ready && time.seeking) {
@@ -115,7 +127,7 @@ const PlayerThumbnail: React.FC<Props> = ({
 const mapStateToProps = (state: AppState) => {
   return {
     songs: state.player.songs,
-    playState: state.player.playState,
+    playerState: state.player.playerState,
     time: state.player.time,
   };
 };
@@ -126,6 +138,7 @@ const mapDispatchToProps = (
 ) => ({
   autoNextSong: bindActionCreators(autoNextSong, dispatch),
   togglePlaying: bindActionCreators(togglePlaying, dispatch),
+  setVideoIsRunning: bindActionCreators(setVideoIsRunning, dispatch),
   seekDone: bindActionCreators(seekDone, dispatch),
 });
 

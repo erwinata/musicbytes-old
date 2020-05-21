@@ -29,7 +29,10 @@ import { PlayState } from "types/PlayState";
 
 type Props = StateProps & DispatchProps;
 interface StateProps {
-  playState: PlayState;
+  playerState: {
+    playState: PlayState;
+    videoIsRunning: boolean;
+  };
   songs?: {
     list: Song[];
     playing: Song;
@@ -53,7 +56,7 @@ interface DispatchProps {
 }
 
 const PlayerControl: React.FC<Props> = ({
-  playState,
+  playerState,
   songs,
   setting,
   time,
@@ -69,7 +72,7 @@ const PlayerControl: React.FC<Props> = ({
       <PlayerTopButtonList />
       <PlayerTitle songPlaying={songs!.playing} />
       <PlayerButtonList
-        playState={playState}
+        playState={playerState.playState}
         togglePlaying={togglePlaying}
         nextSong={nextSong}
         prevSong={prevSong}
@@ -178,7 +181,7 @@ const PlayerButtonList: React.FC<PlayerButtonListProps> = ({
 
 const mapStateToProps = (state: AppState) => {
   return {
-    playState: state.player.playState,
+    playerState: state.player.playerState,
     songs: state.player.songs,
     setting: state.player.setting,
     time: state.player.time,

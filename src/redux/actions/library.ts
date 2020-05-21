@@ -9,11 +9,13 @@ import { actionPlayPlaylist, playPlaylist } from "./player";
 
 export const actionAddToPlaylist = (
   songs: Song[],
-  playlistIndex: number
+  playlistIndex: number,
+  isMergeTo?: boolean
 ): AllActions => ({
   type: "ADD_TO_PLAYLIST",
   songs,
   playlistIndex,
+  isMergeTo,
 });
 
 export const actionSavePlaylist = (
@@ -49,9 +51,13 @@ export const actionLikeSong = (song: Song, isExist: boolean): AllActions => ({
   isExist,
 });
 
-export const addToPlaylist = (songs: Song[], playlistIndex: number) => {
+export const addToPlaylist = (
+  songs: Song[],
+  playlistIndex: number,
+  isMergeTo?: boolean
+) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    if (songs.length == 1) {
+    if (!isMergeTo) {
       var songExist = findIndex(
         getState().library.playlists[playlistIndex].songs,
         (item) => item.id == songs[0]!.id

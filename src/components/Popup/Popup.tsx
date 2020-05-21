@@ -39,7 +39,11 @@ interface StateProps {
 }
 interface DispatchProps {
   setPopupMenu: (menuState: PopupMenuType, songAdding?: Song) => any;
-  addToPlaylist: (songs: Song[], playlistIndex: number) => any;
+  addToPlaylist: (
+    songs: Song[],
+    playlistIndex: number,
+    isMergeTo?: boolean
+  ) => any;
   newPlaylist: (title: string, songs: Song[]) => any;
 
   savePlaylist: (songs: Song[], playlistIndex: number) => any;
@@ -110,11 +114,6 @@ const Popup: React.FC<Props> = ({
               playlistOptionListDefault.slice(0, 1),
               playlistOptionListDefault.slice(2, 3)
             )
-            // playlistOptionListDefault.slice(
-            // 2,
-            // playlistOptionListDefault.length
-            // )
-            // )
           );
         } else {
           setPlaylistOptionList(
@@ -175,15 +174,11 @@ const Popup: React.FC<Props> = ({
 
   const handle = {
     clickPlaylist: (playlistIndex: number) => {
-      var songsToBeMerged: Song[] = [];
-      if (popupState.menuState === PopupMenuType.ADDING_SONG_TO_PLAYLIST)
-        songsToBeMerged = [popupState.songAdding!];
-      else if (popupState.menuState === PopupMenuType.PLAYLIST_SAVING_MERGE) {
-        console.log("mwe");
-        songsToBeMerged = songs!.list;
+      if (popupState.menuState === PopupMenuType.ADDING_SONG_TO_PLAYLIST) {
+        addToPlaylist([popupState.songAdding!], playlistIndex);
+      } else if (popupState.menuState === PopupMenuType.PLAYLIST_SAVING_MERGE) {
+        addToPlaylist(songs!.list, playlistIndex, true);
       }
-
-      addToPlaylist(songsToBeMerged, playlistIndex);
 
       closePopup();
     },

@@ -2,12 +2,11 @@ import React from "react";
 import { YoutubeDataAPI } from "youtube-v3-api";
 import { Song } from "types/Song";
 import { decodeText } from "helpers/decode";
+import { ConvertDurationToNumber } from "helpers/duration";
 
 export const SearchSong = (query: string, total: number): Promise<Song[]> => {
   const API_KEY = "AIzaSyBQ5KGEWWK9-A0O87RLepRrmX3yz7kU4iA";
   const api = new YoutubeDataAPI(API_KEY);
-
-  var result: Song[] = [];
 
   return new Promise((resolve, reject) => {
     api
@@ -16,12 +15,37 @@ export const SearchSong = (query: string, total: number): Promise<Song[]> => {
         videoCategoryId: 10,
         part: "snippet",
       })
-      .then((data: any) => {
-        data.items.map((video: any) => {
-          var snippet: any = video.snippet;
+      .then(async (data: any) => {
+        var ids = "";
 
-          var item: Song = {
-            id: video.id.videoId,
+        data.items.map((video: any) => {
+          ids += video.id.videoId + ",";
+        });
+
+        resolve(SearchSongDetail(ids));
+      })
+      .catch((err: any) => {
+        reject(err);
+      });
+  });
+};
+
+export const SearchSongDetail = (ids: string): Promise<Song[]> => {
+  const API_KEY = "AIzaSyBQ5KGEWWK9-A0O87RLepRrmX3yz7kU4iA";
+  const api = new YoutubeDataAPI(API_KEY);
+
+  return new Promise((resolve, reject) => {
+    api
+      .searchVideo(ids)
+      .then((data: any) => {
+        var songs: Song[] = [];
+
+        data.items.map((video: any, index: number) => {
+          var snippet: any = video.snippet;
+          var duration = ConvertDurationToNumber(video.contentDetails.duration);
+
+          var song: Song = {
+            id: video.id,
             title: decodeText(snippet.title),
             channel: decodeText(snippet.channelTitle),
             thumbnails: {
@@ -29,12 +53,14 @@ export const SearchSong = (query: string, total: number): Promise<Song[]> => {
               medium: snippet.thumbnails.medium.url,
               high: snippet.thumbnails.high.url,
             },
-            duration: 0,
+            duration: duration,
           };
-          result.push(item);
+
+          songs.push(song);
         });
-        console.log(result);
-        resolve(result);
+
+        console.log(songs);
+        resolve(songs);
       })
       .catch((err: any) => {
         reject(err);

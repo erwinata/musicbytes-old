@@ -14,7 +14,10 @@ import { settings } from "cluster";
 
 export interface PlayerState {
   showPlayer: boolean;
-  playState: PlayState;
+  playerState: {
+    playState: PlayState;
+    videoIsRunning: boolean;
+  };
   playlist?: {
     index: number;
     data: Playlist;
@@ -96,7 +99,7 @@ const samplePlaylist: Song[] = [
       medium: "https://i.ytimg.com/vi/je9okpHFZp0/mqdefault.jpg",
       high: "https://i.ytimg.com/vi/je9okpHFZp0/hqdefault.jpg",
     },
-    duration: 0,
+    duration: 268,
   },
   {
     id: "kX1O93X77d4",
@@ -107,7 +110,7 @@ const samplePlaylist: Song[] = [
       medium: "https://i.ytimg.com/vi/kX1O93X77d4/mqdefault.jpg",
       high: "https://i.ytimg.com/vi/kX1O93X77d4/hqdefault.jpg",
     },
-    duration: 0,
+    duration: 280,
   },
   {
     id: "tUJAxxm1y1I",
@@ -118,7 +121,7 @@ const samplePlaylist: Song[] = [
       medium: "https://i.ytimg.com/vi/tUJAxxm1y1I/mqdefault.jpg",
       high: "https://i.ytimg.com/vi/tUJAxxm1y1I/hqdefault.jpg",
     },
-    duration: 0,
+    duration: 216,
   },
 ];
 const sampleSongPlaying: Song = {
@@ -130,12 +133,15 @@ const sampleSongPlaying: Song = {
     medium: "https://i.ytimg.com/vi/tUJAxxm1y1I/mqdefault.jpg",
     high: "https://i.ytimg.com/vi/tUJAxxm1y1I/hqdefault.jpg",
   },
-  duration: 0,
+  duration: 216,
 };
 
 const playerReducerDefaultState: PlayerState = {
   showPlayer: false,
-  playState: PlayState.ENDED,
+  playerState: {
+    playState: PlayState.ENDED,
+    videoIsRunning: false,
+  },
   // showPlayer: true,
   playlist: undefined,
   songs: { list: samplePlaylist, playing: sampleSongPlaying },
@@ -209,7 +215,7 @@ export const playerReducer = (
       };
 
     case "TOGGLE_PLAYING":
-      var newPlayState = state.playState;
+      var newPlayState = state.playerState.playState;
       if (action.state !== undefined) {
         newPlayState = action.state!;
       } else {
@@ -221,7 +227,25 @@ export const playerReducer = (
       }
       return {
         ...state,
-        playState: newPlayState,
+        playerState: {
+          ...state.playerState,
+          playState: newPlayState,
+        },
+      };
+
+    case "SET_VIDEO_IS_RUNNING":
+      var newVideoIsRunning: boolean;
+      if (action.videoIsRunning !== undefined) {
+        newVideoIsRunning = action.videoIsRunning!;
+      } else {
+        newVideoIsRunning = !state.playerState.videoIsRunning;
+      }
+      return {
+        ...state,
+        playerState: {
+          ...state.playerState,
+          videoIsRunning: newVideoIsRunning,
+        },
       };
 
     case "AUTO_NEXT_SONG":
@@ -234,6 +258,9 @@ export const playerReducer = (
               state.songs!.list,
               (song) => song.id == state.songs!.playing!.id
             ) + 1;
+          if (index >= state.songs!.list.length) {
+            index = -1;
+          }
           break;
         case Repeat.REPEAT_ALL:
           index =
@@ -241,6 +268,9 @@ export const playerReducer = (
               state.songs!.list,
               (song) => song.id == state.songs!.playing!.id
             ) + 1;
+          if (index >= state.songs!.list.length) {
+            index = 0;
+          }
           break;
         case Repeat.REPEAT_ONE:
           index = findIndex(
@@ -251,13 +281,27 @@ export const playerReducer = (
           break;
       }
 
+      if (index !== -1) {
+        return {
+          ...state,
+          songs: { ...state.songs!, playing: state.songs!.list[index] },
+          time: {
+            current: 0,
+            total: state.songs!.list[index].duration,
+            seeking: seeking,
+          },
+        };
+      }
       return {
         ...state,
-        songs: { ...state.songs!, playing: state.songs!.list[index] },
+        playerState: {
+          ...state.playerState,
+          playState: PlayState.PAUSED,
+        },
         time: {
+          ...state.time,
           current: 0,
-          total: state.songs!.list[index].duration,
-          seeking: seeking,
+          seeking: true,
         },
       };
 
@@ -267,6 +311,9 @@ export const playerReducer = (
           state.songs!.list,
           (el) => el.id == state.songs!.playing!.id
         ) + 1;
+      if (index >= state.songs!.list.length) {
+        index = 0;
+      }
 
       return {
         ...state,
@@ -284,6 +331,9 @@ export const playerReducer = (
           state.songs!.list,
           (el) => el.id == state.songs!.playing!.id
         ) - 1;
+      if (index <= state.songs!.list.length) {
+        index = state.songs!.list.length - 1;
+      }
 
       return {
         ...state,

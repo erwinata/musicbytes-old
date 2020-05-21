@@ -35,6 +35,12 @@ export const actionTogglePlaying = (state?: PlayState): AllActions => ({
   type: "TOGGLE_PLAYING",
   state,
 });
+export const actionSetVideoIsRunning = (
+  videoIsRunning?: boolean
+): AllActions => ({
+  type: "SET_VIDEO_IS_RUNNING",
+  videoIsRunning,
+});
 
 export const actionAutoNextSong = (): AllActions => ({
   type: "AUTO_NEXT_SONG",
@@ -78,10 +84,8 @@ export const showPlayer = (show: boolean) => {
 
 export const playSong = (song: Song, resetPlaylist: boolean) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    console.log(song);
-    song = await SongDetail(song);
-
     dispatch(actionPlaySong(song, resetPlaylist));
+    dispatch(actionTogglePlaying(PlayState.PLAYING));
     dispatch(actionShowPlayer(true));
   };
 };
@@ -134,6 +138,12 @@ export const durationIncrement = () => {
 export const togglePlaying = (state?: PlayState) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionTogglePlaying(state));
+  };
+};
+
+export const setVideoIsRunning = (videoIsRunning?: boolean) => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionSetVideoIsRunning(videoIsRunning));
   };
 };
 

@@ -19,7 +19,7 @@ const sampleSearchSong = [
       medium: "https://i.ytimg.com/vi/iSyxz2RVddA/mqdefault.jpg",
       high: "https://i.ytimg.com/vi/iSyxz2RVddA/hqdefault.jpg",
     },
-    duration: 0,
+    duration: 276,
   },
 ];
 

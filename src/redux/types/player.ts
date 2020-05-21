@@ -5,6 +5,7 @@ import { Playlist } from "types/Playlist";
 export const SHOW_PLAYER = "SHOW_PLAYER";
 
 export const PLAY_SONG = "PLAY_SONG";
+export const SET_VIDEO_IS_RUNNING = "SET_VIDEO_IS_RUNNING";
 export const PLAY_PLAYLIST = "PLAY_PLAYLIST";
 export const CLEAR_PLAYLIST = "CLEAR_PLAYLIST";
 export const TOGGLE_PLAYING = "TOGGLE_PLAYING";
@@ -46,6 +47,10 @@ export interface ClearPlaylistAction {
 export interface TogglePlayingAction {
   type: typeof TOGGLE_PLAYING;
   state?: PlayState;
+}
+export interface SetVideoIsRunningAction {
+  type: typeof SET_VIDEO_IS_RUNNING;
+  videoIsRunning?: boolean;
 }
 export interface AutoNextSongAction {
   type: typeof AUTO_NEXT_SONG;
@@ -92,6 +97,7 @@ export type PlayerActionTypes =
   | PlayPlaylistAction
   | ClearPlaylistAction
   | TogglePlayingAction
+  | SetVideoIsRunningAction
   | AutoNextSongAction
   | NextSongAction
   | PrevSongAction
