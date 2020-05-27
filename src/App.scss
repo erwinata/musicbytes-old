@@ -16,6 +16,16 @@
   font-family: "Montserrat", sans-serif;
   color: $color-white;
   cursor: default;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
 }
 
 ::-webkit-scrollbar {
@@ -27,9 +37,8 @@
   overflow: hidden;
   width: 100vw;
   height: 100vh;
+  min-height: -webkit-fill-available;
   font-family: $font-default;
-  min-height: 100vh;
-  padding-bottom: 25vh;
   color: $color-white;
   background: $color-bg-blue;
   background: linear-gradient($color-bg-black 0%, $color-bg-blue 100%);
@@ -39,6 +48,8 @@
 .Discover,
 .Library {
   position: absolute;
+  height: 84vh;
+  overflow-y: auto;
   width: 100vw;
 }
 

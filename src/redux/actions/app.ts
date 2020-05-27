@@ -6,6 +6,8 @@ import { NavigationTab } from "types/Navigation";
 import { Playlist } from "types/Playlist";
 import { ToastType } from "types/ToastType";
 import { PopupMenuType } from "types/PopupMenuType";
+import { OptionActionType } from "types/Option";
+import { XY } from "types/XY";
 
 export const actionChangeTab = (to: NavigationTab): AllActions => ({
   type: "CHANGE_TAB",
@@ -31,6 +33,28 @@ export const actionSetPopupMenu = (
   menuState,
   songAdding,
 });
+export const actionSetOverlay = (
+  show: boolean,
+  dismissAction?: () => any,
+  transparent?: boolean
+): AllActions => ({
+  type: "SET_OVERLAY",
+  show,
+  dismissAction,
+  transparent,
+});
+export const actionSetOption = (
+  show: boolean,
+  item?: any,
+  optionList?: OptionActionType[],
+  position?: XY
+): AllActions => ({
+  type: "SET_OPTION",
+  show,
+  item,
+  optionList,
+  position,
+});
 
 export const changeTab = (to: NavigationTab) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
@@ -53,5 +77,24 @@ export const viewPlaylist = (playlistViewing: Playlist) => {
 export const setPopupMenu = (menuState: PopupMenuType, songAdding?: Song) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionSetPopupMenu(menuState, songAdding));
+  };
+};
+export const setOverlay = (
+  show: boolean,
+  dismissAction?: () => any,
+  transparent?: boolean
+) => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionSetOverlay(show, dismissAction, transparent));
+  };
+};
+export const setOption = (
+  show: boolean,
+  item?: any,
+  optionList?: OptionActionType[],
+  position?: XY
+) => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionSetOption(show, item, optionList, position));
   };
 };

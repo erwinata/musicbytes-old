@@ -84,7 +84,7 @@ const PlayerPlaylistHeader: React.FC<{
     } else {
       setPlaylistChanged(true);
     }
-  }, [songs]);
+  }, [songs, playlist]);
 
   return (
     <div className="PlayerPlaylistHeader">

@@ -6,6 +6,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { AllActions } from "redux/types/app";
 import { bindActionCreators } from "redux";
 import { searchSong } from "redux/actions/discover";
+import { res_discover } from "res";
 
 type Props = StateProps & DispatchProps;
 
@@ -31,7 +32,7 @@ const SearchBar: React.FC<Props> = ({ query, startSearchSong }: Props) => {
 
   return (
     <div className="SearchBar">
-      <img src="/res/search.svg" alt="Search" />
+      <img src={res_discover} alt="Search" />
       <input type="text" defaultValue={query} onChange={handleChange} />
     </div>
   );

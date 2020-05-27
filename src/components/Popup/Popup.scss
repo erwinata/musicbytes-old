@@ -1,23 +1,11 @@
 @import "_base.scss";
 
-.BlackOverlay {
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
-  z-index: 99;
-
-  background: $color-pitch-black-overlay;
-}
-
 .Popup {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  z-index: 99;
+  z-index: $z-popup;
 
   .container {
-    position: absolute;
-    z-index: 100;
+    position: fixed;
+    z-index: $z-popup + 1;
     @extend .centerVertical;
     width: 90vw;
     max-width: 512px;

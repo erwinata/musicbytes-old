@@ -18,12 +18,13 @@ interface StateProps {
   tabState: {
     currentTab: NavigationTab;
   };
+  showPlayer: boolean;
 }
 interface DispatchProps {
   viewPlaylist: (playlist: Playlist) => any;
 }
 
-const Navbar: React.FC<Props> = ({ tabState, viewPlaylist }) => {
+const Navbar: React.FC<Props> = ({ tabState, showPlayer, viewPlaylist }) => {
   return (
     <div
       className="Navbar"
@@ -33,19 +34,19 @@ const Navbar: React.FC<Props> = ({ tabState, viewPlaylist }) => {
     >
       <Link to="/Discover">
         <NavbarItem
-          active={tabState.currentTab == NavigationTab.DISCOVER}
+          active={!showPlayer && tabState.currentTab === NavigationTab.DISCOVER}
           type={NavigationTab.DISCOVER}
         />
       </Link>
       <Link to="/">
         <NavbarItem
-          active={tabState.currentTab == NavigationTab.LISTEN}
+          active={!showPlayer && tabState.currentTab === NavigationTab.LISTEN}
           type={NavigationTab.LISTEN}
         />
       </Link>
       <Link to="/Library">
         <NavbarItem
-          active={tabState.currentTab == NavigationTab.LIBRARY}
+          active={!showPlayer && tabState.currentTab === NavigationTab.LIBRARY}
           type={NavigationTab.LIBRARY}
         />
       </Link>
@@ -56,6 +57,7 @@ const Navbar: React.FC<Props> = ({ tabState, viewPlaylist }) => {
 const mapStateToProps = (state: AppState) => {
   return {
     tabState: state.app.tabState,
+    showPlayer: state.player.showPlayer,
   };
 };
 const mapDispatchToProps = (

@@ -7,6 +7,7 @@ import { AppState } from "redux/store/configureStore";
 import { Playlist } from "types/Playlist";
 import { animated } from "react-spring";
 import { PopupMenuType } from "types/PopupMenuType";
+import { res_library, res_plus } from "res";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -63,7 +64,7 @@ const PlaylistListItem: React.FC<{
         onClick(index);
       }}
     >
-      <img src="/res/library.svg" alt="Icon" />
+      <img src={res_library} alt="Icon" />
       <div className="info">
         <h1>{playlist.title}</h1>
         <h2>{playlist.songs.length} songs</h2>
@@ -75,7 +76,7 @@ const PlaylistListItem: React.FC<{
 const PlaylistListAdd: React.FC<{ onClick: () => any }> = ({ onClick }) => {
   return (
     <div className="PlaylistListItem Add" onClick={onClick}>
-      <img src="/res/plus.svg" alt="Icon" />
+      <img src={res_plus} alt="Icon" />
       <div className="info">
         <h1>New Playlist</h1>
       </div>

@@ -2,8 +2,8 @@
 
 .Navbar {
   position: fixed;
-  z-index: 100;
-  bottom: 0;
+  z-index: $z-navbar;
+  bottom: 0vh;
   width: 100%;
   background: $color-bg-black-blue;
   height: 8vh;

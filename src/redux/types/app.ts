@@ -6,13 +6,19 @@ import { Playlist } from "types/Playlist";
 import { Song } from "types/Song";
 import { ToastType } from "types/ToastType";
 import { PopupMenuType } from "types/PopupMenuType";
+import { OptionActionType } from "types/Option";
+import { XY } from "types/XY";
 
 export const CHANGE_TAB = "CHANGE_TAB";
 export const SHOW_TOAST = "SHOW_TOAST";
+
 export const VIEW_PLAYLIST = "VIEW_PLAYLIST";
 export const ADDING_TO_PLAYLIST = "ADDING_TO_PLAYLIST";
 export const SAVING_PLAYLIST = "SAVING_PLAYLIST";
+
 export const SET_POPUP_MENU = "SET_POPUP_MENU";
+export const SET_OVERLAY = "SET_OVERLAY";
+export const SET_OPTION = "SET_OPTION";
 
 export interface ChangeTabAction {
   type: typeof CHANGE_TAB;
@@ -34,11 +40,28 @@ export interface SetPopupMenuAction {
   songAdding?: Song;
 }
 
+export interface SetOverlayAction {
+  type: typeof SET_OVERLAY;
+  show: boolean;
+  dismissAction?: () => any;
+  transparent?: boolean;
+}
+
+export interface SetOptionAction {
+  type: typeof SET_OPTION;
+  show: boolean;
+  item?: any;
+  optionList?: OptionActionType[];
+  position?: XY;
+}
+
 export type AppActionTypes =
   | ChangeTabAction
   | ShowToastAction
   | ViewPlaylistAction
-  | SetPopupMenuAction;
+  | SetPopupMenuAction
+  | SetOverlayAction
+  | SetOptionAction;
 
 export type AllActions =
   | AppActionTypes

@@ -20,11 +20,15 @@ import { changeTab } from "redux/actions/app";
 import PlaylistView from "pages/PlaylistView/PlaylistView";
 import Popup from "components/Popup/Popup";
 import Toast from "components/Toast/Toast";
+import { Header } from "components/Header/Header";
+import Overlay from "components/Overlay/Overlay";
+import Option from "components/Option/Option";
+import { useEffectOnce } from "react-use";
 declare module "react-spring" {
   export const animated: any;
 }
 
-type Props = StateProps;
+type Props = StateProps & DispatchProps;
 
 interface StateProps {
   tabState: {
@@ -34,40 +38,11 @@ interface StateProps {
   songs?: { list: Song[]; playing: Song };
   showPlayer: boolean;
 }
-
-interface ITabTransition {
-  lastTab: NavigationTab;
-  direction: number;
+interface DispatchProps {
+  changeTab: (to: NavigationTab) => any;
 }
 
-const App: React.FC<Props> = ({ tabState, songs, showPlayer }) => {
-  // useEffect(() => {
-  //   console.log("F " + tabTransition.lastTab);
-
-  //   let lastTab = currentTab;
-  //   let direction = 1;
-
-  //   if (currentTab == NavigationTab.LIBRARY) {
-  //     direction = 1;
-  //   } else if (currentTab == NavigationTab.DISCOVER) {
-  //     direction = -1;
-  //   } else {
-  //     direction = tabTransition.lastTab == NavigationTab.DISCOVER ? 1 : -1;
-  //   }
-
-  //   setTabTransition({
-  //     lastTab: lastTab,
-  //     direction: direction,
-  //   });
-
-  //   console.log("T " + tabTransition.lastTab);
-  // }, [currentTab]);
-
-  // const [tabTransition, setTabTransition] = useState<ITabTransition>({
-  //   lastTab: NavigationTab.LISTEN,
-  //   direction: 1,
-  // });
-
+const App: React.FC<Props> = ({ tabState, songs, showPlayer, changeTab }) => {
   const location = useLocation();
   const transitions = useTransition(location, (location) => location.pathname, {
     from: {
@@ -83,16 +58,32 @@ const App: React.FC<Props> = ({ tabState, songs, showPlayer }) => {
     },
   });
 
-  var page = transitions.map(({ item: location, props, key }) => (
-    <animated.div key={key} style={props}>
-      <Switch location={location}>
-        <Route path="/" exact component={Listen} />
-        <Route path="/discover" exact component={Discover} />
-        <Route path="/library" exact component={Library} />
-        <Route path="/" render={() => <div>{tabState.currentTab}</div>} />
-      </Switch>
-    </animated.div>
-  ));
+  var page = transitions.map(({ item: location, props, key }) => {
+    return (
+      <animated.div key={key} style={props}>
+        <Switch location={location}>
+          <Route path="/" exact component={Listen} />
+          <Route path="/discover" exact component={Discover} />
+          <Route path="/library" exact component={Library} />
+          <Route path="/" render={() => <div>{tabState.currentTab}</div>} />
+        </Switch>
+      </animated.div>
+    );
+  });
+
+  useEffectOnce(() => {
+    switch (location.pathname) {
+      case "/":
+        changeTab(NavigationTab.LISTEN);
+        break;
+      case "/Discover":
+        changeTab(NavigationTab.DISCOVER);
+        break;
+      case "/Library":
+        changeTab(NavigationTab.LIBRARY);
+        break;
+    }
+  });
 
   return (
     <div className="App">
@@ -101,10 +92,18 @@ const App: React.FC<Props> = ({ tabState, songs, showPlayer }) => {
         <br></br>
         Direction {tabTransition.direction}
       </div> */}
+      <Header />
+
+      <Overlay />
 
       <Toast />
 
       <Popup />
+
+      <Option />
+      {/* // dismissOption={dismissOption}
+      // optionList={optionList}
+      // optionState={optionState} */}
 
       <Navbar />
 

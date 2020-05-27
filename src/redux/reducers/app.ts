@@ -9,6 +9,8 @@ import { NavigationTab } from "types/Navigation";
 import { Playlist } from "types/Playlist";
 import { ToastType } from "types/ToastType";
 import { PopupMenuType } from "types/PopupMenuType";
+import { OptionActionType } from "types/Option";
+import { XY } from "types/XY";
 
 export interface IAppState {
   tabState: {
@@ -20,9 +22,20 @@ export interface IAppState {
     menuState: PopupMenuType;
     songAdding?: Song;
   };
+  overlayState: {
+    show: boolean;
+    dismissAction?: () => any;
+    transparent?: boolean;
+  };
   toastState: {
     text: string;
     toastType: ToastType;
+  };
+  optionState: {
+    show: boolean;
+    item?: any;
+    optionList?: OptionActionType[];
+    position?: XY;
   };
 }
 
@@ -132,14 +145,18 @@ const appReducerDefaultState: IAppState = {
   //   createdAt: 1589043600000,
   //   updatedAt: 1589205857159,
   // },
-  playlistViewing: undefined,
   popupState: {
     menuState: PopupMenuType.NONE,
-    songAdding: undefined,
+  },
+  overlayState: {
+    show: false,
   },
   toastState: {
     text: "Song added to playlist",
     toastType: ToastType.NORMAL,
+  },
+  optionState: {
+    show: false,
   },
 };
 
@@ -195,6 +212,25 @@ export const appReducer = (
         popupState: {
           menuState: action.menuState,
           songAdding: songAdding,
+        },
+      };
+    case "SET_OVERLAY":
+      return {
+        ...state,
+        overlayState: {
+          show: action.show,
+          dismissAction: action.dismissAction,
+          transparent: action.transparent,
+        },
+      };
+    case "SET_OPTION":
+      return {
+        ...state,
+        optionState: {
+          show: action.show,
+          item: action.item,
+          optionList: action.optionList,
+          position: action.position,
         },
       };
     default:

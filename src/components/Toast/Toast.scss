@@ -3,7 +3,7 @@
 .Toast {
   position: fixed;
   overflow: hidden;
-  z-index: 1000;
+  z-index: $z-toast;
   bottom: 12vh;
   padding: 1.5rem 2.25rem;
   box-sizing: content-box;

@@ -9,16 +9,30 @@ import { AppState } from "redux/store/configureStore";
 import { connect } from "react-redux";
 import { findIndex } from "lodash";
 import { useMeasure } from "react-use";
+import { bindActionCreators } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { AppActionTypes } from "redux/types/app";
+import { setOverlay, setOption } from "redux/actions/app";
+import { XY } from "types/XY";
 
-type Props = PassingProps & StateProps;
+type Props = PassingProps & StateProps & DispatchProps;
 
 interface PassingProps {
   songs: Song[];
   resetPlaylist: boolean;
   optionList: OptionActionType[];
+  miniPlayerShown?: boolean;
 }
 interface StateProps {
   collection: Song[];
+}
+interface DispatchProps {
+  setOption: (
+    show: boolean,
+    item?: any,
+    optionList?: OptionActionType[],
+    position?: XY
+  ) => any;
 }
 
 const SongList: React.FC<Props> = ({
@@ -26,18 +40,22 @@ const SongList: React.FC<Props> = ({
   optionList,
   resetPlaylist,
   collection,
+  miniPlayerShown,
+  setOption,
 }: Props) => {
-  const [contentHeight, setContentHeight] = useState(50);
+  const [contentHeight, setContentHeight] = useState("0px");
+  const [itemHeight, setItemHeight] = useState(50);
 
   const [ref, { height }] = useMeasure();
 
   useEffect(() => {
-    setContentHeight(height);
-    console.log("H" + height);
-  }, [height]);
+    setItemHeight(height);
+    var miniPlayerHeight = miniPlayerShown ? "12.5vh" : "";
+    setContentHeight(`calc(${height * songs.length}px + ${miniPlayerHeight} )`);
+  }, [height, miniPlayerShown, songs]);
 
   const transitions = useTransition(
-    songs.map((data, i) => ({ ...data, y: i * contentHeight, x: 0 })),
+    songs.map((data, i) => ({ ...data, y: i * itemHeight, x: 0 })),
     (d) => d.id,
     {
       from: {
@@ -60,26 +78,29 @@ const SongList: React.FC<Props> = ({
     song: undefined,
   });
 
-  const clickButtonOption = (index: number, song: Song) => {
+  const dismissOption = () => {
+    setOption(false);
+  };
+
+  const clickButtonOption = (index: number, song: Song, event: any) => {
     setOptionState({
       index,
       song,
     });
-  };
 
-  const dismissOption = () => {
-    setOptionState({
-      index: -1,
+    let currentTargetRect = event.currentTarget.getBoundingClientRect();
+    const offsetX = event.pageX - currentTargetRect.left;
+    const offsetY = event.pageY - currentTargetRect.top;
+
+    console.log(offsetX + " " + offsetY);
+    setOption(true, songs[index], optionList, {
+      x: event.clientX,
+      y: event.clientY,
     });
   };
 
   return (
-    <div className="SongList">
-      <Option
-        dismissOption={dismissOption}
-        optionList={optionList}
-        optionState={optionState}
-      />
+    <div className="SongList" style={{ height: contentHeight }}>
       {transitions.map(({ item, props: { y, ...rest }, key }, index) => {
         var like =
           findIndex(collection, (el) => el.id == item.id) !== -1 ? true : false;
@@ -114,4 +135,10 @@ const mapStateToProps = (state: AppState) => {
   };
 };
 
-export default connect(mapStateToProps)(SongList);
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<any, any, AppActionTypes>
+) => ({
+  setOption: bindActionCreators(setOption, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SongList);

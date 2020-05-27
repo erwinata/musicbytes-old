@@ -19,7 +19,7 @@ interface PassingProps {
   index: number;
   song: Song;
   resetPlaylist: boolean;
-  clickButtonOption: (index: number, song: Song) => any;
+  clickButtonOption: (index: number, song: Song, e: any) => any;
   like: boolean;
 }
 interface StateProps {
@@ -93,8 +93,8 @@ const SongListItem: React.FC<Props> = ({
       <div className="option">
         <ButtonLike like={like} onClick={clickButtonLike} />
         <ButtonOption
-          onClick={() => {
-            clickButtonOption(index, song);
+          onClick={(e: any) => {
+            clickButtonOption(index, song, e);
           }}
         />
       </div>

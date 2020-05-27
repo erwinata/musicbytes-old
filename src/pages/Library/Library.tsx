@@ -19,6 +19,7 @@ interface PassingProps {}
 interface StateProps {
   playlists: Playlist[];
   collection: Song[];
+  songPlaying?: Song;
 }
 interface DispatchProps {
   addToNowPlaying: (song: Song) => any;
@@ -27,6 +28,7 @@ interface DispatchProps {
 const Library: React.FC<Props> = ({
   playlists,
   collection,
+  songPlaying,
   addToNowPlaying,
 }) => {
   const optionList: OptionActionType[] = [
@@ -37,12 +39,6 @@ const Library: React.FC<Props> = ({
 
   return (
     <div className="Library">
-      <Header />
-
-      {/* <h1>Library</h1>
-
-      <PlaylistList/> */}
-
       <CategoryTitle text="Your Playlist" />
       <SongGrid playlists={playlists} />
 
@@ -51,6 +47,7 @@ const Library: React.FC<Props> = ({
         songs={collection}
         optionList={optionList}
         resetPlaylist={true}
+        miniPlayerShown={songPlaying ? true : false}
       />
     </div>
   );
@@ -60,6 +57,7 @@ const mapStateToProps = (state: AppState) => {
   return {
     playlists: state.library.playlists,
     collection: state.library.collection,
+    songPlaying: state.player.songs?.playing,
   };
 };
 

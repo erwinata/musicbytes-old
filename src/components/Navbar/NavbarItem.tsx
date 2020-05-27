@@ -9,6 +9,14 @@ import { connect } from "react-redux";
 import { NavigationTab } from "types/Navigation";
 import { changeTab } from "redux/actions/app";
 import { useSpring, animated } from "react-spring";
+import {
+  res_discover,
+  res_discover_active,
+  res_listen,
+  res_listen_active,
+  res_library,
+  res_library_active,
+} from "res";
 import "_base.scss";
 
 type Props = PassingProps & DispatchProps;
@@ -29,20 +37,24 @@ const NavbarItem: React.FC<Props> = ({
   changeTab,
 }) => {
   var name = "";
-  var img = "";
+  var img;
+  var imgActive;
 
   switch (type) {
     case NavigationTab.DISCOVER:
       name = "Discover";
-      img = "discover";
+      img = res_discover;
+      imgActive = res_discover_active;
       break;
     case NavigationTab.LISTEN:
       name = "Listen";
-      img = "listen";
+      img = res_listen;
+      imgActive = res_listen_active;
       break;
     case NavigationTab.LIBRARY:
       name = "Library";
-      img = "library";
+      img = res_library;
+      imgActive = res_library_active;
       break;
   }
 
@@ -58,10 +70,7 @@ const NavbarItem: React.FC<Props> = ({
   return (
     <div className="NavbarItem" onClick={(e) => navbarClick()}>
       <div>
-        <img
-          src={`/res/${img}${active ? "-active" : ""}.svg`}
-          alt="Navbar Icon"
-        />
+        <img src={active ? imgActive : img} alt="Navbar Icon" />
       </div>
       <animated.span style={spanStyle}>{name}</animated.span>
     </div>

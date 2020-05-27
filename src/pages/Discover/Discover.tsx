@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Header } from "components/Header/Header";
 import SearchBar from "components/SearchBar/SearchBar";
 import SongList from "components/SongList/SongList";
@@ -15,6 +15,7 @@ import { addToNowPlaying } from "redux/actions/player";
 import { setPopupMenu } from "redux/actions/app";
 import { likeSong } from "redux/actions/library";
 import { PopupMenuType } from "types/PopupMenuType";
+import { useMeasure } from "react-use";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -22,6 +23,7 @@ interface PassingProps {}
 interface StateProps {
   query: string;
   songs: Song[];
+  songPlaying?: Song;
 }
 interface DispatchProps {
   addToNowPlaying: (song: Song) => any;
@@ -34,6 +36,7 @@ interface DiscoverState {}
 export const Discover: React.FC<Props> = ({
   query,
   songs,
+  songPlaying,
   addToNowPlaying,
   setPopupMenu,
   likeSong,
@@ -44,12 +47,22 @@ export const Discover: React.FC<Props> = ({
     OptionActionType.LIKE_SONG,
   ];
 
+  const [contentHeight, setContentHeight] = useState(500);
+  const [ref, { height }] = useMeasure();
+
+  useEffect(() => {
+    setContentHeight(songs.length * 100);
+  }, [songs]);
+
   return (
     <div className="Discover">
-      <Header />
-
       <SearchBar />
-      <SongList songs={songs} optionList={optionList} resetPlaylist={true} />
+      <SongList
+        songs={songs}
+        optionList={optionList}
+        resetPlaylist={true}
+        miniPlayerShown={songPlaying ? true : false}
+      />
     </div>
   );
 };
@@ -58,6 +71,7 @@ const mapStateToProps = (state: AppState) => {
   return {
     query: state.discover.query,
     songs: state.discover.songs,
+    songPlaying: state.player.songs?.playing,
   };
 };
 

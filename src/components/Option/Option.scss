@@ -3,16 +3,19 @@
 .Option {
   overflow: hidden;
   position: absolute;
-  z-index: 50;
-  right: 1.25rem;
-  margin-top: 1rem;
-  background: $color-black-transparent;
-  border: 1px solid $color-red;
-  padding: 1rem 0;
-  border-radius: 10px 0px 10px 10px;
+  z-index: $z-option;
+  // right: 1.25rem;
 
   display: grid;
   grid-template-rows: 1fr;
+
+  .container {
+    margin-left: 0.5rem;
+    background: $color-black-transparent;
+    border: 2px solid $color-red;
+    border-radius: 10px 10px 10px 10px;
+    padding: 1rem 0;
+  }
 
   .OptionItem {
     font-size: 1.15rem;

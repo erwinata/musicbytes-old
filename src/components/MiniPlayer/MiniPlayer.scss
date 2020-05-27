@@ -4,7 +4,7 @@
   @extend .centerHorizontal;
 
   position: fixed;
-  z-index: 50;
+  z-index: $z-miniplayer;
   width: 95%;
   max-width: 512px;
   height: 9vh;
@@ -44,11 +44,14 @@
     align-items: center;
 
     img {
-      width: 2.75rem;
+      width: 3.25rem;
       border-radius: 0px;
     }
-    .buttonNext {
+    .ButtonNext {
       width: 1rem;
+      img {
+        width: 1.25rem;
+      }
     }
   }
 }

@@ -8,6 +8,8 @@ import { useHistory } from "react-router";
 import { bindActionCreators } from "redux";
 import { showPlayer } from "redux/actions/player";
 import { showToast } from "redux/actions/app";
+import { ButtonNext, ButtonPlay } from "components/Buttons/Buttons";
+import { PlayState } from "types/PlayState";
 
 type Props = DispatchProps;
 
@@ -34,9 +36,9 @@ const MiniPlayer: React.FC<Props> = ({ showPlayer, showToast }) => {
       </div>
       <div className="control">
         <div className="buttonPlayContainer">
-          <img src="/res/play.svg" className="buttonPlay" alt="Play" />
+          <ButtonPlay playState={PlayState.PLAYING} />
         </div>
-        <img src="/res/next.svg" className="buttonNext" alt="Next" />
+        <ButtonNext />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 
 .Player {
   position: fixed;
-  z-index: 90;
+  z-index: $z-player;
   top: 0;
   width: 100%;
   height: 92vh;

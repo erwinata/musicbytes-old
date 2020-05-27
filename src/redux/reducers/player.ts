@@ -151,7 +151,7 @@ const playerReducerDefaultState: PlayerState = {
   },
   time: {
     current: 0,
-    total: 180,
+    total: sampleSongPlaying.duration,
     seeking: false,
   },
 };

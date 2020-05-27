@@ -2,7 +2,6 @@ import { AllActions } from "redux/types/app";
 import { Dispatch } from "redux";
 import { AppState } from "redux/store/configureStore";
 import { Song } from "types/Song";
-import { SongDetail } from "api/SongDetail";
 import { PlayState } from "types/PlayState";
 import { Playlist } from "types/Playlist";
 
@@ -96,21 +95,11 @@ export const playPlaylist = (playlist: { index: number; data: Playlist }) => {
 
     dispatch(actionClearPlaylist());
 
-    new Promise<Song[]>(async (resolve) => {
-      var detailedSongs: Song[] = [];
-      for (const song of songs) {
-        const detailedSong = await SongDetail(song);
-        detailedSongs.push(detailedSong);
-      }
-      resolve(detailedSongs);
-    }).then(async (detailedSongs) => {
-      // console.log(detailedSongs);
-      detailedSongs.forEach((song) => {
-        dispatch(actionAddToNowPlaying(song));
-      });
-      dispatch(actionPlaySong(songs[0], false));
-      dispatch(actionShowPlayer(true));
+    songs.forEach((song) => {
+      dispatch(actionAddToNowPlaying(song));
     });
+    dispatch(actionPlaySong(songs[0], false));
+    dispatch(actionShowPlayer(true));
   };
 };
 
@@ -122,9 +111,6 @@ export const clearPlaylist = () => {
 
 export const addToNowPlaying = (song: Song) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    console.log(song);
-    song = await SongDetail(song);
-
     dispatch(actionAddToNowPlaying(song));
   };
 };

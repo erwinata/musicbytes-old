@@ -11,7 +11,7 @@ import { Song } from "types/Song";
 import { animated, useSpring } from "react-spring";
 import { useMeasure } from "react-use";
 import { bindActionCreators } from "redux";
-import { showToast, setPopupMenu } from "redux/actions/app";
+import { showToast, setPopupMenu, setOverlay } from "redux/actions/app";
 import {
   addToPlaylist,
   newPlaylist,
@@ -39,6 +39,11 @@ interface StateProps {
 }
 interface DispatchProps {
   setPopupMenu: (menuState: PopupMenuType, songAdding?: Song) => any;
+  setOverlay: (
+    show: boolean,
+    dismissAction?: () => any,
+    transparent?: boolean
+  ) => any;
   addToPlaylist: (
     songs: Song[],
     playlistIndex: number,
@@ -55,6 +60,7 @@ const Popup: React.FC<Props> = ({
   playlist,
   // playlistPlaying,
   setPopupMenu,
+  setOverlay,
   addToPlaylist,
   newPlaylist,
   savePlaylist,
@@ -99,9 +105,12 @@ const Popup: React.FC<Props> = ({
   const closePopup = () => {
     setPopupMenu(PopupMenuType.NONE);
     setPopupHeaderText("");
+    console.log("CLOSEPOP");
   };
 
   useEffect(() => {
+    setOverlay(popupState.menuState !== PopupMenuType.NONE, closePopup, false);
+
     switch (popupState.menuState) {
       case PopupMenuType.ADDING_SONG_TO_PLAYLIST:
         setPopupHeaderText("Add Song to Playlist");
@@ -132,12 +141,6 @@ const Popup: React.FC<Props> = ({
     console.log(height);
     setContentHeight(height);
   }, [height]);
-
-  // useEffect(() => {
-  //   console.log("HEIasd");
-  //   console.log(height);
-  //   // setContentHeight(height);
-  // }, [height]);
 
   const style = {
     popup: {
@@ -202,11 +205,6 @@ const Popup: React.FC<Props> = ({
 
   return (
     <div className="Popup" style={style.popup}>
-      <animated.div
-        className="BlackOverlay"
-        style={style.overlay}
-        onClick={closePopup}
-      ></animated.div>
       <animated.div className="container" style={style.content}>
         <h1>{popupHeaderText}</h1>
         <div className="content" ref={ref}>
@@ -246,6 +244,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AppActionTypes>
 ) => ({
   setPopupMenu: bindActionCreators(setPopupMenu, dispatch),
+  setOverlay: bindActionCreators(setOverlay, dispatch),
   addToPlaylist: bindActionCreators(addToPlaylist, dispatch),
   newPlaylist: bindActionCreators(newPlaylist, dispatch),
 

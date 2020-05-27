@@ -6,8 +6,6 @@ import SongGrid from "components/SongGrid/SongGrid";
 export const Listen = () => {
   return (
     <div className="Listen">
-      <Header />
-
       <CategoryTitle text="Recent Playlist" />
       {/* <SongGrid /> */}
 
