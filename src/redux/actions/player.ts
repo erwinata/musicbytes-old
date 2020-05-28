@@ -4,6 +4,7 @@ import { AppState } from "redux/store/configureStore";
 import { Song } from "types/Song";
 import { PlayState } from "types/PlayState";
 import { Playlist } from "types/Playlist";
+import { actionShowToast } from "./app";
 
 export const actionShowPlayer = (show: boolean): AllActions => ({
   type: "SHOW_PLAYER",
@@ -74,6 +75,10 @@ export const actionAddToNowPlaying = (song: Song): AllActions => ({
   type: "ADD_TO_NOW_PLAYING",
   song,
 });
+export const actionRemoveFromNowPlaying = (song: Song): AllActions => ({
+  type: "REMOVE_FROM_NOW_PLAYING",
+  song,
+});
 
 export const showPlayer = (show: boolean) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
@@ -98,7 +103,9 @@ export const playPlaylist = (playlist: { index: number; data: Playlist }) => {
     songs.forEach((song) => {
       dispatch(actionAddToNowPlaying(song));
     });
+    dispatch(actionPlayPlaylist(playlist));
     dispatch(actionPlaySong(songs[0], false));
+    dispatch(actionSeekTo(0));
     dispatch(actionShowPlayer(true));
   };
 };
@@ -112,6 +119,17 @@ export const clearPlaylist = () => {
 export const addToNowPlaying = (song: Song) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionAddToNowPlaying(song));
+    dispatch(actionShowToast("Songs added to Now Playing"));
+  };
+};
+
+export const removeFromNowPlaying = (song: Song) => {
+  return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    if (song.id === getState().player.songs?.playing.id) {
+      dispatch(actionNextSong());
+    }
+    dispatch(actionRemoveFromNowPlaying(song));
+    dispatch(actionShowToast("Song removed from Now Playing"));
   };
 };
 
@@ -154,6 +172,7 @@ export const prevSong = () => {
 export const removeSong = (song: Song) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionRemoveSong(song));
+    dispatch(actionShowToast("Song removed"));
   };
 };
 

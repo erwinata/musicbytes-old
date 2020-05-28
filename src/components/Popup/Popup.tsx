@@ -21,6 +21,7 @@ import { ToastType } from "types/ToastType";
 import { PopupMenuType } from "types/PopupMenuType";
 import { Playlist } from "types/Playlist";
 import { concat } from "lodash";
+import { res_save, res_edit, res_merge } from "res";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -45,11 +46,11 @@ interface DispatchProps {
     transparent?: boolean
   ) => any;
   addToPlaylist: (
-    songs: Song[],
     playlistIndex: number,
+    songs: Song[],
     isMergeTo?: boolean
   ) => any;
-  newPlaylist: (title: string, songs: Song[]) => any;
+  newPlaylist: (title: string, songs: Song[], isMergeTo?: boolean) => any;
 
   savePlaylist: (songs: Song[], playlistIndex: number) => any;
 }
@@ -74,7 +75,7 @@ const Popup: React.FC<Props> = ({
 
   const playlistOptionListDefault = [
     {
-      icon: "save",
+      icon: res_save,
       label: "Save Playlist",
       action: () => {
         savePlaylist(songs!.list, playlist!.index);
@@ -82,14 +83,14 @@ const Popup: React.FC<Props> = ({
       },
     },
     {
-      icon: "edit",
+      icon: res_edit,
       label: "Save as New Playlist",
       action: () => {
         setPopupMenu(PopupMenuType.PLAYLIST_SAVING_SAVE_NEW);
       },
     },
     {
-      icon: "merge",
+      icon: res_merge,
       label: "Merge to Playlist",
       action: () => {
         setPopupMenu(PopupMenuType.PLAYLIST_SAVING_MERGE);
@@ -178,9 +179,9 @@ const Popup: React.FC<Props> = ({
   const handle = {
     clickPlaylist: (playlistIndex: number) => {
       if (popupState.menuState === PopupMenuType.ADDING_SONG_TO_PLAYLIST) {
-        addToPlaylist([popupState.songAdding!], playlistIndex);
+        addToPlaylist(playlistIndex, [popupState.songAdding!]);
       } else if (popupState.menuState === PopupMenuType.PLAYLIST_SAVING_MERGE) {
-        addToPlaylist(songs!.list, playlistIndex, true);
+        addToPlaylist(playlistIndex, songs!.list, true);
       }
 
       closePopup();
@@ -192,12 +193,13 @@ const Popup: React.FC<Props> = ({
 
     clickSaveNewPlaylist: (title: string) => {
       var songsToBeSaved: Song[] = [];
-      if (popupState.menuState === PopupMenuType.ADDING_SONG_NEW_PLAYLIST)
-        songsToBeSaved = [popupState.songAdding!];
-      else if (popupState.menuState === PopupMenuType.PLAYLIST_SAVING_SAVE_NEW)
-        songsToBeSaved = songs!.list;
-
-      newPlaylist(title, songsToBeSaved);
+      if (popupState.menuState === PopupMenuType.ADDING_SONG_NEW_PLAYLIST) {
+        newPlaylist(title, [popupState.songAdding!]);
+      } else if (
+        popupState.menuState === PopupMenuType.PLAYLIST_SAVING_SAVE_NEW
+      ) {
+        newPlaylist(title, songs!.list, true);
+      }
 
       closePopup();
     },

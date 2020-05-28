@@ -14,20 +14,26 @@ type Props = PassingProps & DispatchProps;
 interface PassingProps {
   song?: Song;
   playlist?: Playlist;
+  index: number;
   // optionList: OptionItemData[];
 }
 interface DispatchProps {
-  viewPlaylist: (playlist: Playlist) => any;
+  viewPlaylist: (playlist: Playlist, playlistIndex?: number) => any;
 }
 
-const SongGridItem: React.FC<Props> = ({ song, playlist, viewPlaylist }) => {
+const SongGridItem: React.FC<Props> = ({
+  song,
+  playlist,
+  index,
+  viewPlaylist,
+}) => {
   const isSong = song !== undefined;
 
   const handleClick = () => {
     if (isSong) {
       console.log("SONG");
     } else {
-      viewPlaylist(playlist!);
+      viewPlaylist(playlist!, index);
     }
   };
 

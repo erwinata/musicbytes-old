@@ -31,7 +31,8 @@ export interface ShowToastAction {
 }
 export interface ViewPlaylistAction {
   type: typeof VIEW_PLAYLIST;
-  playlistViewing: Playlist;
+  playlist: Playlist;
+  playlistIndex?: number;
 }
 
 export interface SetPopupMenuAction {

@@ -6,12 +6,12 @@ import { ThunkDispatch } from "redux-thunk";
 import { AppState } from "redux/store/configureStore";
 import { connect } from "react-redux";
 import { Song } from "types/Song";
-import { addToNowPlaying } from "redux/actions/player";
+import { addToNowPlaying, removeFromNowPlaying } from "redux/actions/player";
 import { bindActionCreators } from "redux";
 import { OptionAction, OptionActionType } from "types/Option";
 import { useSpring, animated, config } from "react-spring";
 import { setPopupMenu, setOption, setOverlay } from "redux/actions/app";
-import { likeSong } from "redux/actions/library";
+import { likeSong, removeFromPlaylist } from "redux/actions/library";
 import { findIndex } from "lodash";
 import { PopupMenuType } from "types/PopupMenuType";
 import { useMeasure } from "react-use";
@@ -36,6 +36,7 @@ interface StateProps {
   };
   songs?: { list: Song[]; playing: Song };
   collection: Song[];
+  playlistViewingIndex?: number;
 }
 interface DispatchProps {
   setOverlay: (
@@ -53,6 +54,8 @@ interface DispatchProps {
   addToNowPlaying: (song: Song) => any;
   setPopupMenu: (menuState: PopupMenuType, songAdding: Song) => any;
   likeSong: (song: Song) => any;
+  removeFromNowPlaying: (song: Song) => any;
+  removeFromPlaylist: (playlistIndex: number, song: Song) => any;
 }
 
 const Option: React.FC<Props> = ({
@@ -60,11 +63,14 @@ const Option: React.FC<Props> = ({
   popupState,
   songs,
   collection,
+  playlistViewingIndex,
+  setOverlay,
+  setOption,
   addToNowPlaying,
   setPopupMenu,
   likeSong,
-  setOverlay,
-  setOption,
+  removeFromNowPlaying,
+  removeFromPlaylist,
 }) => {
   const optionActions: OptionAction[] = [
     {
@@ -86,6 +92,20 @@ const Option: React.FC<Props> = ({
       label: "Like Song",
       action: (item: Song) => {
         likeSong(item);
+      },
+    },
+    {
+      type: OptionActionType.REMOVE_FROM_NOW_PLAYING,
+      label: "Remove Song",
+      action: (item: Song) => {
+        removeFromNowPlaying(item);
+      },
+    },
+    {
+      type: OptionActionType.REMOVE_FROM_PLAYLIST,
+      label: "Remove Song from Playlist",
+      action: (item: Song) => {
+        removeFromPlaylist(playlistViewingIndex!, item);
       },
     },
   ];
@@ -157,19 +177,8 @@ const Option: React.FC<Props> = ({
     container: useSpring({
       to: {
         opacity: optionState.show ? 1 : 0,
-        // paddingBottom: optionState.show
-        //   ? 0
-        //   : optionStyleState.flip.vertical
-        //   ? 0
-        //   : 0,
-        // paddingTop: optionState.show
-        //   ? 0
-        //   : optionStyleState.flip.vertical
-        //   ? 10
-        //   : 0,
         borderRadius: optionStyleState.borderRadius,
         transform: optionState.show ? "scale(1,1)" : "scale(0.9,0.975)",
-        // height: optionState.show ? "auto" : 90,
       },
       config: config.stiff,
     }),
@@ -193,7 +202,7 @@ const Option: React.FC<Props> = ({
           {optionState.optionList?.map((optionListItem, index) => {
             if (
               optionListItem == OptionActionType.ADD_TO_NOW_PLAYING &&
-              songs!.list.length == 0
+              songs?.list.length == 0
             ) {
               return null;
             }
@@ -263,6 +272,7 @@ const mapStateToProps = (state: AppState) => {
     popupState: state.app.popupState,
     songs: state.player.songs,
     collection: state.library.collection,
+    playlistViewingIndex: state.app.playlistViewing?.playlistIndex,
   };
 };
 
@@ -275,6 +285,8 @@ const mapDispatchToProps = (
   addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch),
   setPopupMenu: bindActionCreators(setPopupMenu, dispatch),
   likeSong: bindActionCreators(likeSong, dispatch),
+  removeFromNowPlaying: bindActionCreators(removeFromNowPlaying, dispatch),
+  removeFromPlaylist: bindActionCreators(removeFromPlaylist, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Option);

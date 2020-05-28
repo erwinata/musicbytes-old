@@ -23,7 +23,9 @@ export const DURATION_INCREMENT = "DURATION_INCREMENT";
 
 export const SEEK_TO = "SEEK_TO";
 export const SEEK_DONE = "SEEK_DONE";
+
 export const ADD_TO_NOW_PLAYING = "ADD_TO_NOW_PLAYING";
+export const REMOVE_FROM_NOW_PLAYING = "REMOVE_FROM_NOW_PLAYING";
 
 export interface ShowPlayerAction {
   type: typeof SHOW_PLAYER;
@@ -91,6 +93,11 @@ export interface AddToNowPlayingAction {
   song: Song;
 }
 
+export interface RemoveFromNowPlayingAction {
+  type: typeof REMOVE_FROM_NOW_PLAYING;
+  song: Song;
+}
+
 export type PlayerActionTypes =
   | ShowPlayerAction
   | PlaySongAction
@@ -107,4 +114,5 @@ export type PlayerActionTypes =
   | DurationIncrementAction
   | SeekToAction
   | SeekDoneAction
-  | AddToNowPlayingAction;
+  | AddToNowPlayingAction
+  | RemoveFromNowPlayingAction;

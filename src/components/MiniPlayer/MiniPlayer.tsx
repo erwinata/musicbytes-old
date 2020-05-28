@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import "./MiniPlayer.scss";
 import { ThunkDispatch } from "redux-thunk";
 import { AllActions } from "redux/types/app";
@@ -6,39 +6,115 @@ import { connect } from "react-redux";
 import { AppState } from "redux/store/configureStore";
 import { useHistory } from "react-router";
 import { bindActionCreators } from "redux";
-import { showPlayer } from "redux/actions/player";
+import { showPlayer, togglePlaying, nextSong } from "redux/actions/player";
 import { showToast } from "redux/actions/app";
 import { ButtonNext, ButtonPlay } from "components/Buttons/Buttons";
 import { PlayState } from "types/PlayState";
+import { Song } from "types/Song";
+import { useMeasure } from "react-use";
+import { useSpring, animated, config } from "react-spring";
 
-type Props = DispatchProps;
+type Props = StateProps & DispatchProps;
 
+interface StateProps {
+  songs?: {
+    list: Song[];
+    playing: Song;
+  };
+  time: {
+    current: number;
+    total: number;
+    seeking: boolean;
+  };
+  playState: PlayState;
+}
 interface DispatchProps {
   showPlayer: (show: boolean) => any;
+  togglePlaying: (state?: PlayState) => any;
+  nextSong: () => any;
   showToast: (text: string) => any;
 }
 
-const MiniPlayer: React.FC<Props> = ({ showPlayer, showToast }) => {
-  const history = useHistory();
+const MiniPlayer: React.FC<Props> = ({
+  songs,
+  time,
+  playState,
+  showPlayer,
+  togglePlaying,
+  nextSong,
+  showToast,
+}) => {
+  const [infoRef, infoMeasure] = useMeasure();
+  const [titleRef, titleMeasure] = useMeasure();
 
+  const [titleOffset, setTitleOffset] = useState(0);
+  const [titleStyleState, setTitleStyleState] = useState({
+    reverse: false,
+  });
+
+  const style = {
+    title: useSpring({
+      to: { left: !titleStyleState.reverse ? -titleOffset : 0 },
+      config: { duration: Math.abs(titleOffset - titleMeasure.left) * 100 },
+      from: { left: 0 },
+      onRest: () => {
+        setTimeout(() => {
+          setTitleStyleState({ reverse: !titleStyleState.reverse });
+        }, 1500);
+      },
+    }),
+  };
+
+  useEffect(() => {
+    if (titleMeasure.width > infoMeasure.width) {
+      setTitleOffset(titleMeasure.width - infoMeasure.width);
+    }
+  }, [titleMeasure]);
+
+  if (!songs) return null;
+  else {
+    if (songs!.list.length <= 0) return null;
+  }
   return (
-    <div
-      className="MiniPlayer"
-      onClick={(e) => {
-        showPlayer(true);
-        showToast("Player showing");
-      }}
-    >
-      <img src="/res/sample-album.png" alt="Thumbnail Image" />
-      <div className="info">
-        <h1>Siapkah kau tuk jatuh cinta</h1>
-        <h2>Hivi!</h2>
+    <div className="MiniPlayer">
+      <img
+        src={songs!.playing.thumbnails?.default}
+        className={
+          playState !== PlayState.PAUSED && playState !== PlayState.ENDED
+            ? "rotate"
+            : ""
+        }
+        alt="Thumbnail Image"
+        onClick={() => {
+          showPlayer(true);
+        }}
+      />
+      <div
+        className="info"
+        ref={infoRef}
+        onClick={() => {
+          showPlayer(true);
+        }}
+      >
+        <animated.h1 ref={titleRef} style={style.title}>
+          {songs!.playing.title}
+        </animated.h1>
+        <h2>{songs!.playing.channel}</h2>
       </div>
       <div className="control">
         <div className="buttonPlayContainer">
-          <ButtonPlay playState={PlayState.PLAYING} />
+          <ButtonPlay
+            playState={playState}
+            onClick={() => {
+              togglePlaying();
+            }}
+          />
         </div>
-        <ButtonNext />
+        <ButtonNext
+          onClick={() => {
+            nextSong();
+          }}
+        />
       </div>
     </div>
   );
@@ -48,6 +124,7 @@ const mapStateToProps = (state: AppState) => {
   return {
     songs: state.player.songs,
     time: state.player.time,
+    playState: state.player.playerState.playState,
   };
 };
 
@@ -56,6 +133,8 @@ const mapDispatchToProps = (
   // ownProps: DiscoverProps
 ) => ({
   showPlayer: bindActionCreators(showPlayer, dispatch),
+  togglePlaying: bindActionCreators(togglePlaying, dispatch),
+  nextSong: bindActionCreators(nextSong, dispatch),
   showToast: bindActionCreators(showToast, dispatch),
 });
 

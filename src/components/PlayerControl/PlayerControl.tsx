@@ -70,7 +70,7 @@ const PlayerControl: React.FC<Props> = ({
   return (
     <div className="PlayerControl">
       <PlayerTopButtonList />
-      <PlayerTitle songPlaying={songs!.playing} />
+      <PlayerTitle songPlaying={songs?.playing} />
       <PlayerButtonList
         playState={playerState.playState}
         togglePlaying={togglePlaying}
@@ -86,15 +86,21 @@ const PlayerControl: React.FC<Props> = ({
 };
 
 interface PlayerTitleProps {
-  songPlaying: Song | null;
+  songPlaying?: Song;
 }
 const PlayerTitle: React.FC<PlayerTitleProps> = ({
   songPlaying,
 }: PlayerTitleProps) => {
   return (
     <div className="PlayerTitle">
-      <h1>{songPlaying?.title}</h1>
-      <h2>{songPlaying?.channel}</h2>
+      {songPlaying ? (
+        <>
+          <h1>{songPlaying?.title}</h1>
+          <h2>{songPlaying?.channel}</h2>
+        </>
+      ) : (
+        <h1>Empty</h1>
+      )}
     </div>
   );
 };

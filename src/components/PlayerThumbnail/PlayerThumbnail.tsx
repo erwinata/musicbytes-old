@@ -107,7 +107,7 @@ const PlayerThumbnail: React.FC<Props> = ({
       state.youtubePlayer.seekTo(time.current, true);
       seekDone();
     }
-  }, [time.seeking]);
+  }, [time]);
 
   return (
     <div className="PlayerThumbnail">

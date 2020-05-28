@@ -12,7 +12,8 @@ const sampleSearchSong = [
     index: -1,
     playOrder: -1,
     id: "iSyxz2RVddA",
-    title: "HIVI! - Tersenyum, Untuk Siapa? (Official Lyric Video)",
+    title:
+      "HIVI! - Tersenyum, Untuk Siapa? (Official Lyric Video) ini judul yang panjang sekali woi",
     channel: "HIVI!",
     thumbnails: {
       default: "https://i.ytimg.com/vi/iSyxz2RVddA/default.jpg",
@@ -141,8 +142,8 @@ const sampleSearchSong = [
 ];
 
 const discoverReducerDefaultState: IDiscoverState = {
-  // songs: [],
-  songs: sampleSearchSong,
+  songs: [],
+  // songs: sampleSearchSong,
   loading: true,
   query: "michael jackson",
 };

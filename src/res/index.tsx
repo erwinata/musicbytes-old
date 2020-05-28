@@ -21,6 +21,7 @@ export const res_shuffle = require("./shuffle.svg");
 export const res_shuffle_active = require("./shuffle_active.svg");
 
 export const res_save = require("./save.svg");
+export const res_edit = require("./edit.svg");
 export const res_merge = require("./merge.svg");
 
 export const res_option = require("./option.svg");

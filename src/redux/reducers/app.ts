@@ -17,7 +17,10 @@ export interface IAppState {
     currentTab: NavigationTab;
     transitionDirection: number;
   };
-  playlistViewing?: number;
+  playlistViewing?: {
+    playlist: Playlist;
+    playlistIndex?: number;
+  };
   popupState: {
     menuState: PopupMenuType;
     songAdding?: Song;
@@ -152,7 +155,7 @@ const appReducerDefaultState: IAppState = {
     show: false,
   },
   toastState: {
-    text: "Song added to playlist",
+    text: "",
     toastType: ToastType.NORMAL,
   },
   optionState: {
@@ -197,8 +200,13 @@ export const appReducer = (
     case "VIEW_PLAYLIST":
       return {
         ...state,
-        // playlistViewing:
-        //   action.playlistViewing !== null ? action.playlistViewing : undefined,
+        playlistViewing:
+          action.playlist === undefined
+            ? undefined
+            : {
+                playlist: action.playlist,
+                playlistIndex: action.playlistIndex,
+              },
       };
     case "SET_POPUP_MENU":
       var songAdding = state.popupState.songAdding;

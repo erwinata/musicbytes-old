@@ -7,10 +7,9 @@ import {
   arrayGetObjectByAttr,
   arrayRemoveObjectAtIndex,
 } from "helpers/array";
-import { shuffle, orderBy, indexOf, findIndex } from "lodash";
+import { shuffle, orderBy, remove, findIndex } from "lodash";
 import { seekTo } from "redux/actions/player";
 import { Playlist } from "types/Playlist";
-import { settings } from "cluster";
 
 export interface PlayerState {
   showPlayer: boolean;
@@ -144,7 +143,8 @@ const playerReducerDefaultState: PlayerState = {
   },
   // showPlayer: true,
   playlist: undefined,
-  songs: { list: samplePlaylist, playing: sampleSongPlaying },
+  songs: undefined,
+  // songs: { list: samplePlaylist, playing: sampleSongPlaying },
   setting: {
     shuffle: false,
     repeat: Repeat.NO_REPEAT,
@@ -167,13 +167,17 @@ export const playerReducer = (
         showPlayer: action.show,
       };
     case "PLAY_SONG":
-      let songs = state.songs!.list;
+      let playSongs: Song[] = [];
+      if (state.songs) {
+        playSongs = [...state.songs!.list];
+      }
+
       if (action.resetPlaylist) {
-        songs = [action.song];
+        playSongs = [action.song];
       }
       return {
         ...state,
-        songs: { ...state.songs, list: songs, playing: action.song },
+        songs: { ...state.songs, list: playSongs, playing: action.song },
         time: {
           ...state.time,
           current: 0,
@@ -181,11 +185,11 @@ export const playerReducer = (
         },
       };
     case "PLAY_PLAYLIST":
-      var resetPlaying = true;
+      let resetPlaying = true;
 
-      var songExistInPlaylist = findIndex(
+      let songExistInPlaylist = findIndex(
         action.playlist.data.songs,
-        (item) => item.id == state.songs!.playing.id
+        (item) => item.id == state.songs?.playing.id
       );
 
       if (songExistInPlaylist > -1) {
@@ -205,6 +209,7 @@ export const playerReducer = (
           ...state.time,
           current: resetPlaying ? 0 : state.time.current,
           total: resetPlaying ? 0 : state.time.total,
+          // seeking: true,
         },
       };
     case "CLEAR_PLAYLIST":
@@ -215,7 +220,7 @@ export const playerReducer = (
       };
 
     case "TOGGLE_PLAYING":
-      var newPlayState = state.playerState.playState;
+      let newPlayState = state.playerState.playState;
       if (action.state !== undefined) {
         newPlayState = action.state!;
       } else {
@@ -234,7 +239,7 @@ export const playerReducer = (
       };
 
     case "SET_VIDEO_IS_RUNNING":
-      var newVideoIsRunning: boolean;
+      let newVideoIsRunning: boolean;
       if (action.videoIsRunning !== undefined) {
         newVideoIsRunning = action.videoIsRunning!;
       } else {
@@ -249,31 +254,31 @@ export const playerReducer = (
       };
 
     case "AUTO_NEXT_SONG":
-      var index = -1;
-      var seeking = false;
+      let autoNextIndex = -1;
+      let seeking = false;
       switch (state.setting.repeat) {
         case Repeat.NO_REPEAT:
-          index =
+          autoNextIndex =
             findIndex(
               state.songs!.list,
               (song) => song.id == state.songs!.playing!.id
             ) + 1;
-          if (index >= state.songs!.list.length) {
-            index = -1;
+          if (autoNextIndex >= state.songs!.list.length) {
+            autoNextIndex = -1;
           }
           break;
         case Repeat.REPEAT_ALL:
-          index =
+          autoNextIndex =
             findIndex(
               state.songs!.list,
               (song) => song.id == state.songs!.playing!.id
             ) + 1;
-          if (index >= state.songs!.list.length) {
-            index = 0;
+          if (autoNextIndex >= state.songs!.list.length) {
+            autoNextIndex = 0;
           }
           break;
         case Repeat.REPEAT_ONE:
-          index = findIndex(
+          autoNextIndex = findIndex(
             state.songs!.list,
             (el) => el.id == state.songs!.playing!.id
           );
@@ -281,13 +286,13 @@ export const playerReducer = (
           break;
       }
 
-      if (index !== -1) {
+      if (autoNextIndex !== -1) {
         return {
           ...state,
-          songs: { ...state.songs!, playing: state.songs!.list[index] },
+          songs: { ...state.songs!, playing: state.songs!.list[autoNextIndex] },
           time: {
             current: 0,
-            total: state.songs!.list[index].duration,
+            total: state.songs!.list[autoNextIndex].duration,
             seeking: seeking,
           },
         };
@@ -306,49 +311,49 @@ export const playerReducer = (
       };
 
     case "NEXT_SONG":
-      var index =
+      let nextIndex =
         findIndex(
           state.songs!.list,
           (el) => el.id == state.songs!.playing!.id
         ) + 1;
-      if (index >= state.songs!.list.length) {
-        index = 0;
+      if (nextIndex >= state.songs!.list.length) {
+        nextIndex = 0;
       }
 
       return {
         ...state,
-        songs: { ...state.songs!, playing: state.songs!.list[index] },
+        songs: { ...state.songs!, playing: state.songs!.list[nextIndex] },
         time: {
           ...state.time,
           current: 0,
-          total: state.songs!.list[index].duration,
+          total: state.songs!.list[nextIndex].duration,
         },
       };
 
     case "PREV_SONG":
-      var index =
+      let prevIndex =
         findIndex(
           state.songs!.list,
           (el) => el.id == state.songs!.playing!.id
         ) - 1;
-      if (index <= state.songs!.list.length) {
-        index = state.songs!.list.length - 1;
+      if (prevIndex <= state.songs!.list.length) {
+        nextIndex = state.songs!.list.length - 1;
       }
 
       return {
         ...state,
-        songs: { ...state.songs!, playing: state.songs!.list[index] },
+        songs: { ...state.songs!, playing: state.songs!.list[prevIndex] },
         time: {
           ...state.time,
           current: 0,
-          total: state.songs!.list[index].duration,
+          total: state.songs!.list[prevIndex].duration,
         },
       };
 
     case "REMOVE_SONG":
-    // var playOrder = action.song.playOrder;
+    // let playOrder = action.song.playOrder;
 
-    // var updatedSongs = state.songs!.list.filter(
+    // let updatedSongs = state.songs!.list.filter(
     //   (song) => song.playOrder !== action.song.playOrder
     // );
 
@@ -364,7 +369,7 @@ export const playerReducer = (
     // };
 
     case "TOGGLE_SHUFFLE":
-      var shuffledSongs;
+      let shuffledSongs;
       shuffledSongs = state.setting.shuffle
         ? orderBy(state.songs!.list, ["index"], ["asc"])
         : shuffle(state.songs!.list);
@@ -392,11 +397,44 @@ export const playerReducer = (
 
     case "ADD_TO_NOW_PLAYING":
       // action.song.playOrder = state.songs.length;
+      let addedSongs;
+      if (state.songs) {
+        addedSongs = {
+          ...state.songs!,
+          list: [...state.songs.list, action.song],
+        };
+      } else {
+        addedSongs = {
+          list: [action.song],
+          playing: action.song,
+        };
+      }
 
       return {
         ...state,
-        songs: { ...state.songs!, list: [...state.songs!.list, action.song] },
+        songs: addedSongs,
       };
+
+    case "REMOVE_FROM_NOW_PLAYING":
+      // action.song.playOrder = state.songs.length;
+      let removedSongs;
+
+      if (state.songs!.list.length === 1) {
+        removedSongs = undefined!;
+      } else {
+        let removedSongsList = state.songs!.list;
+        remove(removedSongsList, { id: action.song.id });
+        removedSongs = {
+          ...state.songs!,
+          list: removedSongsList,
+        };
+      }
+
+      return {
+        ...state,
+        songs: removedSongs,
+      };
+
     case "DURATION_INCREMENT":
       return {
         ...state,

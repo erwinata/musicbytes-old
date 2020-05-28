@@ -35,12 +35,16 @@ const SongGrid: React.FC<Props> = ({ songs, playlists }) => {
     <div className="SongGrid">
       {/* <div className="SongGrid" onWheel={(e) => onWheel(e)}> */}
       {songs !== undefined
-        ? songs!.map((song) => {
-            return <SongGridItem song={song} key={song.id} />;
+        ? songs!.map((song, index) => {
+            return <SongGridItem song={song} key={song.id} index={index} />;
           })
-        : playlists!.map((playlist) => {
+        : playlists!.map((playlist, index) => {
             return (
-              <SongGridItem playlist={playlist} key={playlist.createdAt} />
+              <SongGridItem
+                playlist={playlist}
+                key={playlist.createdAt}
+                index={index}
+              />
             );
           })}
     </div>

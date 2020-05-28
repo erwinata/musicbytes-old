@@ -16,12 +16,19 @@
 
   display: grid;
   grid-template-columns: 6.5vh 4fr 1.25fr;
-  grid-gap: 0.5rem;
+  grid-gap: 0.75rem;
   align-items: center;
 
-  img {
+  & > img {
     height: 6.5vh;
-    border-radius: 10px;
+    width: 6.5vh;
+    object-fit: cover;
+    border-radius: 100%;
+    animation: resetRotation 0.3s ease;
+
+    &.rotate {
+      animation: rotation 30s linear infinite;
+    }
   }
   .info {
     overflow: hidden;
@@ -29,6 +36,8 @@
     h1 {
       @extend .regularText;
       position: relative;
+      white-space: nowrap;
+      width: fit-content;
     }
     h2 {
       @extend .subText;
@@ -53,5 +62,26 @@
         width: 1.25rem;
       }
     }
+  }
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes resetRotation {
+  0% {
+    transform: rotate(45deg);
+  }
+  60% {
+    transform: rotate(-10deg);
+  }
+  100% {
+    transform: rotate(0deg);
   }
 }

@@ -40,7 +40,7 @@ const PlaylistOptionItem: React.FC<{
 }> = ({ data }) => {
   return (
     <div className="PlaylistListItem" onClick={data.action}>
-      <img src={`/res/${data.icon}.svg`} alt="Icon" />
+      <img src={data.icon} alt="Icon" />
       <div className="info">
         <h1>{data.label}</h1>
       </div>

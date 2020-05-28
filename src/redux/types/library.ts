@@ -1,8 +1,10 @@
 import { Song } from "types/Song";
 
 export const ADD_TO_PLAYLIST = "ADD_TO_PLAYLIST";
+export const REMOVE_FROM_PLAYLIST = "REMOVE_FROM_PLAYLIST";
 export const SAVE_PLAYLIST = "SAVE_PLAYLIST";
 export const RENAME_PLAYLIST = "RENAME_PLAYLIST";
+export const DELETE_PLAYLIST = "DELETE_PLAYLIST";
 export const NEW_PLAYLIST = "NEW_PLAYLIST";
 
 export const MERGE_TO_PLAYLIST = "MERGE_TO_PLAYLIST";
@@ -15,6 +17,11 @@ export interface AddToPlaylistAction {
   songs: Song[];
   isMergeTo?: boolean;
 }
+export interface RemoveFromPlaylistAction {
+  type: typeof REMOVE_FROM_PLAYLIST;
+  playlistIndex: number;
+  song: Song;
+}
 export interface SavePlaylistAction {
   type: typeof SAVE_PLAYLIST;
   playlistIndex: number;
@@ -25,10 +32,15 @@ export interface RenamePlaylistAction {
   playlistIndex: number;
   title: string;
 }
+export interface DeletePlaylistAction {
+  type: typeof DELETE_PLAYLIST;
+  playlistIndex: number;
+}
 export interface NewPlaylistAction {
   type: typeof NEW_PLAYLIST;
   title: string;
   songs: Song[];
+  isMergeTo?: boolean;
 }
 
 export interface LikeSongAction {
@@ -39,7 +51,9 @@ export interface LikeSongAction {
 
 export type LibraryActionTypes =
   | AddToPlaylistAction
+  | RemoveFromPlaylistAction
   | SavePlaylistAction
   | RenamePlaylistAction
+  | DeletePlaylistAction
   | NewPlaylistAction
   | LikeSongAction;

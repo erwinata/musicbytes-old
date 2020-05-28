@@ -87,28 +87,13 @@ const App: React.FC<Props> = ({ tabState, songs, showPlayer, changeTab }) => {
 
   return (
     <div className="App">
-      {/* <div>
-        Lasttab {tabTransition.lastTab}
-        <br></br>
-        Direction {tabTransition.direction}
-      </div> */}
       <Header />
-
       <Overlay />
-
       <Toast />
-
       <Popup />
-
       <Option />
-      {/* // dismissOption={dismissOption}
-      // optionList={optionList}
-      // optionState={optionState} */}
-
       <Navbar />
-
-      {songs!.list.length > 0 ? <MiniPlayer /> : null}
-
+      <MiniPlayer />
       <Player />
       <PlaylistView />
       {page}

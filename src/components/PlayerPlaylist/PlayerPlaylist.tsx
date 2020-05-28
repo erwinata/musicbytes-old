@@ -39,6 +39,7 @@ const PlayerPlaylist: React.FC<Props> = ({
     OptionActionType.ADD_TO_NOW_PLAYING,
     OptionActionType.ADD_TO_PLAYLIST,
     OptionActionType.LIKE_SONG,
+    OptionActionType.REMOVE_FROM_NOW_PLAYING,
   ];
 
   const handleClickButtonSave = () => {
@@ -47,16 +48,20 @@ const PlayerPlaylist: React.FC<Props> = ({
 
   return (
     <div className="PlayerPlaylist">
-      <PlayerPlaylistHeader
-        onClick={handleClickButtonSave}
-        songs={songs!.list}
-        playlist={playlist}
-      />
-      <SongList
-        songs={songs!.list}
-        optionList={optionList}
-        resetPlaylist={false}
-      />
+      {songs ? (
+        <>
+          <PlayerPlaylistHeader
+            onClick={handleClickButtonSave}
+            songs={songs!.list}
+            playlist={playlist}
+          />
+          <SongList
+            songs={songs!.list}
+            optionList={optionList}
+            resetPlaylist={false}
+          />
+        </>
+      ) : null}
     </div>
   );
 };

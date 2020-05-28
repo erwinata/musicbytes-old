@@ -5,7 +5,7 @@ import {
 } from "redux/types/library";
 import { Song } from "types/Song";
 import { Playlist } from "types/Playlist";
-import { now, filter, concat, uniqBy } from "lodash";
+import { now, filter, concat, uniqBy, remove } from "lodash";
 
 export interface ILibraryState {
   playlists: Playlist[];
@@ -109,26 +109,27 @@ const samplePlaylist = [
 
 const libraryReducerDefaultState: ILibraryState = {
   playlists: [
-    {
-      title: "Lagu saya",
-      songs: samplePlaylist,
-      createdAt: 1589043600000,
-      updatedAt: 1589205857159,
-    },
-    {
-      title: "Pop Music",
-      songs: samplePlaylist,
-      createdAt: 1589043600000,
-      updatedAt: 1589205857159,
-    },
-    {
-      title: "Chillin Dude",
-      songs: samplePlaylist,
-      createdAt: 1589043600000,
-      updatedAt: 1589205857159,
-    },
+    // {
+    //   title: "Lagu saya",
+    //   songs: samplePlaylist,
+    //   createdAt: 1589043600000,
+    //   updatedAt: 1589205857159,
+    // },
+    // {
+    //   title: "Pop Music",
+    //   songs: samplePlaylist,
+    //   createdAt: 1589043600000,
+    //   updatedAt: 1589205857159,
+    // },
+    // {
+    //   title: "Chillin Dude",
+    //   songs: samplePlaylist,
+    //   createdAt: 1589043600000,
+    //   updatedAt: 1589205857159,
+    // },
   ],
-  collection: samplePlaylist,
+  collection: [],
+  // collection: samplePlaylist,
 };
 
 export const libraryReducer = (
@@ -154,6 +155,22 @@ export const libraryReducer = (
           ...state.playlists.slice(action.playlistIndex + 1),
         ],
       };
+    case "REMOVE_FROM_PLAYLIST":
+      let removedSongsList = state.playlists[action.playlistIndex].songs;
+      remove(removedSongsList, { id: action.song.id });
+      console.log(removedSongsList);
+
+      return {
+        ...state,
+        playlists: [
+          ...state.playlists.slice(0, action.playlistIndex),
+          {
+            ...state.playlists[action.playlistIndex],
+            songs: removedSongsList,
+          },
+          ...state.playlists.slice(action.playlistIndex + 1),
+        ],
+      };
     case "SAVE_PLAYLIST":
       return {
         ...state,
@@ -175,6 +192,14 @@ export const libraryReducer = (
             ...state.playlists[action.playlistIndex],
             title: action.title,
           },
+          ...state.playlists.slice(action.playlistIndex + 1),
+        ],
+      };
+    case "DELETE_PLAYLIST":
+      return {
+        ...state,
+        playlists: [
+          ...state.playlists.slice(0, action.playlistIndex),
           ...state.playlists.slice(action.playlistIndex + 1),
         ],
       };

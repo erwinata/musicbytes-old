@@ -21,7 +21,7 @@ interface StateProps {
   showPlayer: boolean;
 }
 interface DispatchProps {
-  viewPlaylist: (playlist: Playlist) => any;
+  viewPlaylist: (playlist: Playlist, playlistIndex?: number) => any;
 }
 
 const Navbar: React.FC<Props> = ({ tabState, showPlayer, viewPlaylist }) => {

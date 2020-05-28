@@ -20,7 +20,10 @@ type Props = PassingProps & StateProps & DispatchProps;
 
 interface PassingProps {}
 interface StateProps {
-  playlistViewing?: number;
+  playlistViewing?: {
+    playlist: Playlist;
+    playlistIndex?: number;
+  };
   collection: Song[];
 }
 interface DispatchProps {
@@ -36,6 +39,7 @@ const PlaylistView: React.FC<Props> = ({
     OptionActionType.ADD_TO_NOW_PLAYING,
     OptionActionType.ADD_TO_PLAYLIST,
     OptionActionType.LIKE_SONG,
+    OptionActionType.REMOVE_FROM_PLAYLIST,
   ];
 
   const slide = useSpring({
@@ -43,19 +47,18 @@ const PlaylistView: React.FC<Props> = ({
     opacity: playlistViewing ? 1 : 0,
   });
 
+  if (playlistViewing === undefined) return null;
   return (
     <animated.div className="PlaylistView" style={slide}>
-      {playlistViewing !== undefined ? (
-        <div>
-          <PlaylistViewHeader />
+      <div>
+        <PlaylistViewHeader playlistViewing={playlistViewing} />
 
-          {/* <SongList
-            songs={playlistViewing!.songs}
-            optionList={optionList}
-            resetPlaylist={true}
-          /> */}
-        </div>
-      ) : null}
+        <SongList
+          songs={playlistViewing!.playlist.songs}
+          optionList={optionList}
+          resetPlaylist={true}
+        />
+      </div>
     </animated.div>
   );
 };
