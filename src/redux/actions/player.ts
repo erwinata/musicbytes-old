@@ -5,6 +5,7 @@ import { Song } from "types/Song";
 import { PlayState } from "types/PlayState";
 import { Playlist } from "types/Playlist";
 import { actionShowToast } from "./app";
+import { findIndex } from "lodash";
 
 export const actionShowPlayer = (show: boolean): AllActions => ({
   type: "SHOW_PLAYER",
@@ -88,6 +89,9 @@ export const showPlayer = (show: boolean) => {
 
 export const playSong = (song: Song, resetPlaylist: boolean) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    if (resetPlaylist) {
+      dispatch(actionClearPlaylist());
+    }
     dispatch(actionPlaySong(song, resetPlaylist));
     dispatch(actionTogglePlaying(PlayState.PLAYING));
     dispatch(actionShowPlayer(true));
@@ -118,8 +122,16 @@ export const clearPlaylist = () => {
 
 export const addToNowPlaying = (song: Song) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    dispatch(actionAddToNowPlaying(song));
-    dispatch(actionShowToast("Songs added to Now Playing"));
+    var songExist = findIndex(
+      getState().player.songs?.list,
+      (item) => item.id == song.id
+    );
+    if (songExist > -1) {
+      dispatch(actionShowToast("Song already exists in player"));
+    } else {
+      dispatch(actionAddToNowPlaying(song));
+      dispatch(actionShowToast("Songs added to Now Playing"));
+    }
   };
 };
 
