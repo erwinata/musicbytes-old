@@ -30,6 +30,9 @@ export interface IAppState {
     dismissAction?: () => any;
     transparent?: boolean;
   };
+  clickOverlayState: {
+    show: boolean;
+  };
   toastState: {
     text: string;
     toastType: ToastType;
@@ -154,6 +157,9 @@ const appReducerDefaultState: IAppState = {
   overlayState: {
     show: false,
   },
+  clickOverlayState: {
+    show: true,
+  },
   toastState: {
     text: "",
     toastType: ToastType.NORMAL,
@@ -229,6 +235,13 @@ export const appReducer = (
           show: action.show,
           dismissAction: action.dismissAction,
           transparent: action.transparent,
+        },
+      };
+    case "SET_CLICK_OVERLAY":
+      return {
+        ...state,
+        clickOverlayState: {
+          show: action.show,
         },
       };
     case "SET_OPTION":

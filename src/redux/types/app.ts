@@ -18,6 +18,7 @@ export const SAVING_PLAYLIST = "SAVING_PLAYLIST";
 
 export const SET_POPUP_MENU = "SET_POPUP_MENU";
 export const SET_OVERLAY = "SET_OVERLAY";
+export const SET_CLICK_OVERLAY = "SET_CLICK_OVERLAY";
 export const SET_OPTION = "SET_OPTION";
 
 export interface ChangeTabAction {
@@ -48,6 +49,11 @@ export interface SetOverlayAction {
   transparent?: boolean;
 }
 
+export interface SetClickOverlayAction {
+  type: typeof SET_CLICK_OVERLAY;
+  show: boolean;
+}
+
 export interface SetOptionAction {
   type: typeof SET_OPTION;
   show: boolean;
@@ -62,6 +68,7 @@ export type AppActionTypes =
   | ViewPlaylistAction
   | SetPopupMenuAction
   | SetOverlayAction
+  | SetClickOverlayAction
   | SetOptionAction;
 
 export type AllActions =

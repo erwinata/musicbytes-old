@@ -7,7 +7,7 @@ import { bindActionCreators } from "redux";
 import { showPlayer } from "redux/actions/player";
 import { connect } from "react-redux";
 import { NavigationTab } from "types/Navigation";
-import { changeTab } from "redux/actions/app";
+import { changeTab, setClickOverlay } from "redux/actions/app";
 import { useSpring, animated } from "react-spring";
 import {
   res_discover,
@@ -28,6 +28,7 @@ interface PassingProps {
 interface DispatchProps {
   showPlayer: (show: boolean) => any;
   changeTab: (to: NavigationTab) => any;
+  setClickOverlay: (show: boolean) => any;
 }
 
 const NavbarItem: React.FC<Props> = ({
@@ -35,6 +36,7 @@ const NavbarItem: React.FC<Props> = ({
   type,
   showPlayer,
   changeTab,
+  setClickOverlay,
 }) => {
   var name = "";
   var img;
@@ -60,6 +62,7 @@ const NavbarItem: React.FC<Props> = ({
 
   const navbarClick = () => {
     showPlayer(false);
+    setClickOverlay(true);
     changeTab(type);
   };
 
@@ -83,6 +86,7 @@ const mapDispatchToProps = (
 ) => ({
   showPlayer: bindActionCreators(showPlayer, dispatch),
   changeTab: bindActionCreators(changeTab, dispatch),
+  setClickOverlay: bindActionCreators(setClickOverlay, dispatch),
 });
 
 export default connect(null, mapDispatchToProps)(NavbarItem);

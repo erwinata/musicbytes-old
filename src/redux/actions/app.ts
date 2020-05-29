@@ -47,6 +47,10 @@ export const actionSetOverlay = (
   dismissAction,
   transparent,
 });
+export const actionSetClickOverlay = (show: boolean): AllActions => ({
+  type: "SET_CLICK_OVERLAY",
+  show,
+});
 export const actionSetOption = (
   show: boolean,
   item?: any,
@@ -90,6 +94,11 @@ export const setOverlay = (
 ) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionSetOverlay(show, dismissAction, transparent));
+  };
+};
+export const setClickOverlay = (show: boolean) => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionSetClickOverlay(show));
   };
 };
 export const setOption = (

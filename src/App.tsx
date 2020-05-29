@@ -24,6 +24,7 @@ import { Header } from "components/Header/Header";
 import Overlay from "components/Overlay/Overlay";
 import Option from "components/Option/Option";
 import { useEffectOnce } from "react-use";
+import ClickOverlay from "components/ClickOverlay/ClickOverlay";
 declare module "react-spring" {
   export const animated: any;
 }
@@ -89,6 +90,7 @@ const App: React.FC<Props> = ({ tabState, songs, showPlayer, changeTab }) => {
     <div className="App">
       <Header />
       <Overlay />
+      <ClickOverlay />
       <Toast />
       <Popup />
       <Option />
