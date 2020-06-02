@@ -16,7 +16,7 @@ import { Song } from "types/Song";
 import { showPlayer } from "redux/actions/player";
 import { useTransition, animated } from "react-spring";
 import { NavigationTab } from "types/Navigation";
-import { changeTab } from "redux/actions/app";
+import { changeTab, loginUser } from "redux/actions/app";
 import PlaylistView from "pages/PlaylistView/PlaylistView";
 import Popup from "components/Popup/Popup";
 import Toast from "components/Toast/Toast";
@@ -25,6 +25,10 @@ import Overlay from "components/Overlay/Overlay";
 import Option from "components/Option/Option";
 import { useEffectOnce } from "react-use";
 import ClickOverlay from "components/ClickOverlay/ClickOverlay";
+import GoogleLogin from "react-google-login";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 declare module "react-spring" {
   export const animated: any;
 }
@@ -40,10 +44,21 @@ interface StateProps {
   showPlayer: boolean;
 }
 interface DispatchProps {
+  loginUser: (
+    name: string,
+    email: string,
+    token: { google: string; musicbytes: string }
+  ) => any;
   changeTab: (to: NavigationTab) => any;
 }
 
-const App: React.FC<Props> = ({ tabState, songs, showPlayer, changeTab }) => {
+const App: React.FC<Props> = ({
+  tabState,
+  songs,
+  showPlayer,
+  loginUser,
+  changeTab,
+}) => {
   const location = useLocation();
   const transitions = useTransition(location, (location) => location.pathname, {
     from: {
@@ -72,7 +87,24 @@ const App: React.FC<Props> = ({ tabState, songs, showPlayer, changeTab }) => {
     );
   });
 
+  const checkUserCookies = () => {
+    const name = Cookies.get("name");
+    const email = Cookies.get("email");
+    const token_google = Cookies.get("token_google");
+    const token_musicbytes = Cookies.get("token_musicbytes");
+    if (name && email && token_google && token_musicbytes) {
+      const token = {
+        google: token_google,
+        musicbytes: token_musicbytes,
+      };
+
+      loginUser(name, email, token);
+    }
+  };
+
   useEffectOnce(() => {
+    checkUserCookies();
+
     switch (location.pathname) {
       case "/":
         changeTab(NavigationTab.LISTEN);
@@ -112,6 +144,7 @@ const mapStateToProps = (state: AppState) => {
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AllActions>) => ({
+  loginUser: bindActionCreators(loginUser, dispatch),
   changeTab: bindActionCreators(changeTab, dispatch),
 });
 

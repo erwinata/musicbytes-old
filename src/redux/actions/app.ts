@@ -9,6 +9,16 @@ import { PopupMenuType } from "types/PopupMenuType";
 import { OptionActionType } from "types/Option";
 import { XY } from "types/XY";
 
+export const actionLoginUser = (
+  name: string,
+  email: string,
+  token: { google: string; musicbytes: string }
+): AllActions => ({
+  type: "LOGIN_USER",
+  name,
+  email,
+  token,
+});
 export const actionChangeTab = (to: NavigationTab): AllActions => ({
   type: "CHANGE_TAB",
   to,
@@ -64,6 +74,15 @@ export const actionSetOption = (
   position,
 });
 
+export const loginUser = (
+  name: string,
+  email: string,
+  token: { google: string; musicbytes: string }
+) => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionLoginUser(name, email, token));
+  };
+};
 export const changeTab = (to: NavigationTab) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionChangeTab(to));

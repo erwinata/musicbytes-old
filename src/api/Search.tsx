@@ -3,10 +3,15 @@ import { YoutubeDataAPI } from "youtube-v3-api";
 import { Song } from "types/Song";
 import { decodeText } from "helpers/decode";
 import { ConvertDurationToNumber } from "helpers/duration";
+import { store } from "redux/store/configureStore";
+import { SongDetail } from "./SongDetail";
 
 export const SearchSong = (query: string, total: number): Promise<Song[]> => {
-  const API_KEY = "AIzaSyBQ5KGEWWK9-A0O87RLepRrmX3yz7kU4iA";
+  const state = store.getState();
+
+  const API_KEY = state.app.user?.token.google ? "" : state.app.defaultKey;
   const api = new YoutubeDataAPI(API_KEY);
+  // const api = new YoutubeDataAPI("");
 
   return new Promise((resolve, reject) => {
     api
@@ -14,6 +19,9 @@ export const SearchSong = (query: string, total: number): Promise<Song[]> => {
         type: "video",
         videoCategoryId: 10,
         part: "snippet",
+        access_token: state.app.user?.token.google
+          ? state.app.user!.token.google
+          : "",
       })
       .then(async (data: any) => {
         var ids = "";
@@ -22,45 +30,7 @@ export const SearchSong = (query: string, total: number): Promise<Song[]> => {
           ids += video.id.videoId + ",";
         });
 
-        resolve(SearchSongDetail(ids));
-      })
-      .catch((err: any) => {
-        reject(err);
-      });
-  });
-};
-
-export const SearchSongDetail = (ids: string): Promise<Song[]> => {
-  const API_KEY = "AIzaSyBQ5KGEWWK9-A0O87RLepRrmX3yz7kU4iA";
-  const api = new YoutubeDataAPI(API_KEY);
-
-  return new Promise((resolve, reject) => {
-    api
-      .searchVideo(ids)
-      .then((data: any) => {
-        var songs: Song[] = [];
-
-        data.items.map((video: any, index: number) => {
-          var snippet: any = video.snippet;
-          var duration = ConvertDurationToNumber(video.contentDetails.duration);
-
-          var song: Song = {
-            id: video.id,
-            title: decodeText(snippet.title),
-            channel: decodeText(snippet.channelTitle),
-            thumbnails: {
-              default: snippet.thumbnails.default.url,
-              medium: snippet.thumbnails.medium.url,
-              high: snippet.thumbnails.high.url,
-            },
-            duration: duration,
-          };
-
-          songs.push(song);
-        });
-
-        console.log(songs);
-        resolve(songs);
+        resolve(SongDetail(ids));
       })
       .catch((err: any) => {
         reject(err);

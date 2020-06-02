@@ -1,0 +1,24 @@
+@import "_base.scss";
+
+.Login {
+  text-align: center;
+  position: relative;
+  height: 100%;
+
+  .content {
+    position: absolute;
+    top: 45%;
+    width: 100%;
+    transform: translate(0, -50%);
+
+    h1 {
+      @extend .headingText;
+      margin: 1rem 0;
+    }
+
+    h2 {
+      @extend .regularText;
+      margin: 1rem 0;
+    }
+  }
+}

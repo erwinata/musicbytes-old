@@ -137,6 +137,12 @@ export const libraryReducer = (
   action: LibraryActionTypes
 ): ILibraryState => {
   switch (action.type) {
+    case "LOAD_PLAYLISTS":
+      console.log(action.playlists);
+      return {
+        ...state,
+        playlists: action.playlists,
+      };
     case "ADD_TO_PLAYLIST":
       var mergedSongs = concat(
         state.playlists[action.playlistIndex].songs,

@@ -13,6 +13,15 @@ import { OptionActionType } from "types/Option";
 import { XY } from "types/XY";
 
 export interface IAppState {
+  user?: {
+    name: string;
+    email: string;
+    token: {
+      google: string;
+      musicbytes: string;
+    };
+  };
+  defaultKey: string;
   tabState: {
     currentTab: NavigationTab;
     transitionDirection: number;
@@ -141,6 +150,8 @@ const samplePlaylist = [
 ];
 
 const appReducerDefaultState: IAppState = {
+  user: undefined,
+  defaultKey: "AIzaSyBQ5KGEWWK9-A0O87RLepRrmX3yz7kU4iA",
   tabState: {
     currentTab: NavigationTab.LISTEN,
     transitionDirection: 1,
@@ -174,6 +185,15 @@ export const appReducer = (
   action: AppActionTypes
 ): IAppState => {
   switch (action.type) {
+    case "LOGIN_USER":
+      return {
+        ...state,
+        user: {
+          name: action.name,
+          email: action.email,
+          token: action.token,
+        },
+      };
     case "CHANGE_TAB":
       // console.log("REDUCER" + action.query);
       let transitionDirection = 1;

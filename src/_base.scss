@@ -40,6 +40,11 @@ button {
   border: 1px solid $color-red;
   padding: 0.5rem 2rem;
   border-radius: 50px;
+  transition: 0.3s ease;
+}
+button:hover {
+  background: $color-red;
+  transform: scale(1.05, 1.05);
 }
 input {
   border: none;

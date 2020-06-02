@@ -6,6 +6,12 @@ import { Song } from "types/Song";
 import { actionShowToast, actionViewPlaylist } from "./app";
 import { findIndex } from "lodash";
 import { actionPlayPlaylist, playPlaylist } from "./player";
+import { Playlist } from "types/Playlist";
+
+export const actionLoadPlaylists = (playlists: Playlist[]): AllActions => ({
+  type: "LOAD_PLAYLISTS",
+  playlists,
+});
 
 export const actionAddToPlaylist = (
   playlistIndex: number,
@@ -66,6 +72,13 @@ export const actionLikeSong = (song: Song, isExist: boolean): AllActions => ({
   song,
   isExist,
 });
+
+export const loadPlaylists = (playlists: Playlist[]) => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    console.log(playlists);
+    dispatch(actionLoadPlaylists(playlists));
+  };
+};
 
 export const addToPlaylist = (
   playlistIndex: number,

@@ -1,0 +1,25 @@
+@import "_base.scss";
+
+.Loading {
+  text-align: center;
+  position: relative;
+
+  .containerStyle {
+    margin: 2rem 0;
+    position: absolute;
+    display: inline-block;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    .LoadingObject {
+      display: inline-block;
+    }
+
+    .text {
+      margin: 1rem 0;
+      text-align: center;
+      color: $color-blue;
+    }
+  }
+}

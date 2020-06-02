@@ -9,6 +9,8 @@ import { PopupMenuType } from "types/PopupMenuType";
 import { OptionActionType } from "types/Option";
 import { XY } from "types/XY";
 
+export const LOGIN_USER = "LOGIN_USER";
+
 export const CHANGE_TAB = "CHANGE_TAB";
 export const SHOW_TOAST = "SHOW_TOAST";
 
@@ -20,6 +22,16 @@ export const SET_POPUP_MENU = "SET_POPUP_MENU";
 export const SET_OVERLAY = "SET_OVERLAY";
 export const SET_CLICK_OVERLAY = "SET_CLICK_OVERLAY";
 export const SET_OPTION = "SET_OPTION";
+
+export interface LoginUserAction {
+  type: typeof LOGIN_USER;
+  name: string;
+  email: string;
+  token: {
+    google: string;
+    musicbytes: string;
+  };
+}
 
 export interface ChangeTabAction {
   type: typeof CHANGE_TAB;
@@ -63,6 +75,7 @@ export interface SetOptionAction {
 }
 
 export type AppActionTypes =
+  | LoginUserAction
   | ChangeTabAction
   | ShowToastAction
   | ViewPlaylistAction
