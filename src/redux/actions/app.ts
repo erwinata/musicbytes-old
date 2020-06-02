@@ -9,6 +9,10 @@ import { PopupMenuType } from "types/PopupMenuType";
 import { OptionActionType } from "types/Option";
 import { XY } from "types/XY";
 
+export const actionSetAPIBaseURL = (url: string): AllActions => ({
+  type: "SET_API_BASE_URL",
+  url,
+});
 export const actionLoginUser = (
   name: string,
   email: string,
@@ -74,6 +78,11 @@ export const actionSetOption = (
   position,
 });
 
+export const setAPIBaseURL = (url: string) => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionSetAPIBaseURL(url));
+  };
+};
 export const loginUser = (
   name: string,
   email: string,

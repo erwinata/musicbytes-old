@@ -22,6 +22,7 @@ export interface IAppState {
     };
   };
   defaultKey: string;
+  apiBaseURL: string;
   tabState: {
     currentTab: NavigationTab;
     transitionDirection: number;
@@ -152,6 +153,7 @@ const samplePlaylist = [
 const appReducerDefaultState: IAppState = {
   user: undefined,
   defaultKey: "AIzaSyBQ5KGEWWK9-A0O87RLepRrmX3yz7kU4iA",
+  apiBaseURL: "",
   tabState: {
     currentTab: NavigationTab.LISTEN,
     transitionDirection: 1,
@@ -185,6 +187,11 @@ export const appReducer = (
   action: AppActionTypes
 ): IAppState => {
   switch (action.type) {
+    case "SET_API_BASE_URL":
+      return {
+        ...state,
+        apiBaseURL: action.url,
+      };
     case "LOGIN_USER":
       return {
         ...state,

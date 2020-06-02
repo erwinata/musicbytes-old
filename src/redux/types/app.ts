@@ -10,6 +10,7 @@ import { OptionActionType } from "types/Option";
 import { XY } from "types/XY";
 
 export const LOGIN_USER = "LOGIN_USER";
+export const SET_API_BASE_URL = "SET_API_BASE_URL";
 
 export const CHANGE_TAB = "CHANGE_TAB";
 export const SHOW_TOAST = "SHOW_TOAST";
@@ -22,6 +23,11 @@ export const SET_POPUP_MENU = "SET_POPUP_MENU";
 export const SET_OVERLAY = "SET_OVERLAY";
 export const SET_CLICK_OVERLAY = "SET_CLICK_OVERLAY";
 export const SET_OPTION = "SET_OPTION";
+
+export interface SetAPIBaseURLAction {
+  type: typeof SET_API_BASE_URL;
+  url: string;
+}
 
 export interface LoginUserAction {
   type: typeof LOGIN_USER;
@@ -75,6 +81,7 @@ export interface SetOptionAction {
 }
 
 export type AppActionTypes =
+  | SetAPIBaseURLAction
   | LoginUserAction
   | ChangeTabAction
   | ShowToastAction

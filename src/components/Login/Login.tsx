@@ -9,7 +9,7 @@ import { bindActionCreators } from "redux";
 import { loginUser } from "redux/actions/app";
 import { ThunkDispatch } from "redux-thunk";
 import { AllActions } from "redux/types/app";
-import { AppState } from "redux/store/configureStore";
+import { AppState, store } from "redux/store/configureStore";
 import { connect } from "react-redux";
 
 type Props = StateProps & DispatchProps;
@@ -44,7 +44,7 @@ const Login: React.FC<Props> = ({ loginUser }) => {
     const googleKey = response.accessToken;
 
     axios
-      .post("http://localhost:8000/api/v1/login", {
+      .post(`${store.getState().app.apiBaseURL}api/v1/login`, {
         idtoken: response.tokenId,
         email: email,
         name: name,

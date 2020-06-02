@@ -16,7 +16,7 @@ import { Song } from "types/Song";
 import { showPlayer } from "redux/actions/player";
 import { useTransition, animated } from "react-spring";
 import { NavigationTab } from "types/Navigation";
-import { changeTab, loginUser } from "redux/actions/app";
+import { changeTab, loginUser, setAPIBaseURL } from "redux/actions/app";
 import PlaylistView from "pages/PlaylistView/PlaylistView";
 import Popup from "components/Popup/Popup";
 import Toast from "components/Toast/Toast";
@@ -44,6 +44,7 @@ interface StateProps {
   showPlayer: boolean;
 }
 interface DispatchProps {
+  setAPIBaseURL: (url: string) => any;
   loginUser: (
     name: string,
     email: string,
@@ -56,6 +57,7 @@ const App: React.FC<Props> = ({
   tabState,
   songs,
   showPlayer,
+  setAPIBaseURL,
   loginUser,
   changeTab,
 }) => {
@@ -102,8 +104,17 @@ const App: React.FC<Props> = ({
     }
   };
 
+  const checkAPI = () => {
+    if (window.location.href.indexOf("localhost") === -1) {
+      setAPIBaseURL(process.env.REACT_APP_API_BASE_LIVE!);
+    } else {
+      setAPIBaseURL(process.env.REACT_APP_API_BASE_LOCAL!);
+    }
+  };
+
   useEffectOnce(() => {
     checkUserCookies();
+    checkAPI();
 
     switch (location.pathname) {
       case "/":
@@ -144,6 +155,7 @@ const mapStateToProps = (state: AppState) => {
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AllActions>) => ({
+  setAPIBaseURL: bindActionCreators(setAPIBaseURL, dispatch),
   loginUser: bindActionCreators(loginUser, dispatch),
   changeTab: bindActionCreators(changeTab, dispatch),
 });

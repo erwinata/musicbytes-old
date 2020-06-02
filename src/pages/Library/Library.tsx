@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import { AppActionTypes } from "redux/types/app";
-import { AppState } from "redux/store/configureStore";
+import { AppState, store } from "redux/store/configureStore";
 import SongList from "components/SongList/SongList";
 import { Song } from "types/Song";
 import { OptionAction, OptionActionType } from "types/Option";
@@ -68,7 +68,9 @@ const Library: React.FC<Props> = ({
 
       axios
         .get(
-          `http://localhost:8000/api/v1/playlist?token=${user.token.musicbytes}`
+          `${store.getState().app.apiBaseURL}api/v1/playlist?token=${
+            user.token.musicbytes
+          }`
         )
         .then(
           async (response: any) => {
