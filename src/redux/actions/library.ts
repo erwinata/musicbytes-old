@@ -12,6 +12,10 @@ export const actionLoadPlaylists = (playlists: Playlist[]): AllActions => ({
   type: "LOAD_PLAYLISTS",
   playlists,
 });
+export const actionLoadCollection = (collection: Song[]): AllActions => ({
+  type: "LOAD_COLLECTION",
+  collection,
+});
 
 export const actionAddToPlaylist = (
   playlistIndex: number,
@@ -73,10 +77,19 @@ export const actionLikeSong = (song: Song, isExist: boolean): AllActions => ({
   isExist,
 });
 
+// ACTION SEPARATOR
+// ACTION SEPARATOR
+// ACTION SEPARATOR
+
 export const loadPlaylists = (playlists: Playlist[]) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    console.log(playlists);
     dispatch(actionLoadPlaylists(playlists));
+  };
+};
+
+export const loadCollection = (collection: Song[]) => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionLoadCollection(collection));
   };
 };
 

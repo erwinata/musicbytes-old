@@ -29,6 +29,7 @@ import GoogleLogin from "react-google-login";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import Cookies from "js-cookie";
+import { UserData } from "types/UserData";
 declare module "react-spring" {
   export const animated: any;
 }
@@ -45,11 +46,7 @@ interface StateProps {
 }
 interface DispatchProps {
   setAPIBaseURL: (url: string) => any;
-  loginUser: (
-    name: string,
-    email: string,
-    token: { google: string; musicbytes: string }
-  ) => any;
+  loginUser: (userData: UserData) => any;
   changeTab: (to: NavigationTab) => any;
 }
 
@@ -100,7 +97,11 @@ const App: React.FC<Props> = ({
         musicbytes: token_musicbytes,
       };
 
-      loginUser(name, email, token);
+      loginUser({
+        name: name,
+        email: email,
+        token: token,
+      });
     }
   };
 

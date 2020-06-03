@@ -11,16 +11,10 @@ import { ToastType } from "types/ToastType";
 import { PopupMenuType } from "types/PopupMenuType";
 import { OptionActionType } from "types/Option";
 import { XY } from "types/XY";
+import { UserData } from "types/UserData";
 
 export interface IAppState {
-  user?: {
-    name: string;
-    email: string;
-    token: {
-      google: string;
-      musicbytes: string;
-    };
-  };
+  user?: UserData;
   defaultKey: string;
   apiBaseURL: string;
   tabState: {
@@ -195,11 +189,7 @@ export const appReducer = (
     case "LOGIN_USER":
       return {
         ...state,
-        user: {
-          name: action.name,
-          email: action.email,
-          token: action.token,
-        },
+        user: action.userData,
       };
     case "CHANGE_TAB":
       // console.log("REDUCER" + action.query);

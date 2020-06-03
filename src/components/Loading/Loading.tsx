@@ -31,7 +31,7 @@ export const Loading: React.FC<{
   const style = {
     wrapper: {
       display: animationEnd ? "none" : "block",
-      height: show ? height : 0,
+      // height: show ? height : 0,
     },
     container: useSpring({
       opacity: show ? 1 : 0,

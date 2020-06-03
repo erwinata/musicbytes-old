@@ -8,20 +8,15 @@ import { ToastType } from "types/ToastType";
 import { PopupMenuType } from "types/PopupMenuType";
 import { OptionActionType } from "types/Option";
 import { XY } from "types/XY";
+import { UserData } from "types/UserData";
 
 export const actionSetAPIBaseURL = (url: string): AllActions => ({
   type: "SET_API_BASE_URL",
   url,
 });
-export const actionLoginUser = (
-  name: string,
-  email: string,
-  token: { google: string; musicbytes: string }
-): AllActions => ({
+export const actionLoginUser = (userData: UserData): AllActions => ({
   type: "LOGIN_USER",
-  name,
-  email,
-  token,
+  userData,
 });
 export const actionChangeTab = (to: NavigationTab): AllActions => ({
   type: "CHANGE_TAB",
@@ -83,13 +78,9 @@ export const setAPIBaseURL = (url: string) => {
     dispatch(actionSetAPIBaseURL(url));
   };
 };
-export const loginUser = (
-  name: string,
-  email: string,
-  token: { google: string; musicbytes: string }
-) => {
+export const loginUser = (userData: UserData) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    dispatch(actionLoginUser(name, email, token));
+    dispatch(actionLoginUser(userData));
   };
 };
 export const changeTab = (to: NavigationTab) => {

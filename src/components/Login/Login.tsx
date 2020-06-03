@@ -11,16 +11,13 @@ import { ThunkDispatch } from "redux-thunk";
 import { AllActions } from "redux/types/app";
 import { AppState, store } from "redux/store/configureStore";
 import { connect } from "react-redux";
+import { UserData } from "types/UserData";
 
 type Props = StateProps & DispatchProps;
 
 interface StateProps {}
 interface DispatchProps {
-  loginUser: (
-    name: string,
-    email: string,
-    token: { google: string; musicbytes: string }
-  ) => any;
+  loginUser: (userData: UserData) => any;
 }
 
 const Login: React.FC<Props> = ({ loginUser }) => {
@@ -57,7 +54,11 @@ const Login: React.FC<Props> = ({ loginUser }) => {
             musicbytes: musicbytesKey,
           };
 
-          loginUser(name, email, token);
+          loginUser({
+            name: name,
+            email: email,
+            token: token,
+          });
 
           Cookies.set("name", name, { expires: 7 });
           Cookies.set("email", email, { expires: 7 });

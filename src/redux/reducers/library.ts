@@ -137,6 +137,12 @@ export const libraryReducer = (
   action: LibraryActionTypes
 ): ILibraryState => {
   switch (action.type) {
+    case "LOAD_COLLECTION":
+      console.log(action.collection);
+      return {
+        ...state,
+        collection: action.collection,
+      };
     case "LOAD_PLAYLISTS":
       console.log(action.playlists);
       return {

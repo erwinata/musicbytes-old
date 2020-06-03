@@ -8,6 +8,7 @@ import { ToastType } from "types/ToastType";
 import { PopupMenuType } from "types/PopupMenuType";
 import { OptionActionType } from "types/Option";
 import { XY } from "types/XY";
+import { UserData } from "types/UserData";
 
 export const LOGIN_USER = "LOGIN_USER";
 export const SET_API_BASE_URL = "SET_API_BASE_URL";
@@ -31,12 +32,7 @@ export interface SetAPIBaseURLAction {
 
 export interface LoginUserAction {
   type: typeof LOGIN_USER;
-  name: string;
-  email: string;
-  token: {
-    google: string;
-    musicbytes: string;
-  };
+  userData: UserData;
 }
 
 export interface ChangeTabAction {

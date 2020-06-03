@@ -15,10 +15,11 @@ import { Playlist } from "types/Playlist";
 import Login from "components/Login/Login";
 import axios from "axios";
 import { SongDetail } from "api/SongDetail";
-import { loadPlaylists } from "redux/actions/library";
+import { loadPlaylists, loadCollection } from "redux/actions/library";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import { Loading } from "components/Loading/Loading";
 import { LoadingType } from "types/LoadingType";
+import { UserData } from "types/UserData";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -38,6 +39,7 @@ interface StateProps {
 }
 interface DispatchProps {
   loadPlaylists: (playlists: Playlist[]) => any;
+  loadCollection: (collection: Song[]) => any;
   addToNowPlaying: (song: Song) => any;
 }
 
@@ -47,6 +49,7 @@ const Library: React.FC<Props> = ({
   collection,
   songPlaying,
   loadPlaylists,
+  loadCollection,
   addToNowPlaying,
 }) => {
   const optionList: OptionActionType[] = [
@@ -55,21 +58,19 @@ const Library: React.FC<Props> = ({
     OptionActionType.LIKE_SONG,
   ];
 
-  const [libraryState, setLibraryState] = useState({
-    loadingPlaylist: false,
-  });
+  const [loadingPlaylist, setLoadingPlaylist] = useState(false);
+  const [loadingCollection, setLoadingCollection] = useState(false);
 
-  useEffect(() => {
-    if (user && playlists.length == 0) {
-      setLibraryState({
-        ...libraryState,
-        loadingPlaylist: true,
-      });
+  const checkLoadPlaylist = (userData: UserData) => {
+    console.log("PL START");
+    if (playlists.length == 0) {
+      setLoadingPlaylist(true);
+      console.log("PL state SET " + loadingPlaylist);
 
       axios
         .get(
           `${store.getState().app.apiBaseURL}api/v1/playlist?token=${
-            user.token.musicbytes
+            userData.token.musicbytes
           }`
         )
         .then(
@@ -90,10 +91,7 @@ const Library: React.FC<Props> = ({
             );
 
             loadPlaylists(playlistsNew);
-            setLibraryState({
-              ...libraryState,
-              loadingPlaylist: false,
-            });
+            setLoadingPlaylist(false);
 
             console.log(playlistsNew);
           },
@@ -101,11 +99,61 @@ const Library: React.FC<Props> = ({
             console.log(error);
           }
         );
-    } else {
-      setLibraryState({
-        ...libraryState,
-        loadingPlaylist: false,
-      });
+    }
+  };
+
+  const checkLoadCollection = (userData: UserData) => {
+    console.log("CO START");
+    if (collection.length == 0) {
+      setLoadingCollection(true);
+      console.log("CO state SET " + loadingCollection);
+
+      axios
+        .get(
+          `${store.getState().app.apiBaseURL}api/v1/collection?token=${
+            userData.token.musicbytes
+          }`
+        )
+        .then(
+          async (response: any) => {
+            const collectionRaw = response.data.collection;
+
+            const collectionNew = await new Promise<Song[]>(
+              (resolve, reject) => {
+                resolve(SongDetail(collectionRaw));
+              }
+            );
+
+            loadCollection(collectionNew);
+            setLoadingCollection(false);
+
+            console.log(collectionNew);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      const asd = async () => {
+        await Promise.all([checkLoadCollection(user), checkLoadPlaylist(user)]);
+      };
+      // if (playlists.length == 0) {
+      //   setLibraryState({
+      //     ...libraryState,
+      //     loadingPlaylist: true,
+      //   });
+      // }
+      // if (collection.length == 0) {
+      //   setLibrary2State({
+      //     ...library2State,
+      //     loadingCollection: true,
+      //   });
+      // }
+      asd();
     }
   }, [user]);
 
@@ -116,13 +164,18 @@ const Library: React.FC<Props> = ({
           <CategoryTitle text="Your Playlist" />
 
           <Loading
-            show={libraryState.loadingPlaylist}
+            show={loadingPlaylist}
             type={LoadingType.Moon}
             text="Fetching your playlist"
           />
           <SongGrid playlists={playlists} />
 
           <CategoryTitle text="Liked Songs" />
+          <Loading
+            show={loadingCollection}
+            type={LoadingType.Moon}
+            text="Fetching your collection"
+          />
           <SongList
             songs={collection}
             optionList={optionList}
@@ -150,6 +203,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AppActionTypes>
 ) => ({
   loadPlaylists: bindActionCreators(loadPlaylists, dispatch),
+  loadCollection: bindActionCreators(loadCollection, dispatch),
   addToNowPlaying: bindActionCreators(addToNowPlaying, dispatch),
 });
 

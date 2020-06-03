@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./SongGrid.scss";
 import SongGridItem from "./SongGridItem";
 import { Song } from "types/Song";
 import { connect } from "react-redux";
 import { AppState } from "redux/store/configureStore";
 import { Playlist } from "types/Playlist";
+import { useMeasure } from "react-use";
+import { useSpring, animated } from "react-spring";
 
 type Props = PassingProps & StateProps;
 
@@ -31,23 +33,37 @@ const SongGrid: React.FC<Props> = ({ songs, playlists }) => {
     });
   };
 
+  const [ref, { height }] = useMeasure();
+
+  // useEffect(()=>{
+
+  // }, height)
+
+  const style = {
+    songGrid: useSpring({
+      height: height < 120 ? 120 : height,
+    }),
+  };
+
   return (
-    <div className="SongGrid">
+    <animated.div className="SongGrid" style={style.songGrid}>
       {/* <div className="SongGrid" onWheel={(e) => onWheel(e)}> */}
-      {songs !== undefined
-        ? songs!.map((song, index) => {
-            return <SongGridItem song={song} key={song.id} index={index} />;
-          })
-        : playlists!.map((playlist, index) => {
-            return (
-              <SongGridItem
-                playlist={playlist}
-                key={playlist.createdAt}
-                index={index}
-              />
-            );
-          })}
-    </div>
+      <div ref={ref}>
+        {songs !== undefined
+          ? songs!.map((song, index) => {
+              return <SongGridItem song={song} key={song.id} index={index} />;
+            })
+          : playlists!.map((playlist, index) => {
+              return (
+                <SongGridItem
+                  playlist={playlist}
+                  key={playlist.createdAt}
+                  index={index}
+                />
+              );
+            })}
+      </div>
+    </animated.div>
   );
 };
 

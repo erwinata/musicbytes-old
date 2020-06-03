@@ -2,6 +2,7 @@ import { Song } from "types/Song";
 import { Playlist } from "types/Playlist";
 
 export const LOAD_PLAYLISTS = "LOAD_PLAYLISTS";
+export const LOAD_COLLECTION = "LOAD_COLLECTION";
 
 export const ADD_TO_PLAYLIST = "ADD_TO_PLAYLIST";
 export const REMOVE_FROM_PLAYLIST = "REMOVE_FROM_PLAYLIST";
@@ -17,6 +18,10 @@ export const LIKE_SONG = "LIKE_SONG";
 export interface LoadPlaylistsAction {
   type: typeof LOAD_PLAYLISTS;
   playlists: Playlist[];
+}
+export interface LoadCollectionAction {
+  type: typeof LOAD_COLLECTION;
+  collection: Song[];
 }
 export interface AddToPlaylistAction {
   type: typeof ADD_TO_PLAYLIST;
@@ -58,6 +63,7 @@ export interface LikeSongAction {
 
 export type LibraryActionTypes =
   | LoadPlaylistsAction
+  | LoadCollectionAction
   | AddToPlaylistAction
   | RemoveFromPlaylistAction
   | SavePlaylistAction
