@@ -41,7 +41,7 @@ const Login: React.FC<Props> = ({ loginUser }) => {
     const googleKey = response.accessToken;
 
     axios
-      .post(`${store.getState().app.apiBaseURL}api/v1/login`, {
+      .post(`${store.getState().app.apiBaseURL}v1/login`, {
         idtoken: response.tokenId,
         email: email,
         name: name,

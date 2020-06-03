@@ -69,7 +69,7 @@ const Library: React.FC<Props> = ({
 
       axios
         .get(
-          `${store.getState().app.apiBaseURL}api/v1/playlist?token=${
+          `${store.getState().app.apiBaseURL}v1/playlist?token=${
             userData.token.musicbytes
           }`
         )
@@ -110,7 +110,7 @@ const Library: React.FC<Props> = ({
 
       axios
         .get(
-          `${store.getState().app.apiBaseURL}api/v1/collection?token=${
+          `${store.getState().app.apiBaseURL}v1/collection?token=${
             userData.token.musicbytes
           }`
         )

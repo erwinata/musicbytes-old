@@ -111,6 +111,8 @@ const App: React.FC<Props> = ({
     } else {
       setAPIBaseURL(process.env.REACT_APP_API_BASE_LOCAL!);
     }
+
+    setAPIBaseURL(process.env.REACT_APP_API_BASE_LIVE!);
   };
 
   useEffectOnce(() => {
