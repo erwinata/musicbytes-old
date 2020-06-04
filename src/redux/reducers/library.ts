@@ -5,7 +5,7 @@ import {
 } from "redux/types/library";
 import { Song } from "types/Song";
 import { Playlist } from "types/Playlist";
-import { now, filter, concat, uniqBy, remove } from "lodash";
+import { now, filter, concat, uniqBy, remove, findIndex } from "lodash";
 
 export interface ILibraryState {
   playlists: Playlist[];
@@ -136,6 +136,8 @@ export const libraryReducer = (
   state = libraryReducerDefaultState,
   action: LibraryActionTypes
 ): ILibraryState => {
+  let playlistIndex;
+
   switch (action.type) {
     case "LOAD_COLLECTION":
       console.log(action.collection);
@@ -150,83 +152,81 @@ export const libraryReducer = (
         playlists: action.playlists,
       };
     case "ADD_TO_PLAYLIST":
-      var mergedSongs = concat(
-        state.playlists[action.playlistIndex].songs,
-        action.songs
-      );
+      var mergedSongs = concat(action.playlist.songs, action.songs);
       mergedSongs = uniqBy(mergedSongs, "id");
+
+      playlistIndex = findIndex(state.playlists, { id: action.playlist.id });
 
       return {
         ...state,
         playlists: [
-          ...state.playlists.slice(0, action.playlistIndex),
+          ...state.playlists.slice(0, playlistIndex),
           {
-            ...state.playlists[action.playlistIndex],
+            ...state.playlists[playlistIndex],
             songs: mergedSongs,
           },
-          ...state.playlists.slice(action.playlistIndex + 1),
+          ...state.playlists.slice(playlistIndex + 1),
         ],
       };
     case "REMOVE_FROM_PLAYLIST":
-      let removedSongsList = state.playlists[action.playlistIndex].songs;
+      let removedSongsList = action.playlist.songs;
       remove(removedSongsList, { id: action.song.id });
-      console.log(removedSongsList);
+
+      playlistIndex = findIndex(state.playlists, { id: action.playlist.id });
 
       return {
         ...state,
         playlists: [
-          ...state.playlists.slice(0, action.playlistIndex),
+          ...state.playlists.slice(0, playlistIndex),
           {
-            ...state.playlists[action.playlistIndex],
+            ...state.playlists[playlistIndex],
             songs: removedSongsList,
           },
-          ...state.playlists.slice(action.playlistIndex + 1),
+          ...state.playlists.slice(playlistIndex + 1),
         ],
       };
     case "SAVE_PLAYLIST":
+      playlistIndex = findIndex(state.playlists, { id: action.playlist.id });
+
       return {
         ...state,
         playlists: [
-          ...state.playlists.slice(0, action.playlistIndex),
+          ...state.playlists.slice(0, playlistIndex),
           {
-            ...state.playlists[action.playlistIndex],
+            ...state.playlists[playlistIndex],
             songs: action.songs,
           },
-          ...state.playlists.slice(action.playlistIndex + 1),
+          ...state.playlists.slice(playlistIndex + 1),
         ],
       };
     case "RENAME_PLAYLIST":
+      playlistIndex = findIndex(state.playlists, { id: action.playlist.id });
+
       return {
         ...state,
         playlists: [
-          ...state.playlists.slice(0, action.playlistIndex),
+          ...state.playlists.slice(0, playlistIndex),
           {
-            ...state.playlists[action.playlistIndex],
+            ...state.playlists[playlistIndex],
             title: action.title,
           },
-          ...state.playlists.slice(action.playlistIndex + 1),
+          ...state.playlists.slice(playlistIndex + 1),
         ],
       };
     case "DELETE_PLAYLIST":
+      playlistIndex = findIndex(state.playlists, { id: action.playlist.id });
+
       return {
         ...state,
         playlists: [
-          ...state.playlists.slice(0, action.playlistIndex),
-          ...state.playlists.slice(action.playlistIndex + 1),
+          ...state.playlists.slice(0, playlistIndex),
+          ...state.playlists.slice(playlistIndex + 1),
         ],
       };
     case "NEW_PLAYLIST":
       return {
         ...state,
-        playlists: [
-          ...state.playlists,
-          {
-            title: action.title,
-            songs: action.songs,
-            createdAt: now(),
-            updatedAt: now(),
-          },
-        ],
+        playlists: [...state.playlists, action.playlist],
       };
     case "LIKE_SONG":
       var newCollection = [...state.collection];

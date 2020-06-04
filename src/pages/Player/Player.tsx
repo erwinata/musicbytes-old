@@ -28,7 +28,7 @@ interface StateProps {
     videoIsRunning: boolean;
   };
   songs?: { list: Song[]; playing: Song };
-  playlist?: { index: number; data: Playlist };
+  playlist?: Playlist;
   setting: {
     shuffle: boolean;
     repeat: Repeat;

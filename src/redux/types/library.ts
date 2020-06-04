@@ -25,33 +25,32 @@ export interface LoadCollectionAction {
 }
 export interface AddToPlaylistAction {
   type: typeof ADD_TO_PLAYLIST;
-  playlistIndex: number;
   songs: Song[];
+  playlist: Playlist;
   isMergeTo?: boolean;
 }
 export interface RemoveFromPlaylistAction {
   type: typeof REMOVE_FROM_PLAYLIST;
-  playlistIndex: number;
+  playlist: Playlist;
   song: Song;
 }
 export interface SavePlaylistAction {
   type: typeof SAVE_PLAYLIST;
-  playlistIndex: number;
+  playlist: Playlist;
   songs: Song[];
 }
 export interface RenamePlaylistAction {
   type: typeof RENAME_PLAYLIST;
-  playlistIndex: number;
+  playlist: Playlist;
   title: string;
 }
 export interface DeletePlaylistAction {
   type: typeof DELETE_PLAYLIST;
-  playlistIndex: number;
+  playlist: Playlist;
 }
 export interface NewPlaylistAction {
   type: typeof NEW_PLAYLIST;
-  title: string;
-  songs: Song[];
+  playlist: Playlist;
   isMergeTo?: boolean;
 }
 

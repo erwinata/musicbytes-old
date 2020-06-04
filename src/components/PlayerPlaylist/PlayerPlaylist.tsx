@@ -19,7 +19,7 @@ type Props = PassingProps & StateProps & DispatchProps;
 interface PassingProps {}
 interface StateProps {
   songs?: { list: Song[]; playing: Song };
-  playlist?: { index: number; data: Playlist };
+  playlist?: Playlist;
   setting: {
     shuffle: boolean;
     repeat: Repeat;
@@ -69,13 +69,13 @@ const PlayerPlaylist: React.FC<Props> = ({
 const PlayerPlaylistHeader: React.FC<{
   onClick: any;
   songs: Song[];
-  playlist?: { index: number; data: Playlist };
+  playlist?: Playlist;
 }> = ({ onClick, songs, playlist }) => {
   const [playlistChanged, setPlaylistChanged] = useState(false);
 
   useEffect(() => {
     var playerSongs = sortBy(songs, ["id"]);
-    var playlistSongs = sortBy(playlist?.data.songs, ["id"]);
+    var playlistSongs = sortBy(playlist?.songs, ["id"]);
 
     if (playerSongs.length === playlistSongs.length) {
       setPlaylistChanged(false);
@@ -95,7 +95,7 @@ const PlayerPlaylistHeader: React.FC<{
     <div className="PlayerPlaylistHeader">
       <ButtonSave onClick={onClick} />
       <h1>
-        {playlist ? playlist.data.title : "Untitled Playlist"}
+        {playlist ? playlist.title : "Untitled Playlist"}
         {playlistChanged ? <span className="new"></span> : null}
       </h1>
     </div>

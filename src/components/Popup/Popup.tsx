@@ -32,10 +32,7 @@ interface StateProps {
     songAdding?: Song;
   };
   songs?: { list: Song[]; playing: Song };
-  playlist?: {
-    index: number;
-    data: Playlist;
-  };
+  playlist?: Playlist;
   // playlistPlaying?: Playlist;
 }
 interface DispatchProps {
@@ -46,13 +43,13 @@ interface DispatchProps {
     transparent?: boolean
   ) => any;
   addToPlaylist: (
-    playlistIndex: number,
+    playlist: Playlist,
     songs: Song[],
     isMergeTo?: boolean
   ) => any;
   newPlaylist: (title: string, songs: Song[], isMergeTo?: boolean) => any;
 
-  savePlaylist: (songs: Song[], playlistIndex: number) => any;
+  savePlaylist: (playlist: Playlist, songs: Song[]) => any;
 }
 
 const Popup: React.FC<Props> = ({
@@ -78,7 +75,7 @@ const Popup: React.FC<Props> = ({
       icon: res_save,
       label: "Save Playlist",
       action: () => {
-        savePlaylist(songs!.list, playlist!.index);
+        savePlaylist(playlist!, songs!.list);
         setPopupMenu(PopupMenuType.NONE);
       },
     },
@@ -177,11 +174,13 @@ const Popup: React.FC<Props> = ({
   };
 
   const handle = {
-    clickPlaylist: (playlistIndex: number) => {
+    clickPlaylist: (playlist: Playlist) => {
       if (popupState.menuState === PopupMenuType.ADDING_SONG_TO_PLAYLIST) {
-        addToPlaylist(playlistIndex, [popupState.songAdding!]);
+        addToPlaylist(playlist, [popupState.songAdding!]);
       } else if (popupState.menuState === PopupMenuType.PLAYLIST_SAVING_MERGE) {
-        addToPlaylist(playlistIndex, songs!.list, true);
+        console.log("MERGEWO");
+        console.log(playlist);
+        addToPlaylist(playlist, songs!.list, true);
       }
 
       closePopup();

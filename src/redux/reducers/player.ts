@@ -17,10 +17,7 @@ export interface PlayerState {
     playState: PlayState;
     videoIsRunning: boolean;
   };
-  playlist?: {
-    index: number;
-    data: Playlist;
-  };
+  playlist?: Playlist;
   songs?: {
     list: Song[];
     playing: Song;
@@ -188,7 +185,7 @@ export const playerReducer = (
       let resetPlaying = true;
 
       let songExistInPlaylist = findIndex(
-        action.playlist.data.songs,
+        action.playlist.songs,
         (item) => item.id == state.songs?.playing.id
       );
 
@@ -201,9 +198,9 @@ export const playerReducer = (
         playlist: action.playlist,
         songs: {
           playing: resetPlaying
-            ? action.playlist.data.songs[0]
+            ? action.playlist.songs[0]
             : state.songs!.playing,
-          list: action.playlist.data.songs,
+          list: action.playlist.songs,
         },
         time: {
           ...state.time,

@@ -17,6 +17,7 @@ import { PopupMenuType } from "types/PopupMenuType";
 import { useMeasure } from "react-use";
 import { XY } from "types/XY";
 import { Corner } from "types/Corner";
+import { Playlist } from "types/Playlist";
 
 type Props = PassingProps & StateProps & DispatchProps;
 interface PassingProps {
@@ -36,7 +37,7 @@ interface StateProps {
   };
   songs?: { list: Song[]; playing: Song };
   collection: Song[];
-  playlistViewingIndex?: number;
+  playlistViewing?: Playlist;
 }
 interface DispatchProps {
   setOverlay: (
@@ -55,7 +56,7 @@ interface DispatchProps {
   setPopupMenu: (menuState: PopupMenuType, songAdding: Song) => any;
   likeSong: (song: Song) => any;
   removeFromNowPlaying: (song: Song) => any;
-  removeFromPlaylist: (playlistIndex: number, song: Song) => any;
+  removeFromPlaylist: (playlist: Playlist, song: Song) => any;
 }
 
 const Option: React.FC<Props> = ({
@@ -63,7 +64,7 @@ const Option: React.FC<Props> = ({
   popupState,
   songs,
   collection,
-  playlistViewingIndex,
+  playlistViewing,
   setOverlay,
   setOption,
   addToNowPlaying,
@@ -105,7 +106,7 @@ const Option: React.FC<Props> = ({
       type: OptionActionType.REMOVE_FROM_PLAYLIST,
       label: "Remove Song from Playlist",
       action: (item: Song) => {
-        removeFromPlaylist(playlistViewingIndex!, item);
+        removeFromPlaylist(playlistViewing!, item);
       },
     },
   ];
@@ -272,7 +273,7 @@ const mapStateToProps = (state: AppState) => {
     popupState: state.app.popupState,
     songs: state.player.songs,
     collection: state.library.collection,
-    playlistViewingIndex: state.app.playlistViewing?.playlistIndex,
+    playlistViewing: state.app.playlistViewing,
   };
 };
 

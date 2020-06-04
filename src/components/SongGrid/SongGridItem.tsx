@@ -18,7 +18,7 @@ interface PassingProps {
   // optionList: OptionItemData[];
 }
 interface DispatchProps {
-  viewPlaylist: (playlist: Playlist, playlistIndex?: number) => any;
+  viewPlaylist: (playlist: Playlist) => any;
 }
 
 const SongGridItem: React.FC<Props> = ({
@@ -33,7 +33,7 @@ const SongGridItem: React.FC<Props> = ({
     if (isSong) {
       console.log("SONG");
     } else {
-      viewPlaylist(playlist!, index);
+      viewPlaylist(playlist!);
     }
   };
 

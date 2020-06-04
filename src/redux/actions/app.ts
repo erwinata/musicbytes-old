@@ -30,13 +30,9 @@ export const actionShowToast = (
   text,
   toastType,
 });
-export const actionViewPlaylist = (
-  playlist: Playlist,
-  playlistIndex?: number
-): AllActions => ({
+export const actionViewPlaylist = (playlist: Playlist): AllActions => ({
   type: "VIEW_PLAYLIST",
   playlist,
-  playlistIndex,
 });
 export const actionSetPopupMenu = (
   menuState: PopupMenuType,
@@ -96,9 +92,9 @@ export const showToast = (
     dispatch(actionShowToast(text, toastType));
   };
 };
-export const viewPlaylist = (playlist: Playlist, playlistIndex?: number) => {
+export const viewPlaylist = (playlist: Playlist) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    dispatch(actionViewPlaylist(playlist, playlistIndex));
+    dispatch(actionViewPlaylist(playlist));
   };
 };
 export const setPopupMenu = (menuState: PopupMenuType, songAdding?: Song) => {

@@ -1,12 +1,14 @@
 import { AllActions } from "redux/types/app";
 import { Dispatch } from "redux";
-import { AppState } from "redux/store/configureStore";
+import { AppState, store } from "redux/store/configureStore";
 import { SearchSong } from "api/Search";
 import { Song } from "types/Song";
 import { actionShowToast, actionViewPlaylist } from "./app";
-import { findIndex } from "lodash";
+import { find, findIndex } from "lodash";
 import { actionPlayPlaylist, playPlaylist } from "./player";
 import { Playlist } from "types/Playlist";
+import axios from "axios";
+import { UserData } from "types/UserData";
 
 export const actionLoadPlaylists = (playlists: Playlist[]): AllActions => ({
   type: "LOAD_PLAYLISTS",
@@ -18,56 +20,54 @@ export const actionLoadCollection = (collection: Song[]): AllActions => ({
 });
 
 export const actionAddToPlaylist = (
-  playlistIndex: number,
+  playlist: Playlist,
   songs: Song[],
   isMergeTo?: boolean
 ): AllActions => ({
   type: "ADD_TO_PLAYLIST",
+  playlist,
   songs,
-  playlistIndex,
   isMergeTo,
 });
 
 export const actionRemoveFromPlaylist = (
-  playlistIndex: number,
+  playlist: Playlist,
   song: Song
 ): AllActions => ({
   type: "REMOVE_FROM_PLAYLIST",
+  playlist,
   song,
-  playlistIndex,
 });
 
 export const actionSavePlaylist = (
-  songs: Song[],
-  playlistIndex: number
+  playlist: Playlist,
+  songs: Song[]
 ): AllActions => ({
   type: "SAVE_PLAYLIST",
+  playlist,
   songs,
-  playlistIndex,
 });
 
 export const actionRenamePlaylist = (
-  title: string,
-  playlistIndex: number
+  playlist: Playlist,
+  title: string
 ): AllActions => ({
   type: "RENAME_PLAYLIST",
+  playlist,
   title,
-  playlistIndex,
 });
 
-export const actionDeletePlaylist = (playlistIndex: number): AllActions => ({
+export const actionDeletePlaylist = (playlist: Playlist): AllActions => ({
   type: "DELETE_PLAYLIST",
-  playlistIndex,
+  playlist,
 });
 
 export const actionNewPlaylist = (
-  title: string,
-  songs: Song[],
+  playlist: Playlist,
   isMergeTo?: boolean
 ): AllActions => ({
   type: "NEW_PLAYLIST",
-  title,
-  songs,
+  playlist,
   isMergeTo,
 });
 
@@ -76,6 +76,18 @@ export const actionLikeSong = (song: Song, isExist: boolean): AllActions => ({
   song,
   isExist,
 });
+
+// ACTION SEPARATOR
+// ACTION SEPARATOR
+// ACTION SEPARATOR
+
+const checkUserLogin = (dispatch: Dispatch<AllActions>, user?: UserData) => {
+  if (!user) {
+    dispatch(actionShowToast("Please login to use this feature"));
+    return false;
+  }
+  return true;
+};
 
 // ACTION SEPARATOR
 // ACTION SEPARATOR
@@ -94,85 +106,183 @@ export const loadCollection = (collection: Song[]) => {
 };
 
 export const addToPlaylist = (
-  playlistIndex: number,
+  playlist: Playlist,
   songs: Song[],
   isMergeTo?: boolean
 ) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    const user = getState().app.user!;
+    if (!checkUserLogin(dispatch, user)) {
+      return false;
+    }
+
     if (!isMergeTo) {
       var songExist = findIndex(
-        getState().library.playlists[playlistIndex].songs,
+        playlist!.songs,
         (item) => item.id == songs[0]!.id
       );
       if (songExist > -1) {
         dispatch(actionShowToast("Song already exists in this playlist"));
       } else {
-        dispatch(actionAddToPlaylist(playlistIndex, songs));
+        await axios.patch(
+          getState().app.apiBaseURL +
+            "v1/playlist/" +
+            playlist!.id +
+            "?token=" +
+            user.token.musicbytes,
+          {
+            item: songs[0].id,
+          }
+        );
+
+        dispatch(actionAddToPlaylist(playlist, songs));
         dispatch(actionShowToast("Song added to playlist"));
 
-        var playlist = {
-          index: playlistIndex,
-          data: getState().library.playlists[playlistIndex],
-        };
+        let playlistNew = find(getState().library.playlists, {
+          id: playlist.id,
+        });
 
-        if (getState().player.playlist?.index === playlist.index) {
+        if (getState().player.playlist?.id === playlistNew?.id) {
           dispatch(actionPlayPlaylist(playlist));
         }
       }
     } else {
-      dispatch(actionAddToPlaylist(playlistIndex, songs));
-      var playlist = {
-        index: playlistIndex,
-        data: getState().library.playlists[playlistIndex],
-      };
-      dispatch(actionPlayPlaylist(playlist));
+      let songIds = "";
+      songs.map((item, index) => {
+        songIds += item.id;
+        if (index < songs.length - 1) songIds += ",";
+      });
+
+      await axios.patch(
+        getState().app.apiBaseURL +
+          "v1/playlist/" +
+          playlist!.id +
+          "?token=" +
+          user.token.musicbytes,
+        {
+          item: songIds,
+        }
+      );
+
+      dispatch(actionAddToPlaylist(playlist, songs));
+
+      let playlistNew = find(getState().library.playlists, {
+        id: playlist!.id,
+      });
+
+      dispatch(actionPlayPlaylist(playlistNew!));
       dispatch(actionShowToast("Songs merged to playlist"));
     }
   };
 };
 
-export const removeFromPlaylist = (playlistIndex: number, song: Song) => {
+export const removeFromPlaylist = (playlist: Playlist, song: Song) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    if (getState().library.playlists[playlistIndex].songs.length === 1) {
-      dispatch(actionDeletePlaylist(playlistIndex));
+    const user = getState().app.user!;
+    if (!checkUserLogin(dispatch, user)) {
+      return false;
+    }
+
+    if (playlist.songs.length === 1) {
+      await axios.delete(
+        getState().app.apiBaseURL +
+          "v1/playlist/" +
+          playlist!.id +
+          "?token=" +
+          user.token.musicbytes
+      );
+
+      dispatch(actionDeletePlaylist(playlist));
       dispatch(actionShowToast("Playlist deleted"));
       dispatch(actionViewPlaylist(undefined!));
     } else {
-      dispatch(actionRemoveFromPlaylist(playlistIndex, song));
-      dispatch(actionShowToast("Song removed from playlist"));
-      dispatch(
-        actionViewPlaylist(
-          getState().library.playlists[playlistIndex],
-          playlistIndex
-        )
+      await axios.patch(
+        getState().app.apiBaseURL +
+          "v1/playlist/" +
+          playlist!.id +
+          "?token=" +
+          user.token.musicbytes,
+        {
+          item: song.id,
+        }
       );
+
+      dispatch(actionRemoveFromPlaylist(playlist, song));
+      dispatch(actionShowToast("Song removed from playlist"));
+      let playlistNew = find(getState().library.playlists, {
+        id: playlist!.id,
+      });
+      dispatch(actionViewPlaylist(playlistNew!));
     }
   };
 };
 
-export const savePlaylist = (songs: Song[], playlistIndex: number) => {
+export const savePlaylist = (playlist: Playlist, songs: Song[]) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    dispatch(actionSavePlaylist(songs, playlistIndex));
-    var playlist = {
-      index: playlistIndex,
-      data: getState().library.playlists[playlistIndex],
-    };
-    if (getState().player.playlist?.index === playlist.index) {
-      dispatch(actionPlayPlaylist(playlist));
+    const user = getState().app.user!;
+    if (!checkUserLogin(dispatch, user)) {
+      return false;
+    }
+
+    await axios.patch(
+      getState().app.apiBaseURL +
+        "v1/playlist/" +
+        playlist!.id +
+        "?token=" +
+        user.token.musicbytes,
+      {
+        song: songs,
+      }
+    );
+
+    dispatch(actionSavePlaylist(playlist, songs));
+    var playlistNew = getState().library.playlists[playlist.id];
+
+    if (getState().player.playlist?.id === playlist.id) {
+      dispatch(actionPlayPlaylist(playlistNew));
     }
     dispatch(actionShowToast("Playlist saved"));
   };
 };
 
-export const renamePlaylist = (title: string, playlistIndex: number) => {
+export const renamePlaylist = (playlist: Playlist, title: string) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    dispatch(actionRenamePlaylist(title, playlistIndex));
+    const user = getState().app.user!;
+    if (!checkUserLogin(dispatch, user)) {
+      return false;
+    }
+
+    await axios.patch(
+      getState().app.apiBaseURL +
+        "v1/playlist/" +
+        playlist!.id +
+        "?token=" +
+        user.token.musicbytes,
+      {
+        title: title,
+      }
+    );
+
+    dispatch(actionRenamePlaylist(playlist, title));
   };
 };
 
-export const deletePlaylist = (playlistIndex: number) => {
+export const deletePlaylist = (playlist: Playlist) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    dispatch(actionDeletePlaylist(playlistIndex));
+    const user = getState().app.user!;
+    if (!checkUserLogin(dispatch, user)) {
+      return false;
+    }
+
+    await axios.delete(
+      getState().app.apiBaseURL +
+        "v1/playlist/" +
+        playlist!.id +
+        "?token=" +
+        user.token.musicbytes
+    );
+
+    dispatch(actionDeletePlaylist(playlist));
   };
 };
 
@@ -182,14 +292,41 @@ export const newPlaylist = (
   isMergeTo?: boolean
 ) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    dispatch(actionNewPlaylist(title, songs));
+    const user = getState().app.user!;
+    if (!checkUserLogin(dispatch, user)) {
+      return false;
+    }
+
+    let songIds = "";
+    songs.map((item, index) => {
+      songIds += item.id;
+      if (index < songs.length - 1) songIds += ",";
+    });
+
+    const response = await axios.post(
+      getState().app.apiBaseURL +
+        "v1/playlist" +
+        "?token=" +
+        user.token.musicbytes,
+      {
+        title: title,
+        song: songIds,
+      }
+    );
+
+    const playlist: Playlist = {
+      id: response.data.id,
+      title: title,
+      songs: songs,
+      createdAt: response.data.created_at,
+      updatedAt: response.data.updated_at,
+    };
+
+    dispatch(actionNewPlaylist(playlist));
 
     if (isMergeTo) {
       const newPlaylistIndex = getState().library.playlists.length - 1;
-      const newPlaylist = {
-        index: newPlaylistIndex,
-        data: getState().library.playlists[newPlaylistIndex],
-      };
+      const newPlaylist = getState().library.playlists[newPlaylistIndex];
 
       dispatch(actionPlayPlaylist(newPlaylist));
     }
@@ -199,9 +336,25 @@ export const newPlaylist = (
 
 export const likeSong = (song: Song) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    const user = getState().app.user!;
+    if (!checkUserLogin(dispatch, user)) {
+      return false;
+    }
+
     var isExist =
       findIndex(getState().library.collection, (item) => item.id == song!.id) >
       -1;
+
+    await axios.post(
+      getState().app.apiBaseURL +
+        "v1/collection" +
+        "?token=" +
+        user.token.musicbytes,
+      {
+        item: song!.id,
+      }
+    );
+
     dispatch(actionLikeSong(song, isExist));
 
     dispatch(

@@ -21,10 +21,7 @@ export interface IAppState {
     currentTab: NavigationTab;
     transitionDirection: number;
   };
-  playlistViewing?: {
-    playlist: Playlist;
-    playlistIndex?: number;
-  };
+  playlistViewing?: Playlist;
   popupState: {
     menuState: PopupMenuType;
     songAdding?: Song;
@@ -224,12 +221,7 @@ export const appReducer = (
       return {
         ...state,
         playlistViewing:
-          action.playlist === undefined
-            ? undefined
-            : {
-                playlist: action.playlist,
-                playlistIndex: action.playlistIndex,
-              },
+          action.playlist === undefined ? undefined : action.playlist,
       };
     case "SET_POPUP_MENU":
       var songAdding = state.popupState.songAdding;

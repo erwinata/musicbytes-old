@@ -19,10 +19,7 @@ export const actionPlaySong = (
   song,
   resetPlaylist,
 });
-export const actionPlayPlaylist = (playlist: {
-  index: number;
-  data: Playlist;
-}): AllActions => ({
+export const actionPlayPlaylist = (playlist: Playlist): AllActions => ({
   type: "PLAY_PLAYLIST",
   playlist,
 });
@@ -98,9 +95,9 @@ export const playSong = (song: Song, resetPlaylist: boolean) => {
   };
 };
 
-export const playPlaylist = (playlist: { index: number; data: Playlist }) => {
+export const playPlaylist = (playlist: Playlist) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    const songs = playlist.data.songs;
+    const songs = playlist.songs;
 
     dispatch(actionClearPlaylist());
 

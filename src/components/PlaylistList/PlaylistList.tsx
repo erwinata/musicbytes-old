@@ -13,7 +13,7 @@ type Props = PassingProps & StateProps & DispatchProps;
 
 interface PassingProps {
   playlistListStyle: any;
-  onClickPlaylist: (playlistIndex: number) => any;
+  onClickPlaylist: (playlist: Playlist) => any;
   onClickNewPlaylist: () => any;
   popupMenuState: PopupMenuType;
 }
@@ -40,7 +40,6 @@ const PlaylistList: React.FC<Props> = ({
               playlist={playlist}
               onClick={onClickPlaylist}
               key={index}
-              index={index}
             />
           </div>
         );
@@ -54,14 +53,13 @@ const PlaylistList: React.FC<Props> = ({
 
 const PlaylistListItem: React.FC<{
   playlist: Playlist;
-  onClick: (playlistIndex: number) => any;
-  index: number;
-}> = ({ playlist, onClick, index }) => {
+  onClick: (playlist: Playlist) => any;
+}> = ({ playlist, onClick }) => {
   return (
     <div
       className="PlaylistListItem"
       onClick={() => {
-        onClick(index);
+        onClick(playlist);
       }}
     >
       <img src={res_library} alt="Icon" />

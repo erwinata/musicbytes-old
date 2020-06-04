@@ -79,10 +79,11 @@ const Library: React.FC<Props> = ({
 
             async function getSongsData(item: any) {
               let playlistsNewItem = {
+                id: item.id,
                 title: item.title,
                 songs: await SongDetail(item.song),
-                createdAt: 0,
-                updatedAt: 0,
+                createdAt: item.created_at,
+                updatedAt: item.updated_at,
               };
               return playlistsNewItem;
             }

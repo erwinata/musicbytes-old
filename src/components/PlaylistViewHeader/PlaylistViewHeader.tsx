@@ -14,18 +14,15 @@ import { playPlaylist } from "redux/actions/player";
 type Props = PassingProps & StateProps & DispatchProps;
 
 interface PassingProps {
-  playlistViewing?: {
-    playlist: Playlist;
-    playlistIndex?: number;
-  };
+  playlistViewing?: Playlist;
 }
 interface StateProps {
   playlists: Playlist[];
   collection: Song[];
 }
 interface DispatchProps {
-  playPlaylist: (playlist: { index: number; data: Playlist }) => any;
-  viewPlaylist: (playlist: Playlist, playlistIndex?: number) => any;
+  playPlaylist: (playlist: Playlist) => any;
+  viewPlaylist: (playlist: Playlist) => any;
 }
 
 const PlaylistViewHeader: React.FC<Props> = ({
@@ -43,10 +40,7 @@ const PlaylistViewHeader: React.FC<Props> = ({
   // }, [playlistViewing]);
 
   const handleClickPlayNow = () => {
-    playPlaylist({
-      index: playlistViewing?.playlistIndex!,
-      data: playlistViewing?.playlist!,
-    });
+    playPlaylist(playlistViewing!);
   };
   const handleClickClose = () => {
     viewPlaylist(undefined!);
@@ -56,11 +50,11 @@ const PlaylistViewHeader: React.FC<Props> = ({
     <div className="PlaylistViewHeader">
       <ButtonClose onClick={handleClickClose} />
       <img
-        src={playlistViewing?.playlist.songs[0].thumbnails!.default}
+        src={playlistViewing?.songs[0].thumbnails!.default}
         alt="Thumbnail image"
       />
-      <h1>{playlistViewing?.playlist.title}</h1>
-      <h2>{playlistViewing?.playlist.songs.length} songs</h2>
+      <h1>{playlistViewing?.title}</h1>
+      <h2>{playlistViewing?.songs.length} songs</h2>
       <ButtonCapsuleText text={"Play Now"} onClick={handleClickPlayNow} />
     </div>
   );
