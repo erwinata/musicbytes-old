@@ -25,9 +25,10 @@ interface DispatchProps {
 const Header: React.FC<Props> = ({ user, logoutUser }) => {
   const clickLogout = () => {
     axios
-      .post(`${store.getState().app.apiBaseURL}v1/logout`, {
-        idtoken: user?.token.musicbytes,
-      })
+      .post(
+        `${store.getState().app.apiBaseURL}v1/logout?token=` +
+          user?.token.musicbytes
+      )
       .then(
         (response: any) => {
           showToast("Logout successful");
