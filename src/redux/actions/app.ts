@@ -18,6 +18,9 @@ export const actionLoginUser = (userData: UserData): AllActions => ({
   type: "LOGIN_USER",
   userData,
 });
+export const actionLogoutUser = (): AllActions => ({
+  type: "LOGOUT_USER",
+});
 export const actionChangeTab = (to: NavigationTab): AllActions => ({
   type: "CHANGE_TAB",
   to,
@@ -77,6 +80,11 @@ export const setAPIBaseURL = (url: string) => {
 export const loginUser = (userData: UserData) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionLoginUser(userData));
+  };
+};
+export const logoutUser = () => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionLogoutUser());
   };
 };
 export const changeTab = (to: NavigationTab) => {

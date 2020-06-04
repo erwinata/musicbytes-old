@@ -20,7 +20,7 @@ import { changeTab, loginUser, setAPIBaseURL } from "redux/actions/app";
 import PlaylistView from "pages/PlaylistView/PlaylistView";
 import Popup from "components/Popup/Popup";
 import Toast from "components/Toast/Toast";
-import { Header } from "components/Header/Header";
+import Header from "components/Header/Header";
 import Overlay from "components/Overlay/Overlay";
 import Option from "components/Option/Option";
 import { useEffectOnce } from "react-use";
@@ -112,8 +112,8 @@ const App: React.FC<Props> = ({
       setAPIBaseURL(process.env.REACT_APP_API_BASE_LOCAL!);
     }
 
-    // setAPIBaseURL(process.env.REACT_APP_API_BASE_LIVE!);
-    setAPIBaseURL(process.env.REACT_APP_API_BASE_LOCAL!);
+    setAPIBaseURL(process.env.REACT_APP_API_BASE_LIVE!);
+    // setAPIBaseURL(process.env.REACT_APP_API_BASE_LOCAL!);
   };
 
   useEffectOnce(() => {

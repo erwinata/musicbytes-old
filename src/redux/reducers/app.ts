@@ -188,6 +188,11 @@ export const appReducer = (
         ...state,
         user: action.userData,
       };
+    case "LOGOUT_USER":
+      return {
+        ...state,
+        user: undefined,
+      };
     case "CHANGE_TAB":
       // console.log("REDUCER" + action.query);
       let transitionDirection = 1;

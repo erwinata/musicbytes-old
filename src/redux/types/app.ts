@@ -11,6 +11,7 @@ import { XY } from "types/XY";
 import { UserData } from "types/UserData";
 
 export const LOGIN_USER = "LOGIN_USER";
+export const LOGOUT_USER = "LOGOUT_USER";
 export const SET_API_BASE_URL = "SET_API_BASE_URL";
 
 export const CHANGE_TAB = "CHANGE_TAB";
@@ -33,6 +34,9 @@ export interface SetAPIBaseURLAction {
 export interface LoginUserAction {
   type: typeof LOGIN_USER;
   userData: UserData;
+}
+export interface LogoutUserAction {
+  type: typeof LOGOUT_USER;
 }
 
 export interface ChangeTabAction {
@@ -76,8 +80,9 @@ export interface SetOptionAction {
 }
 
 export type AppActionTypes =
-  | SetAPIBaseURLAction
   | LoginUserAction
+  | LogoutUserAction
+  | SetAPIBaseURLAction
   | ChangeTabAction
   | ShowToastAction
   | ViewPlaylistAction
