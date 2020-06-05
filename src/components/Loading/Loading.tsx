@@ -14,10 +14,11 @@ import { useMeasure } from "react-use";
 
 export const Loading: React.FC<{
   show: boolean;
+  once?: boolean;
   type?: LoadingType;
   text?: string;
   color?: string;
-}> = ({ show, type, text, color }) => {
+}> = ({ show, once, type, text, color }) => {
   if (type === undefined) {
     type = LoadingType.Pulse;
   }
@@ -40,7 +41,7 @@ export const Loading: React.FC<{
         : "translate(-50%,0) scale(1.5, 1.5)",
       // config: config.stiff,
       onRest: () => {
-        setAnimationEnd(true);
+        if (once) setAnimationEnd(true);
       },
     }),
   };

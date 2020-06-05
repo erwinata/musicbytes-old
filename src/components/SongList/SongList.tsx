@@ -14,6 +14,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { AppActionTypes } from "redux/types/app";
 import { setOverlay, setOption } from "redux/actions/app";
 import { XY } from "types/XY";
+import InfiniteScroll from "react-infinite-scroller";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -22,6 +23,7 @@ interface PassingProps {
   resetPlaylist: boolean;
   optionList: OptionActionType[];
   miniPlayerShown?: boolean;
+  loadMore?: (pageNumber: number) => any;
 }
 interface StateProps {
   collection: Song[];
@@ -41,6 +43,7 @@ const SongList: React.FC<Props> = ({
   resetPlaylist,
   collection,
   miniPlayerShown,
+  loadMore,
   setOption,
 }: Props) => {
   const [contentHeight, setContentHeight] = useState("0px");
@@ -80,6 +83,10 @@ const SongList: React.FC<Props> = ({
 
   const dismissOption = () => {
     setOption(false);
+  };
+
+  const loadMoreFunction = (pageNumber: number) => {
+    loadMore!(pageNumber);
   };
 
   const clickButtonOption = (index: number, song: Song, event: any) => {

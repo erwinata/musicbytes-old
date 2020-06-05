@@ -6,7 +6,11 @@ import { ConvertDurationToNumber } from "helpers/duration";
 import { store } from "redux/store/configureStore";
 import { SongDetail } from "./SongDetail";
 
-export const SearchSong = (query: string, total: number): Promise<Song[]> => {
+export const SearchSong = (
+  query: string,
+  total: number,
+  nextPageToken?: string
+): Promise<{ nextPageToken: string; songs: Song[] }> => {
   const state = store.getState();
 
   const API_KEY = state.app.user?.token.google ? "" : state.app.defaultKey;
@@ -19,6 +23,7 @@ export const SearchSong = (query: string, total: number): Promise<Song[]> => {
         type: "video",
         videoCategoryId: 10,
         part: "snippet",
+        pageToken: nextPageToken,
         access_token: state.app.user?.token.google
           ? state.app.user!.token.google
           : "",
@@ -30,7 +35,10 @@ export const SearchSong = (query: string, total: number): Promise<Song[]> => {
           ids += video.id.videoId + ",";
         });
 
-        resolve(SongDetail(ids));
+        resolve({
+          nextPageToken: data.nextPageToken,
+          songs: await SongDetail(ids),
+        });
       })
       .catch((err: any) => {
         reject(err);

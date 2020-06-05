@@ -26,7 +26,6 @@ export const SongDetail = (ids: string): Promise<Song[]> => {
       let song: Song | undefined = find(cachedSong, { id: id });
       if (song) {
         resultSongs.push(song);
-        console.log("FOUND " + id);
         // remove(songIdArray, id);
       } else {
         reducedIds += id;
@@ -42,7 +41,6 @@ export const SongDetail = (ids: string): Promise<Song[]> => {
 
   return new Promise((resolve, reject) => {
     if (ids.replace(" ", "") == "") {
-      console.log("STOPP BRO");
       resolve(resultSongs);
     } else {
       api

@@ -1,7 +1,9 @@
 import { DiscoverActionTypes, SONG_SEARCH } from "redux/types/discover";
 import { Song } from "types/Song";
+import { concat } from "lodash";
 
 export interface IDiscoverState {
+  nextPageToken: string;
   songs: Song[];
   loading: boolean;
   query: string;
@@ -142,6 +144,7 @@ const sampleSearchSong = [
 ];
 
 const discoverReducerDefaultState: IDiscoverState = {
+  nextPageToken: "",
   songs: [],
   // songs: sampleSearchSong,
   loading: true,
@@ -155,10 +158,18 @@ export const discoverReducer = (
   switch (action.type) {
     case SONG_SEARCH:
       // console.log("REDUCER" + action.query);
+      var songs = state.songs;
+      if (action.addSongs) {
+        songs = concat(songs, action.songs);
+      } else {
+        songs = action.songs;
+      }
+
       return {
         ...state,
         query: action.query,
-        songs: action.songs,
+        nextPageToken: action.nextPageToken,
+        songs: songs,
       };
     default:
       return state;

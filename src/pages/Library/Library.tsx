@@ -156,6 +156,7 @@ const Library: React.FC<Props> = ({
             show={loadingPlaylist}
             type={LoadingType.Moon}
             text="Fetching your playlist"
+            once={true}
           />
           <SongGrid playlists={playlists} />
 
@@ -164,6 +165,7 @@ const Library: React.FC<Props> = ({
             show={loadingCollection}
             type={LoadingType.Moon}
             text="Fetching your collection"
+            once={true}
           />
           <SongList
             songs={collection}

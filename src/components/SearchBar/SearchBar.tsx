@@ -14,10 +14,10 @@ interface StateProps {
   query: string;
 }
 interface DispatchProps {
-  startSearchSong: (query: string) => any;
+  searchSong: (query: string, nextPage?: boolean) => any;
 }
 
-const SearchBar: React.FC<Props> = ({ query, startSearchSong }: Props) => {
+const SearchBar: React.FC<Props> = ({ query, searchSong }: Props) => {
   var timeout: any;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +27,7 @@ const SearchBar: React.FC<Props> = ({ query, startSearchSong }: Props) => {
   };
 
   const inputDelay = (query: string) => {
-    startSearchSong(query);
+    searchSong(query);
   };
 
   return (
@@ -48,7 +48,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AllActions>
   // ownProps: DiscoverProps
 ) => ({
-  startSearchSong: bindActionCreators(searchSong, dispatch),
+  searchSong: bindActionCreators(searchSong, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
