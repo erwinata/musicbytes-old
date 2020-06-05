@@ -14,7 +14,6 @@ import { ThunkDispatch } from "redux-thunk";
 import { AppActionTypes } from "redux/types/app";
 import { setOverlay, setOption } from "redux/actions/app";
 import { XY } from "types/XY";
-import InfiniteScroll from "react-infinite-scroller";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
