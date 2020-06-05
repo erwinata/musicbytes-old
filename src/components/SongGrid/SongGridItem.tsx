@@ -42,8 +42,8 @@ const SongGridItem: React.FC<Props> = ({
       <img
         src={
           isSong
-            ? song!.thumbnails!.default
-            : playlist!.songs[0].thumbnails!.default
+            ? song?.thumbnails?.default
+            : playlist?.songs[0].thumbnails?.default
         }
         alt="Thumbnail Image"
       />

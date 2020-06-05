@@ -22,7 +22,7 @@ interface DispatchProps {
   showToast: (text: string, toastType: ToastType) => any;
 }
 
-const Header: React.FC<Props> = ({ user, logoutUser }) => {
+const Header: React.FC<Props> = ({ user, logoutUser, showToast }) => {
   const clickLogout = () => {
     axios
       .post(
@@ -31,7 +31,7 @@ const Header: React.FC<Props> = ({ user, logoutUser }) => {
       )
       .then(
         (response: any) => {
-          showToast("Logout successful");
+          showToast("Logout successful", ToastType.NORMAL);
 
           Cookies.remove("name");
           Cookies.remove("email");

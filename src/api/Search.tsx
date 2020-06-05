@@ -1,7 +1,7 @@
 import React from "react";
 import { YoutubeDataAPI } from "youtube-v3-api";
 import { Song } from "types/Song";
-import { decodeText } from "helpers/decode";
+import { decodeText } from "helpers/string";
 import { ConvertDurationToNumber } from "helpers/duration";
 import { store } from "redux/store/configureStore";
 import { SongDetail } from "./SongDetail";

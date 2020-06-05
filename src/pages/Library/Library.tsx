@@ -140,19 +140,8 @@ const Library: React.FC<Props> = ({
     if (user) {
       const asd = async () => {
         await Promise.all([checkLoadCollection(user), checkLoadPlaylist(user)]);
+        // await Promise.all([checkLoadPlaylist(user)]);
       };
-      // if (playlists.length == 0) {
-      //   setLibraryState({
-      //     ...libraryState,
-      //     loadingPlaylist: true,
-      //   });
-      // }
-      // if (collection.length == 0) {
-      //   setLibrary2State({
-      //     ...library2State,
-      //     loadingCollection: true,
-      //   });
-      // }
       asd();
     }
   }, [user]);
