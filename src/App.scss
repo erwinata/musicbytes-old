@@ -55,13 +55,13 @@
     background: linear-gradient($color-bg-black 0%, $color-bg-blue 100%);
     box-shadow: 5px 5px 25px 5px #00000050;
 
-    .leftWrapper {
+    .leftWrapper.desktop {
       left: 0;
       height: 100vh;
       width: 40%;
       position: absolute;
     }
-    .rightWrapper {
+    .rightWrapper.desktop {
       height: 100vh;
       right: 0;
       width: 60%;

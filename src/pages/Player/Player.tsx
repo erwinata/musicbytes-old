@@ -91,15 +91,21 @@ const Player: React.FC<Props> = ({
 
   // }, [playlist?.data.songs])
 
-  const slide = useSpring({
-    top: isDesktop ? "0vh" : showPlayer ? "0vh" : "100vh",
-    opacity: isDesktop ? "0vh" : showPlayer ? "0vh" : "100vh",
-  });
+  const style = {
+    mobile: useSpring({
+      top: showPlayer ? "0vh" : "100vh",
+      opacity: showPlayer ? 1 : 0,
+    }),
+    desktop: {
+      top: "0vh",
+      opacity: 1,
+    },
+  };
 
   return (
     <animated.div
       className={`Player ${isDesktop ? "desktop" : ""}`}
-      style={slide}
+      style={isDesktop ? style.desktop : style.mobile}
     >
       <PlayerThumbnail />
       <PlayerControl />

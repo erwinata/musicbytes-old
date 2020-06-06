@@ -39,6 +39,7 @@ declare module "react-spring" {
 type Props = StateProps & DispatchProps;
 
 interface StateProps {
+  isDesktop: boolean;
   tabState: {
     currentTab: NavigationTab;
     transitionDirection: number;
@@ -54,6 +55,7 @@ interface DispatchProps {
 }
 
 const App: React.FC<Props> = ({
+  isDesktop,
   tabState,
   songs,
   showPlayer,
@@ -156,7 +158,7 @@ const App: React.FC<Props> = ({
 
   return (
     <div className="App">
-      <div className={`wrapper ${isBrowser ? "desktop" : ""}`}>
+      <div className={`wrapper ${isDesktop ? "desktop" : ""}`}>
         <Overlay />
         <ClickOverlay />
         <MiniPlayer />
@@ -164,10 +166,10 @@ const App: React.FC<Props> = ({
         <Popup />
         <Option />
 
-        <div className={`leftWrapper ${isBrowser ? "desktop" : ""}`}>
+        <div className={`leftWrapper ${isDesktop ? "desktop" : ""}`}>
           <Player />
         </div>
-        <div className={`rightWrapper ${isBrowser ? "desktop" : ""}`}>
+        <div className={`rightWrapper ${isDesktop ? "desktop" : ""}`}>
           <Header />
           <PlaylistView />
           <Navbar />
@@ -180,6 +182,7 @@ const App: React.FC<Props> = ({
 
 const mapStateToProps = (state: AppState) => {
   return {
+    isDesktop: state.app.isDesktop,
     tabState: state.app.tabState,
     songs: state.player.songs,
     showPlayer: state.player.showPlayer,
