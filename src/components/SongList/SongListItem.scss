@@ -30,6 +30,7 @@
     }
     h2 {
       @extend .subText;
+      white-space: nowrap;
     }
   }
 

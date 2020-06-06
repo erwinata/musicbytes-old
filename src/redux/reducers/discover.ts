@@ -1,6 +1,6 @@
 import { DiscoverActionTypes, SONG_SEARCH } from "redux/types/discover";
 import { Song } from "types/Song";
-import { concat } from "lodash";
+import { concat, uniqBy } from "lodash";
 
 export interface IDiscoverState {
   nextPageToken: string;
@@ -164,6 +164,8 @@ export const discoverReducer = (
       } else {
         songs = action.songs;
       }
+
+      uniqBy(songs, "id");
 
       return {
         ...state,

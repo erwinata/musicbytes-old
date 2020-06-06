@@ -52,7 +52,7 @@ const SongList: React.FC<Props> = ({
 
   useEffect(() => {
     setItemHeight(height);
-    var miniPlayerHeight = miniPlayerShown ? "12.5vh" : "";
+    var miniPlayerHeight = miniPlayerShown ? "12.5vh" : "0px";
     setContentHeight(`calc(${height * songs.length}px + ${miniPlayerHeight} )`);
   }, [height, miniPlayerShown, songs]);
 

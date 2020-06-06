@@ -18,6 +18,7 @@ import { useMeasure, useScroll } from "react-use";
 import { Loading } from "components/Loading/Loading";
 import { LoadingType } from "types/LoadingType";
 import { relative } from "path";
+import { useSpring } from "react-spring";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -54,6 +55,7 @@ export const Discover: React.FC<Props> = ({
   const [loadingMore, setLoadingMore] = useState({
     show: false,
     top: 0,
+    scrollLock: false,
   });
 
   const [contentHeight, setContentHeight] = useState(500);
@@ -64,12 +66,15 @@ export const Discover: React.FC<Props> = ({
   const { x, y } = useScroll(scrollRef);
 
   useEffect(() => {
-    setLoadingMore({ ...loadingMore, show: false });
+    setLoadingMore({ ...loadingMore, show: false, scrollLock: false });
   }, [songs]);
 
   useEffect(() => {
-    console.log(y);
-  }, [y]);
+    setLoadingMore({
+      ...loadingMore,
+      top: 0,
+    });
+  }, [height]);
 
   const loadMore = () => {
     console.log("loadMore");
@@ -88,9 +93,23 @@ export const Discover: React.FC<Props> = ({
         target.clientHeight
     );
 
+    // if (loadingMore.scrollLock) {
+    //   target.scrollTop = target.scrollHeight + 100;
+    // }
+
     if (pos >= target.clientHeight - 5 && pos <= target.clientHeight) {
       if (!loadingMore.show) {
-        setLoadingMore({ show: true, top: target.scrollHeight - 75 });
+        setLoadingMore({
+          ...loadingMore,
+          show: true,
+          scrollLock: true,
+        });
+        setTimeout(() => {
+          setLoadingMore({
+            ...loadingMore,
+            scrollLock: false,
+          });
+        }, 500);
         searchSong(query, true);
       }
     }
@@ -99,14 +118,16 @@ export const Discover: React.FC<Props> = ({
   return (
     <div className="Discover" onScroll={handleScroll}>
       <SearchBar />
-      <SongList
-        songs={songs}
-        optionList={optionList}
-        resetPlaylist={true}
-        miniPlayerShown={songPlaying ? true : false}
-        loadMore={loadMore}
-      />
-      <div style={{ position: "relative", top: loadingMore.top }}>
+      <div ref={ref}>
+        <SongList
+          songs={songs}
+          optionList={optionList}
+          resetPlaylist={true}
+          miniPlayerShown={songPlaying ? true : false}
+          loadMore={loadMore}
+        />
+      </div>
+      <div style={{ position: "relative", height: 100 }}>
         <Loading show={loadingMore.show} type={LoadingType.Beat} />
       </div>
     </div>
