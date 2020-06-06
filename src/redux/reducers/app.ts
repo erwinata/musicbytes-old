@@ -44,6 +44,7 @@ export interface IAppState {
     optionList?: OptionActionType[];
     position?: XY;
   };
+  isDesktop: boolean;
 }
 
 const samplePlaylist = [
@@ -171,6 +172,7 @@ const appReducerDefaultState: IAppState = {
   optionState: {
     show: false,
   },
+  isDesktop: false,
 };
 
 export const appReducer = (
@@ -267,6 +269,11 @@ export const appReducer = (
           optionList: action.optionList,
           position: action.position,
         },
+      };
+    case "SET_DEVICE":
+      return {
+        ...state,
+        isDesktop: action.isDesktop,
       };
     default:
       return state;

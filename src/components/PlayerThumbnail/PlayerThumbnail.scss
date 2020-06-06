@@ -7,10 +7,14 @@
     background-position: center center;
   }
 
+  .iframeWrapper {
+    background-size: cover;
+    background-position: center;
+  }
+
   div {
     position: relative;
     padding-bottom: 56.25%;
-    padding-top: 25;
     height: 0;
     // pointer-events: none;
     // display: none;

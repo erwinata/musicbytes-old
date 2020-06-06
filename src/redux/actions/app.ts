@@ -72,6 +72,11 @@ export const actionSetOption = (
   position,
 });
 
+export const actionSetDevice = (isDesktop: boolean): AllActions => ({
+  type: "SET_DEVICE",
+  isDesktop,
+});
+
 export const setAPIBaseURL = (url: string) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionSetAPIBaseURL(url));
@@ -132,5 +137,10 @@ export const setOption = (
 ) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionSetOption(show, item, optionList, position));
+  };
+};
+export const setDevice = (isDekstop: boolean) => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionSetDevice(isDekstop));
   };
 };

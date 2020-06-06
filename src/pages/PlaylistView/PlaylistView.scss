@@ -1,7 +1,7 @@
 @import "_base";
 
 .PlaylistView {
-  position: fixed;
+  position: absolute;
   z-index: $z-playlist;
   top: 0;
   width: 100%;
@@ -10,4 +10,8 @@
 
   background: $color-bg-blue;
   background: linear-gradient($color-bg-black 0%, $color-bg-blue 100%);
+}
+
+.PlaylistView.desktop .songListWrapper {
+  padding: 0 1rem;
 }

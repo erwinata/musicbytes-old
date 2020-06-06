@@ -27,6 +27,7 @@ interface StateProps {
   query: string;
   songs: Song[];
   songPlaying?: Song;
+  isDesktop: boolean;
 }
 interface DispatchProps {
   addToNowPlaying: (song: Song) => any;
@@ -35,12 +36,11 @@ interface DispatchProps {
   searchSong: (query: string, nextPage?: boolean) => any;
 }
 
-interface DiscoverState {}
-
 export const Discover: React.FC<Props> = ({
   query,
   songs,
   songPlaying,
+  isDesktop,
   addToNowPlaying,
   setPopupMenu,
   likeSong,
@@ -116,7 +116,10 @@ export const Discover: React.FC<Props> = ({
   };
 
   return (
-    <div className="Discover" onScroll={handleScroll}>
+    <div
+      className={`Discover ${isDesktop ? "desktop" : ""}`}
+      onScroll={handleScroll}
+    >
       <SearchBar />
       <div ref={ref}>
         <SongList
@@ -139,6 +142,7 @@ const mapStateToProps = (state: AppState) => {
     query: state.discover.query,
     songs: state.discover.songs,
     songPlaying: state.player.songs?.playing,
+    isDesktop: state.app.isDesktop,
   };
 };
 

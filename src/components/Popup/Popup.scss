@@ -1,15 +1,18 @@
 @import "_base.scss";
 
 .Popup {
+  // position: fixed;
   z-index: $z-popup;
+  // width: 100vw;
+  // height: 100vh;
 
   .container {
-    position: fixed;
+    position: absolute;
     z-index: $z-popup + 1;
-    @extend .centerVertical;
+    @extend .centerBoth;
     width: 90vw;
     max-width: 512px;
-    margin: 0 5vw;
+    margin: 0 auto;
     padding: 1.5rem 5vw;
     background: $color-black-transparent;
     border-radius: 10px;
@@ -20,7 +23,7 @@
       margin-bottom: 1rem;
     }
     .content {
-      width: calc(80vw);
+      width: 100%;
       position: relative;
     }
   }

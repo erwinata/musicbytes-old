@@ -22,6 +22,7 @@ interface PassingProps {}
 interface StateProps {
   playlistViewing?: Playlist;
   collection: Song[];
+  isDesktop: boolean;
 }
 interface DispatchProps {
   addToNowPlaying: (song: Song) => any;
@@ -30,6 +31,7 @@ interface DispatchProps {
 const PlaylistView: React.FC<Props> = ({
   playlistViewing,
   collection,
+  isDesktop,
   addToNowPlaying,
 }) => {
   const optionList: OptionActionType[] = [
@@ -46,15 +48,20 @@ const PlaylistView: React.FC<Props> = ({
 
   if (playlistViewing === undefined) return null;
   return (
-    <animated.div className="PlaylistView" style={slide}>
+    <animated.div
+      className={`PlaylistView ${isDesktop ? "desktop" : ""}`}
+      style={slide}
+    >
       <div>
         <PlaylistViewHeader playlistViewing={playlistViewing} />
 
-        <SongList
-          songs={playlistViewing!.songs}
-          optionList={optionList}
-          resetPlaylist={true}
-        />
+        <div className="songListWrapper">
+          <SongList
+            songs={playlistViewing!.songs}
+            optionList={optionList}
+            resetPlaylist={true}
+          />
+        </div>
       </div>
     </animated.div>
   );
@@ -64,6 +71,7 @@ const mapStateToProps = (state: AppState) => {
   return {
     playlistViewing: state.app.playlistViewing,
     collection: state.library.collection,
+    isDesktop: state.app.isDesktop,
   };
 };
 

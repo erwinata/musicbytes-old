@@ -14,6 +14,7 @@ import {
   setVideoIsRunning,
 } from "redux/actions/player";
 import { PlayState } from "types/PlayState";
+import { res_logo_thumbnail } from "res";
 
 type Props = StateProps & DispatchProps;
 
@@ -111,15 +112,19 @@ const PlayerThumbnail: React.FC<Props> = ({
 
   return (
     <div className="PlayerThumbnail">
-      {songs ? (
-        <YouTube
-          videoId={songs.playing!.id}
-          opts={opts}
-          onReady={handleOnReady}
-          onStateChange={handleOnStateChange}
-        />
-      ) : null}
-      {/* <div className="image" style={thumbnailImageBackground}></div> */}
+      <div
+        className="iframeWrapper"
+        style={{ backgroundImage: `url(${res_logo_thumbnail})` }}
+      >
+        {songs ? (
+          <YouTube
+            videoId={songs.playing!.id}
+            opts={opts}
+            onReady={handleOnReady}
+            onStateChange={handleOnStateChange}
+          />
+        ) : null}
+      </div>
     </div>
   );
 };

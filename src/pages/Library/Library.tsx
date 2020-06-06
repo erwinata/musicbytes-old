@@ -35,6 +35,7 @@ interface StateProps {
   playlists: Playlist[];
   collection: Song[];
   songPlaying?: Song;
+  isDesktop: boolean;
 }
 interface DispatchProps {
   loadPlaylists: (playlists: Playlist[]) => any;
@@ -47,6 +48,7 @@ const Library: React.FC<Props> = ({
   playlists,
   collection,
   songPlaying,
+  isDesktop,
   loadPlaylists,
   loadCollection,
   addToNowPlaying,
@@ -147,7 +149,7 @@ const Library: React.FC<Props> = ({
   }, [user]);
 
   return (
-    <div className="Library">
+    <div className={`Library ${isDesktop ? "desktop" : ""}`}>
       {user ? (
         <>
           <CategoryTitle text="Your Playlist" />
@@ -187,6 +189,7 @@ const mapStateToProps = (state: AppState) => {
     playlists: state.library.playlists,
     collection: state.library.collection,
     songPlaying: state.player.songs?.playing,
+    isDekstop: state.app.isDesktop,
   };
 };
 

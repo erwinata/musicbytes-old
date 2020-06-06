@@ -1,7 +1,7 @@
 @import "_base.scss";
 
 .Toast {
-  position: fixed;
+  position: absolute;
   overflow: hidden;
   z-index: $z-toast;
   bottom: 12vh;
@@ -14,5 +14,12 @@
   box-shadow: 0px 10px 20px $color-pitch-black-overlay-50;
   text-align: center;
   font-size: 1.1rem;
-  width: 60vw;
+  width: 60%;
+  max-width: 300px;
+}
+
+.Toast.desktop {
+  left: 70%;
+  // right: 5%;
+  // transform: translate(0%, 0);
 }

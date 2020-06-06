@@ -99,7 +99,10 @@ const PlayerTitle: React.FC<PlayerTitleProps> = ({
           <h2>{songPlaying?.channel}</h2>
         </>
       ) : (
-        <h1>Empty</h1>
+        <>
+          <h1> </h1>
+          <h2> </h2>
+        </>
       )}
     </div>
   );

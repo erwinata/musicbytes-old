@@ -22,12 +22,13 @@ interface StateProps {
     text: string;
     toastType: ToastType;
   };
+  isDesktop: boolean;
 }
 interface DispatchProps {
   // addingToPlaylist: (song: Song) => any;
 }
 
-const Toast: React.FC<Props> = ({ toastState }) => {
+const Toast: React.FC<Props> = ({ toastState, isDesktop }) => {
   const [text, setText] = useState("");
   const [textDisplay, setTextDisplay] = useState("");
   const [timeoutDone, setTimeoutDone] = useState(false);
@@ -70,7 +71,10 @@ const Toast: React.FC<Props> = ({ toastState }) => {
   });
 
   return (
-    <animated.div className="Toast" style={toastStyle}>
+    <animated.div
+      className={`Toast ${isDesktop ? "desktop" : ""}`}
+      style={toastStyle}
+    >
       <div ref={ref}>{textDisplay}</div>
     </animated.div>
   );
@@ -79,6 +83,7 @@ const Toast: React.FC<Props> = ({ toastState }) => {
 const mapStateToProps = (state: AppState) => {
   return {
     toastState: state.app.toastState,
+    isDesktop: state.app.isDesktop,
   };
 };
 

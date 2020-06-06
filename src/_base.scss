@@ -10,6 +10,7 @@ $color-bg-black-blue-50: rgba(15, 33, 53, 0.5);
 $color-bg-black-blue-25: rgba(15, 33, 53, 0.25);
 $color-black-transparent: rgba(15, 33, 53, 0.95);
 $color-black-semi-transparent: rgba(15, 33, 53, 0.5);
+$color-pitch-black-overlay-10: rgba(0, 0, 0, 0.1);
 $color-pitch-black-overlay-25: rgba(0, 0, 0, 0.25);
 $color-pitch-black-overlay-50: rgba(0, 0, 0, 0.5);
 $color-pitch-black-overlay: rgba(0, 0, 0, 0.8);
@@ -18,11 +19,12 @@ $font-default: Segoe UI, sans serif;
 $font-default: "Poppins", sans-serif;
 
 $z-toast: 200;
-$z-navbar: 100;
-$z-overlay: 60;
+$z-popup: 120;
+$z-option: 110;
+$z-overlay: 100;
+$z-navbar: 70;
 $z-player: 50;
-$z-popup: 70;
-$z-option: 70;
+$z-navbar-desktop: 40;
 $z-miniplayer: 20;
 $z-playlist: 10;
 
@@ -77,4 +79,9 @@ input {
 .centerVertical {
   top: 50%;
   transform: translate(0, -50%);
+}
+.centerBoth {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

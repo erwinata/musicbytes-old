@@ -27,6 +27,7 @@ interface StateProps {
     seeking: boolean;
   };
   playState: PlayState;
+  isDesktop: boolean;
 }
 interface DispatchProps {
   showPlayer: (show: boolean) => any;
@@ -39,6 +40,7 @@ const MiniPlayer: React.FC<Props> = ({
   songs,
   time,
   playState,
+  isDesktop,
   showPlayer,
   togglePlaying,
   nextSong,
@@ -71,7 +73,7 @@ const MiniPlayer: React.FC<Props> = ({
     }
   }, [titleMeasure]);
 
-  if (!songs) return null;
+  if (!songs || isDesktop) return null;
   else {
     if (songs!.list.length <= 0) return null;
   }
@@ -125,6 +127,7 @@ const mapStateToProps = (state: AppState) => {
     songs: state.player.songs,
     time: state.player.time,
     playState: state.player.playerState.playState,
+    isDesktop: state.app.isDesktop,
   };
 };
 

@@ -37,6 +37,7 @@ interface StateProps {
     current: number;
     total: number;
   };
+  isDesktop: boolean;
 }
 interface DispatchProps {
   durationIncrement: () => any;
@@ -53,6 +54,7 @@ const Player: React.FC<Props> = ({
   playerState,
   setting,
   time,
+  isDesktop,
   durationIncrement,
   addToNowPlaying,
 }: Props) => {
@@ -90,12 +92,15 @@ const Player: React.FC<Props> = ({
   // }, [playlist?.data.songs])
 
   const slide = useSpring({
-    top: showPlayer ? "0vh" : "100vh",
-    opacity: showPlayer ? 1 : 0,
+    top: isDesktop ? "0vh" : showPlayer ? "0vh" : "100vh",
+    opacity: isDesktop ? "0vh" : showPlayer ? "0vh" : "100vh",
   });
 
   return (
-    <animated.div className="Player" style={slide}>
+    <animated.div
+      className={`Player ${isDesktop ? "desktop" : ""}`}
+      style={slide}
+    >
       <PlayerThumbnail />
       <PlayerControl />
       <PlayerPlaylist />
@@ -111,6 +116,7 @@ const mapStateToProps = (state: AppState) => {
     playerState: state.player.playerState,
     setting: state.player.setting,
     time: state.player.time,
+    isDesktop: state.app.isDesktop,
   };
 };
 

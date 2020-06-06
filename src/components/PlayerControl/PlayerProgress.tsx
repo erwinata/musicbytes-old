@@ -28,10 +28,14 @@ const PlayerTime: React.FC<TimeProps> = ({ time }) => {
   return (
     <div className="PlayerTime">
       <span className="current">
-        {ToMinutes(time.current) + ":" + ToSeconds(time.current)}
+        {time.total > 0
+          ? ToMinutes(time.current) + ":" + ToSeconds(time.current)
+          : null}
       </span>
       <span className="total">
-        {ToMinutes(time.total) + ":" + ToSeconds(time.total)}
+        {time.total > 0
+          ? ToMinutes(time.total) + ":" + ToSeconds(time.total)
+          : null}
       </span>
     </div>
   );

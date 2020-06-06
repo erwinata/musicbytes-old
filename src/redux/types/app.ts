@@ -26,6 +26,8 @@ export const SET_OVERLAY = "SET_OVERLAY";
 export const SET_CLICK_OVERLAY = "SET_CLICK_OVERLAY";
 export const SET_OPTION = "SET_OPTION";
 
+export const SET_DEVICE = "SET_DEVICE";
+
 export interface SetAPIBaseURLAction {
   type: typeof SET_API_BASE_URL;
   url: string;
@@ -79,6 +81,11 @@ export interface SetOptionAction {
   position?: XY;
 }
 
+export interface SetDeviceAction {
+  type: typeof SET_DEVICE;
+  isDesktop: boolean;
+}
+
 export type AppActionTypes =
   | LoginUserAction
   | LogoutUserAction
@@ -89,7 +96,8 @@ export type AppActionTypes =
   | SetPopupMenuAction
   | SetOverlayAction
   | SetClickOverlayAction
-  | SetOptionAction;
+  | SetOptionAction
+  | SetDeviceAction;
 
 export type AllActions =
   | AppActionTypes

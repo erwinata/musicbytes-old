@@ -65,7 +65,7 @@ const SongList: React.FC<Props> = ({
         opacity: 0,
         marginLeft: "0%",
       },
-      leave: { height: 0, opacity: 0, marginLeft: "100%" },
+      leave: { height: 0, opacity: 0, transform: "scale(1,0)" },
       enter: ({ y }) => ({ y, opacity: 1 }),
       update: ({ y }) => ({ y }),
       config: config.stiff,
@@ -115,10 +115,11 @@ const SongList: React.FC<Props> = ({
             key={key}
             style={{
               ...rest,
+              width: "100%",
               transform: y.interpolate((y) => `translate3d(0,${y}px,0)`),
             }}
           >
-            <div ref={ref}>
+            <div className="SongListItemWrapper" ref={ref}>
               <SongListItem
                 index={index}
                 song={item}

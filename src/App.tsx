@@ -4,7 +4,7 @@ import Discover from "pages/Discover/Discover";
 import Player from "pages/Player/Player";
 import Library from "pages/Library/Library";
 import "./App.scss";
-import { Switch, Route, BrowserRouter, useLocation } from "react-router-dom";
+import { Switch, Route, useLocation } from "react-router-dom";
 import Navbar from "components/Navbar/Navbar";
 import MiniPlayer from "components/MiniPlayer/MiniPlayer";
 import { connect } from "react-redux";
@@ -13,10 +13,14 @@ import { ThunkDispatch } from "redux-thunk";
 import { AllActions } from "redux/types/app";
 import { AppState } from "redux/store/configureStore";
 import { Song } from "types/Song";
-import { showPlayer } from "redux/actions/player";
 import { useTransition, animated } from "react-spring";
 import { NavigationTab } from "types/Navigation";
-import { changeTab, loginUser, setAPIBaseURL } from "redux/actions/app";
+import {
+  changeTab,
+  loginUser,
+  setAPIBaseURL,
+  setDevice,
+} from "redux/actions/app";
 import PlaylistView from "pages/PlaylistView/PlaylistView";
 import Popup from "components/Popup/Popup";
 import Toast from "components/Toast/Toast";
@@ -25,11 +29,9 @@ import Overlay from "components/Overlay/Overlay";
 import Option from "components/Option/Option";
 import { useEffectOnce } from "react-use";
 import ClickOverlay from "components/ClickOverlay/ClickOverlay";
-import GoogleLogin from "react-google-login";
-import axios from "axios";
-import { useCookies } from "react-cookie";
 import Cookies from "js-cookie";
 import { UserData } from "types/UserData";
+import { isBrowser } from "react-device-detect";
 declare module "react-spring" {
   export const animated: any;
 }
@@ -45,6 +47,7 @@ interface StateProps {
   showPlayer: boolean;
 }
 interface DispatchProps {
+  setDevice: (isDesktop: boolean) => any;
   setAPIBaseURL: (url: string) => any;
   loginUser: (userData: UserData) => any;
   changeTab: (to: NavigationTab) => any;
@@ -54,6 +57,7 @@ const App: React.FC<Props> = ({
   tabState,
   songs,
   showPlayer,
+  setDevice,
   setAPIBaseURL,
   loginUser,
   changeTab,
@@ -112,13 +116,22 @@ const App: React.FC<Props> = ({
       setAPIBaseURL(process.env.REACT_APP_API_BASE_LOCAL!);
     }
 
-    // setAPIBaseURL(process.env.REACT_APP_API_BASE_LIVE!);
-    setAPIBaseURL(process.env.REACT_APP_API_BASE_LOCAL!);
+    setAPIBaseURL(process.env.REACT_APP_API_BASE_LIVE!);
+    // setAPIBaseURL(process.env.REACT_APP_API_BASE_LOCAL!);
   };
+
+  const [windowSize, setWindowSize] = React.useState({
+    w: window.innerWidth,
+    h: window.innerHeight,
+  });
 
   useEffectOnce(() => {
     checkUserCookies();
     checkAPI();
+
+    window.addEventListener("resize", () =>
+      setWindowSize({ w: window.innerWidth, h: window.innerHeight })
+    );
 
     switch (location.pathname) {
       case "/":
@@ -133,19 +146,34 @@ const App: React.FC<Props> = ({
     }
   });
 
+  useEffect(() => {
+    if (windowSize.w > windowSize.h && isBrowser) {
+      setDevice(true);
+    } else {
+      setDevice(false);
+    }
+  }, [windowSize]);
+
   return (
     <div className="App">
-      <Header />
-      <Overlay />
-      <ClickOverlay />
-      <Toast />
-      <Popup />
-      <Option />
-      <Navbar />
-      <MiniPlayer />
-      <Player />
-      <PlaylistView />
-      {page}
+      <div className={`wrapper ${isBrowser ? "desktop" : ""}`}>
+        <Overlay />
+        <ClickOverlay />
+        <MiniPlayer />
+        <Toast />
+        <Popup />
+        <Option />
+
+        <div className={`leftWrapper ${isBrowser ? "desktop" : ""}`}>
+          <Player />
+        </div>
+        <div className={`rightWrapper ${isBrowser ? "desktop" : ""}`}>
+          <Header />
+          <PlaylistView />
+          <Navbar />
+          {page}
+        </div>
+      </div>
     </div>
   );
 };
@@ -159,6 +187,7 @@ const mapStateToProps = (state: AppState) => {
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AllActions>) => ({
+  setDevice: bindActionCreators(setDevice, dispatch),
   setAPIBaseURL: bindActionCreators(setAPIBaseURL, dispatch),
   loginUser: bindActionCreators(loginUser, dispatch),
   changeTab: bindActionCreators(changeTab, dispatch),

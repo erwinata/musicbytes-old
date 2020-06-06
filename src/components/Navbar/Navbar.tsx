@@ -19,15 +19,21 @@ interface StateProps {
     currentTab: NavigationTab;
   };
   showPlayer: boolean;
+  isDesktop: boolean;
 }
 interface DispatchProps {
   viewPlaylist: (playlist: Playlist, playlistIndex?: number) => any;
 }
 
-const Navbar: React.FC<Props> = ({ tabState, showPlayer, viewPlaylist }) => {
+const Navbar: React.FC<Props> = ({
+  tabState,
+  showPlayer,
+  isDesktop,
+  viewPlaylist,
+}) => {
   return (
     <div
-      className="Navbar"
+      className={`Navbar ${isDesktop ? "desktop" : ""}`}
       onClick={() => {
         viewPlaylist(undefined!);
       }}
@@ -58,6 +64,7 @@ const mapStateToProps = (state: AppState) => {
   return {
     tabState: state.app.tabState,
     showPlayer: state.player.showPlayer,
+    isDesktop: state.app.isDesktop,
   };
 };
 const mapDispatchToProps = (
