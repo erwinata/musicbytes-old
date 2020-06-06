@@ -98,10 +98,10 @@ const SongList: React.FC<Props> = ({
     const offsetX = event.pageX - currentTargetRect.left;
     const offsetY = event.pageY - currentTargetRect.top;
 
-    console.log(offsetX + " " + offsetY);
+    // console.log(offsetX + " " + offsetY);
     setOption(true, songs[index], optionList, {
-      x: event.clientX,
-      y: event.clientY,
+      x: event.pageX,
+      y: event.pageY,
     });
   };
 
