@@ -65,7 +65,7 @@ const SongList: React.FC<Props> = ({
         opacity: 0,
         marginLeft: "0%",
       },
-      leave: { height: 0, opacity: 0, transform: "scale(1,0)" },
+      leave: { height: 0, opacity: 0, marginLeft: "25%" },
       enter: ({ y }) => ({ y, opacity: 1 }),
       update: ({ y }) => ({ y }),
       config: config.stiff,
@@ -94,11 +94,6 @@ const SongList: React.FC<Props> = ({
       song,
     });
 
-    let currentTargetRect = event.currentTarget.getBoundingClientRect();
-    const offsetX = event.pageX - currentTargetRect.left;
-    const offsetY = event.pageY - currentTargetRect.top;
-
-    // console.log(offsetX + " " + offsetY);
     setOption(true, songs[index], optionList, {
       x: event.pageX,
       y: event.pageY,

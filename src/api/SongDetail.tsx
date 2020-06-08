@@ -71,6 +71,7 @@ export const SongDetail = (ids: string): Promise<Song[]> => {
                   high: snippet.thumbnails.high.url,
                 },
                 duration: duration,
+                tags: snippet.tags,
               };
 
               cachedSong.push(song);

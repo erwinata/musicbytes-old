@@ -5,7 +5,8 @@ import { Song } from "types/Song";
 import { PlayState } from "types/PlayState";
 import { Playlist } from "types/Playlist";
 import { actionShowToast } from "./app";
-import { findIndex } from "lodash";
+import { findIndex, find } from "lodash";
+import { addRecent, actionAddRecent } from "./listen";
 
 export const actionShowPlayer = (show: boolean): AllActions => ({
   type: "SHOW_PLAYER",
@@ -86,6 +87,24 @@ export const showPlayer = (show: boolean) => {
 
 export const playSong = (song: Song, resetPlaylist: boolean) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    let cachedSongPlayed: { song: string; total: number }[] = [];
+    let exists = false;
+
+    if (localStorage.getItem("song_played")) {
+      cachedSongPlayed = JSON.parse(localStorage.getItem("song_played")!);
+      let songCached = find(cachedSongPlayed, { song: song.id });
+
+      if (songCached) {
+        exists = true;
+        songCached = { ...songCached, total: songCached.total++ };
+      }
+    }
+    if (!exists) cachedSongPlayed.push({ song: song.id, total: 1 });
+
+    localStorage.setItem("song_played", JSON.stringify(cachedSongPlayed));
+
+    dispatch(actionAddRecent({ song: song }));
+
     if (resetPlaylist) {
       dispatch(actionClearPlaylist());
     }
@@ -104,6 +123,9 @@ export const playPlaylist = (playlist: Playlist) => {
     songs.forEach((song) => {
       dispatch(actionAddToNowPlaying(song));
     });
+
+    dispatch(actionAddRecent({ playlist: playlist }));
+
     dispatch(actionPlayPlaylist(playlist));
     dispatch(actionPlaySong(songs[0], false));
     dispatch(actionSeekTo(0));

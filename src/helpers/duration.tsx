@@ -1,7 +1,15 @@
 export const ConvertDurationToNumber = (durationRaw: string) => {
-  var durationRawSplit = durationRaw.split("M");
-  var minute = parseInt(durationRawSplit[0].toString().replace(/\D/g, ""));
-  var second = parseInt(durationRawSplit[1].toString().replace(/\D/g, ""));
+  var durationRaw = durationRaw.replace("PT", "");
+  var minute = 0;
+  var second = 0;
+  if (durationRaw.indexOf("M") !== -1) {
+    var durationRawSplit = durationRaw.split("M");
+    var minute = parseInt(durationRawSplit[0].toString().replace(/\D/g, ""));
+    var second = parseInt(durationRawSplit[1].toString().replace(/\D/g, ""));
+  } else {
+    var durationRaw = durationRaw.replace("S", "");
+    var second = parseInt(durationRaw);
+  }
   return minute * 60 + second;
 };
 

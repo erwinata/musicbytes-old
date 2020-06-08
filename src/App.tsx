@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { Listen } from "pages/Listen/Listen";
+import Listen from "pages/Listen/Listen";
 import Discover from "pages/Discover/Discover";
 import Player from "pages/Player/Player";
 import Library from "pages/Library/Library";
@@ -20,6 +20,7 @@ import {
   loginUser,
   setAPIBaseURL,
   setDevice,
+  showToast,
 } from "redux/actions/app";
 import PlaylistView from "pages/PlaylistView/PlaylistView";
 import Popup from "components/Popup/Popup";
@@ -32,6 +33,7 @@ import ClickOverlay from "components/ClickOverlay/ClickOverlay";
 import Cookies from "js-cookie";
 import { UserData } from "types/UserData";
 import { isBrowser } from "react-device-detect";
+import { ToastType } from "types/ToastType";
 declare module "react-spring" {
   export const animated: any;
 }
@@ -52,6 +54,7 @@ interface DispatchProps {
   setAPIBaseURL: (url: string) => any;
   loginUser: (userData: UserData) => any;
   changeTab: (to: NavigationTab) => any;
+  showToast: (text: string, toastType: ToastType) => any;
 }
 
 const App: React.FC<Props> = ({
@@ -63,6 +66,7 @@ const App: React.FC<Props> = ({
   setAPIBaseURL,
   loginUser,
   changeTab,
+  showToast,
 }) => {
   const location = useLocation();
   const transitions = useTransition(location, (location) => location.pathname, {
@@ -194,6 +198,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AllActions>) => ({
   setAPIBaseURL: bindActionCreators(setAPIBaseURL, dispatch),
   loginUser: bindActionCreators(loginUser, dispatch),
   changeTab: bindActionCreators(changeTab, dispatch),
+  showToast: bindActionCreators(showToast, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

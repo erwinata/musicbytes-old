@@ -8,4 +8,5 @@ export interface Song {
     high: string;
   };
   duration: number;
+  tags: string[];
 }

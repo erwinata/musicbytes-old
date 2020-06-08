@@ -1,11 +1,11 @@
 .SongGrid {
   & > div {
-    width: 95%;
-    margin: 0 auto;
+    width: 98%;
+    margin-left: 2%;
     overflow-x: auto;
     overflow-y: hidden;
     display: grid;
-    grid-template-columns: repeat(100, 120px);
+    grid-template-columns: repeat(100, 140px);
     // grid-auto-flow: column;
     grid-gap: 1.25rem;
   }

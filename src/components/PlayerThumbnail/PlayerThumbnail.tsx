@@ -88,6 +88,9 @@ const PlayerThumbnail: React.FC<Props> = ({
       case 2:
         setVideoIsRunning(false);
         break;
+      case 3:
+        setVideoIsRunning(false);
+        break;
     }
   };
 

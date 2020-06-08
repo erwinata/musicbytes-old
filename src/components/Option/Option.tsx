@@ -16,7 +16,6 @@ import { findIndex } from "lodash";
 import { PopupMenuType } from "types/PopupMenuType";
 import { useMeasure } from "react-use";
 import { XY } from "types/XY";
-import { Corner } from "types/Corner";
 import { Playlist } from "types/Playlist";
 
 type Props = PassingProps & StateProps & DispatchProps;

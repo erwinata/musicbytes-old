@@ -96,6 +96,7 @@ const samplePlaylist: Song[] = [
       high: "https://i.ytimg.com/vi/je9okpHFZp0/hqdefault.jpg",
     },
     duration: 268,
+    tags: [],
   },
   {
     id: "kX1O93X77d4",
@@ -107,6 +108,7 @@ const samplePlaylist: Song[] = [
       high: "https://i.ytimg.com/vi/kX1O93X77d4/hqdefault.jpg",
     },
     duration: 280,
+    tags: [],
   },
   {
     id: "tUJAxxm1y1I",
@@ -118,6 +120,7 @@ const samplePlaylist: Song[] = [
       high: "https://i.ytimg.com/vi/tUJAxxm1y1I/hqdefault.jpg",
     },
     duration: 216,
+    tags: [],
   },
 ];
 const sampleSongPlaying: Song = {
@@ -130,6 +133,7 @@ const sampleSongPlaying: Song = {
     high: "https://i.ytimg.com/vi/tUJAxxm1y1I/hqdefault.jpg",
   },
   duration: 216,
+  tags: [],
 };
 
 const playerReducerDefaultState: PlayerState = {
@@ -395,6 +399,9 @@ export const playerReducer = (
     case "ADD_TO_NOW_PLAYING":
       // action.song.playOrder = state.songs.length;
       let addedSongs;
+      let time = {
+        ...state.time,
+      };
       if (state.songs) {
         addedSongs = {
           ...state.songs!,
@@ -405,11 +412,17 @@ export const playerReducer = (
           list: [action.song],
           playing: action.song,
         };
+        time = {
+          ...state.time,
+          current: 0,
+          total: action.song.duration,
+        };
       }
 
       return {
         ...state,
         songs: addedSongs,
+        time: time,
       };
 
     case "REMOVE_FROM_NOW_PLAYING":

@@ -84,7 +84,10 @@ const SongListItem: React.FC<Props> = ({
   return (
     <div className={`SongListItem ${classActive}`}>
       <div className="song" onClick={clickSongListItem}>
-        <img src={song.thumbnails?.default} alt="Thumbnail Image" />
+        <div
+          className="image"
+          style={{ backgroundImage: `url('${song.thumbnails?.default}')` }}
+        />
         <div className="info">
           <h1>{song.title}</h1>
           <h2>{song.channel}</h2>

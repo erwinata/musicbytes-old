@@ -19,6 +19,7 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 import { Loading } from "components/Loading/Loading";
 import { LoadingType } from "types/LoadingType";
 import { UserData } from "types/UserData";
+import { convertToSongGridItems } from "helpers/array";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -63,10 +64,8 @@ const Library: React.FC<Props> = ({
   const [loadingCollection, setLoadingCollection] = useState(false);
 
   const checkLoadPlaylist = (userData: UserData) => {
-    console.log("PL START");
     if (playlists.length == 0) {
       setLoadingPlaylist(true);
-      console.log("PL state SET " + loadingPlaylist);
 
       axios
         .get(
@@ -105,10 +104,8 @@ const Library: React.FC<Props> = ({
   };
 
   const checkLoadCollection = (userData: UserData) => {
-    console.log("CO START");
     if (collection.length == 0) {
       setLoadingCollection(true);
-      console.log("CO state SET " + loadingCollection);
 
       axios
         .get(
@@ -160,7 +157,10 @@ const Library: React.FC<Props> = ({
             text="Fetching your playlist"
             once={true}
           />
-          <SongGrid playlists={playlists} />
+          <SongGrid
+            items={convertToSongGridItems(undefined, playlists)}
+            optionList={optionList}
+          />
 
           <CategoryTitle text="Liked Songs" />
           <Loading

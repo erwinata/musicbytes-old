@@ -5,11 +5,13 @@ import { decodeText } from "helpers/string";
 import { ConvertDurationToNumber } from "helpers/duration";
 import { store } from "redux/store/configureStore";
 import { SongDetail } from "./SongDetail";
+import { find, remove } from "lodash";
 
 export const SearchSong = (
   query: string,
   total: number,
-  nextPageToken?: string
+  nextPageToken?: string,
+  songListenedException?: boolean
 ): Promise<{ nextPageToken: string; songs: Song[] }> => {
   const state = store.getState();
 
@@ -29,6 +31,19 @@ export const SearchSong = (
           : "",
       })
       .then(async (data: any) => {
+        let cachedSongPlayed: { song: string; total: number }[] = [];
+        if (localStorage.getItem("song_played")) {
+          cachedSongPlayed = JSON.parse(localStorage.getItem("song_played")!);
+        }
+
+        if (songListenedException) {
+          cachedSongPlayed.map((songId) => {
+            remove(data.items, (o: any) => {
+              return o.id.videoId === songId.song;
+            });
+          });
+        }
+
         var ids = "";
 
         data.items.map((video: any) => {

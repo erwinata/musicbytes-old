@@ -9,6 +9,7 @@ import { PopupMenuType } from "types/PopupMenuType";
 import { OptionActionType } from "types/Option";
 import { XY } from "types/XY";
 import { UserData } from "types/UserData";
+import { ListenActionTypes } from "./listen";
 
 export const LOGIN_USER = "LOGIN_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
@@ -102,5 +103,6 @@ export type AppActionTypes =
 export type AllActions =
   | AppActionTypes
   | DiscoverActionTypes
+  | ListenActionTypes
   | PlayerActionTypes
   | LibraryActionTypes;

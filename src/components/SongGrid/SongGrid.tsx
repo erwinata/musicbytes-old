@@ -7,19 +7,41 @@ import { AppState } from "redux/store/configureStore";
 import { Playlist } from "types/Playlist";
 import { useMeasure } from "react-use";
 import { useSpring, animated } from "react-spring";
+import { OptionActionType } from "types/Option";
+import { ThunkDispatch } from "redux-thunk";
+import { AppActionTypes } from "redux/types/app";
+import { bindActionCreators } from "redux";
+import { setOption } from "redux/actions/app";
+import { XY } from "types/XY";
+import { find } from "lodash";
 
-type Props = PassingProps & StateProps;
+type Props = PassingProps & StateProps & DispatchProps;
 
 interface PassingProps {
-  songs?: Song[];
-  playlists?: Playlist[];
-  // optionList: OptionItemData[];
+  items?: {
+    song?: Song;
+    playlist?: Playlist;
+  }[];
+  optionList: OptionActionType[];
 }
 interface StateProps {
   collection: Song[];
 }
+interface DispatchProps {
+  setOption: (
+    show: boolean,
+    item?: any,
+    optionList?: OptionActionType[],
+    position?: XY
+  ) => any;
+}
 
-const SongGrid: React.FC<Props> = ({ songs, playlists }) => {
+const SongGrid: React.FC<Props> = ({
+  items,
+  optionList,
+  collection,
+  setOption,
+}) => {
   const onWheel = (e: any) => {
     // e.preventDefault();
     var container = document.getElementsByClassName("SongGrid")[0];
@@ -45,23 +67,49 @@ const SongGrid: React.FC<Props> = ({ songs, playlists }) => {
     }),
   };
 
+  const clickSong = (index: number, event: any) => {
+    // setOptionState({
+    //   index,
+    //   song,
+    // });
+
+    setOption(true, items![index].song, optionList, {
+      x: event.pageX,
+      y: event.pageY,
+    });
+  };
+
   return (
     <animated.div className="SongGrid" style={style.songGrid}>
       {/* <div className="SongGrid" onWheel={(e) => onWheel(e)}> */}
       <div ref={ref}>
-        {songs !== undefined
-          ? songs!.map((song, index) => {
-              return <SongGridItem song={song} key={song.id} index={index} />;
+        {items !== undefined
+          ? items!.map((item, index) => {
+              if (item.song) {
+                var like = find(collection, (el) => el.id == item.song?.id)
+                  ? true
+                  : false;
+                return (
+                  <SongGridItem
+                    song={item.song}
+                    key={item.song.id}
+                    index={index}
+                    like={like}
+                    clickSong={clickSong}
+                  />
+                );
+              } else {
+                return (
+                  <SongGridItem
+                    playlist={item.playlist}
+                    key={item.playlist!.createdAt}
+                    index={index}
+                    clickSong={clickSong}
+                  />
+                );
+              }
             })
-          : playlists!.map((playlist, index) => {
-              return (
-                <SongGridItem
-                  playlist={playlist}
-                  key={playlist.createdAt}
-                  index={index}
-                />
-              );
-            })}
+          : null}
       </div>
     </animated.div>
   );
@@ -73,4 +121,10 @@ const mapStateToProps = (state: AppState) => {
   };
 };
 
-export default connect(mapStateToProps)(SongGrid);
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<any, any, AppActionTypes>
+) => ({
+  setOption: bindActionCreators(setOption, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SongGrid);
