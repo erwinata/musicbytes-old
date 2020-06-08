@@ -51,6 +51,7 @@ const MiniPlayer: React.FC<Props> = ({
 
   const [titleOffset, setTitleOffset] = useState(0);
   const [titleStyleState, setTitleStyleState] = useState({
+    reset: false,
     reverse: false,
   });
 
@@ -59,19 +60,34 @@ const MiniPlayer: React.FC<Props> = ({
       to: { left: !titleStyleState.reverse ? -titleOffset : 0 },
       config: { duration: Math.abs(titleOffset - titleMeasure.left) * 100 },
       from: { left: 0 },
+      reset: titleStyleState.reset,
+      onStart: () => {
+        setTitleStyleState({ reset: false, reverse: false });
+      },
       onRest: () => {
         setTimeout(() => {
-          setTitleStyleState({ reverse: !titleStyleState.reverse });
+          setTitleStyleState({
+            ...titleStyleState,
+            reverse: !titleStyleState.reverse,
+          });
         }, 1500);
       },
     }),
   };
 
   useEffect(() => {
+    console.log("MEAS");
+    console.log(titleMeasure.width);
     if (titleMeasure.width > infoMeasure.width) {
       setTitleOffset(titleMeasure.width - infoMeasure.width);
+    } else {
+      setTitleOffset(0);
     }
-  }, [titleMeasure]);
+  }, [titleMeasure.width]);
+
+  useEffect(() => {
+    setTitleStyleState({ reset: true, reverse: false });
+  }, [songs?.playing]);
 
   if (!songs || isDesktop) return null;
   else {
