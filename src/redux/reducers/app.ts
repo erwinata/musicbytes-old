@@ -190,6 +190,21 @@ export const appReducer = (
         ...state,
         user: action.userData,
       };
+    case "UPDATE_TOKEN":
+      return {
+        ...state,
+        user: {
+          ...state.user!,
+          token: {
+            google: action.token.google
+              ? action.token.google
+              : state.user!.token.google,
+            musicbytes: action.token.musicbytes
+              ? action.token.musicbytes
+              : state.user!.token.musicbytes,
+          },
+        },
+      };
     case "LOGOUT_USER":
       return {
         ...state,

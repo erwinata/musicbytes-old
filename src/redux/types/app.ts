@@ -12,6 +12,7 @@ import { UserData } from "types/UserData";
 import { ListenActionTypes } from "./listen";
 
 export const LOGIN_USER = "LOGIN_USER";
+export const UPDATE_TOKEN = "UPDATE_TOKEN";
 export const LOGOUT_USER = "LOGOUT_USER";
 export const SET_API_BASE_URL = "SET_API_BASE_URL";
 
@@ -37,6 +38,13 @@ export interface SetAPIBaseURLAction {
 export interface LoginUserAction {
   type: typeof LOGIN_USER;
   userData: UserData;
+}
+export interface UpdateTokenAction {
+  type: typeof UPDATE_TOKEN;
+  token: {
+    google?: string;
+    musicbytes?: string;
+  };
 }
 export interface LogoutUserAction {
   type: typeof LOGOUT_USER;
@@ -89,6 +97,7 @@ export interface SetDeviceAction {
 
 export type AppActionTypes =
   | LoginUserAction
+  | UpdateTokenAction
   | LogoutUserAction
   | SetAPIBaseURLAction
   | ChangeTabAction

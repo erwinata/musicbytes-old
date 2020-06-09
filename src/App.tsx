@@ -34,6 +34,7 @@ import Cookies from "js-cookie";
 import { UserData } from "types/UserData";
 import { isBrowser } from "react-device-detect";
 import { ToastType } from "types/ToastType";
+import { loadUser } from "helpers/localStorage";
 declare module "react-spring" {
   export const animated: any;
 }
@@ -97,21 +98,9 @@ const App: React.FC<Props> = ({
   });
 
   const checkUserCookies = () => {
-    const name = Cookies.get("name");
-    const email = Cookies.get("email");
-    const token_google = Cookies.get("token_google");
-    const token_musicbytes = Cookies.get("token_musicbytes");
-    if (name && email && token_google && token_musicbytes) {
-      const token = {
-        google: token_google,
-        musicbytes: token_musicbytes,
-      };
-
-      loginUser({
-        name: name,
-        email: email,
-        token: token,
-      });
+    let user = loadUser();
+    if (user) {
+      loginUser(user);
     }
   };
 

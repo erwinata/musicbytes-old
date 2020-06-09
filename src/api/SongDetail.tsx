@@ -6,6 +6,14 @@ import { ConvertDurationToNumber } from "helpers/duration";
 import { decodeText, normalizeTitle, getTitleAndArtist } from "helpers/string";
 import axios from "axios";
 import { find, remove } from "lodash";
+import { axiosIntercept } from "./Connection";
+import { storeUpdateToken } from "helpers/localStorage";
+import {
+  actionUpdateToken,
+  showToast,
+  actionShowToast,
+} from "redux/actions/app";
+import { ToastType } from "types/ToastType";
 
 export const SongDetail = (ids: string): Promise<Song[]> => {
   const state = store.getState();
@@ -35,7 +43,6 @@ export const SongDetail = (ids: string): Promise<Song[]> => {
       }
     });
 
-    console.log(reducedIds);
     ids = reducedIds;
   }
 
@@ -77,57 +84,35 @@ export const SongDetail = (ids: string): Promise<Song[]> => {
               cachedSong.push(song);
 
               resultSongs.push(song);
-
-              // await axios
-              //   .get(
-              //     process.env.REACT_APP_API_BASE_LASTFM! +
-              //       "?api_key=" +
-              //       process.env.REACT_APP_API_KEY_LASTFM! +
-              //       "&format=json" +
-              //       "&method=track.search" +
-              //       "&limit=2" +
-              //       "&track=" +
-              //       normalizeTitle(title)
-              //   )
-              //   .then((response: any) => {
-              //     // resolve(response);
-
-              //     console.log(response.data.results.trackmatches.track[0].artist);
-              //     console.log(snippet.thumbnails.default.url);
-
-              //     let artist = decodeText(
-              //       response.data.results.trackmatches.track[0].artist
-              //     );
-
-              //     let song: Song = {
-              //       id: video.id,
-              //       title: title,
-              //       channel: artist,
-              //       thumbnails: {
-              //         default: snippet.thumbnails.default.url,
-              //         medium: snippet.thumbnails.medium.url,
-              //         high: snippet.thumbnails.high.url,
-              //       },
-              //       duration: duration,
-              //     };
-
-              //     songs.push(song);
-              //   });
             })
           );
 
-          // var songs: Song[] = await Promise.all<Song[]>(promises);
-
-          // data.items.map(async (video: any, index: number) => {
-
-          // });
-
           localStorage.setItem("song", JSON.stringify(cachedSong));
 
-          console.log(resultSongs);
           resolve(resultSongs);
         })
         .catch((err: any) => {
+          // .then(async (data: any) => {
+          const status = err.response ? err.response.status : null;
+
+          if (status === 401) {
+            axiosIntercept()
+              .post(`${store.getState().app.apiBaseURL}v1/refreshgoogletoken`)
+              .then(
+                (response: any) => {
+                  const token = { google: response.data.access_token };
+                  storeUpdateToken(token);
+                  store.dispatch(actionUpdateToken(token));
+                  store.dispatch(actionShowToast("Token Refreshed"));
+                  console.log(response);
+                  resolve(SongDetail(ids));
+                },
+                (error) => {
+                  console.log(error);
+                  reject(err);
+                }
+              );
+          }
           reject(err);
         });
     }

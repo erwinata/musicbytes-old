@@ -9,6 +9,8 @@ import { PopupMenuType } from "types/PopupMenuType";
 import { OptionActionType } from "types/Option";
 import { XY } from "types/XY";
 import { UserData } from "types/UserData";
+import Cookies from "js-cookie";
+import { storeUpdateToken, storeUser } from "helpers/localStorage";
 
 export const actionSetAPIBaseURL = (url: string): AllActions => ({
   type: "SET_API_BASE_URL",
@@ -17,6 +19,13 @@ export const actionSetAPIBaseURL = (url: string): AllActions => ({
 export const actionLoginUser = (userData: UserData): AllActions => ({
   type: "LOGIN_USER",
   userData,
+});
+export const actionUpdateToken = (token: {
+  google?: string;
+  musicbytes?: string;
+}): AllActions => ({
+  type: "UPDATE_TOKEN",
+  token,
 });
 export const actionLogoutUser = (): AllActions => ({
   type: "LOGOUT_USER",
@@ -84,7 +93,17 @@ export const setAPIBaseURL = (url: string) => {
 };
 export const loginUser = (userData: UserData) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    storeUser(userData);
     dispatch(actionLoginUser(userData));
+  };
+};
+export const updateToken = (token: {
+  google?: string;
+  musicbytes?: string;
+}) => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    storeUpdateToken(token);
+    dispatch(actionUpdateToken(token));
   };
 };
 export const logoutUser = () => {

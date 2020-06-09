@@ -9,7 +9,11 @@ import { actionPlayPlaylist, playPlaylist } from "./player";
 import { Playlist } from "types/Playlist";
 import axios from "axios";
 import { UserData } from "types/UserData";
+import { axiosIntercept } from "api/Connection";
 
+export const actionClearAllLibrary = (): AllActions => ({
+  type: "CLEAR_ALL_LIBRARY",
+});
 export const actionLoadPlaylists = (playlists: Playlist[]): AllActions => ({
   type: "LOAD_PLAYLISTS",
   playlists,
@@ -92,6 +96,12 @@ const checkUserLogin = (dispatch: Dispatch<AllActions>, user?: UserData) => {
 // ACTION SEPARATOR
 // ACTION SEPARATOR
 // ACTION SEPARATOR
+
+export const clearAllLibrary = () => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionClearAllLibrary());
+  };
+};
 
 export const loadPlaylists = (playlists: Playlist[]) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
@@ -345,15 +355,9 @@ export const likeSong = (song: Song) => {
       findIndex(getState().library.collection, (item) => item.id == song!.id) >
       -1;
 
-    await axios.post(
-      getState().app.apiBaseURL +
-        "v1/collection" +
-        "?token=" +
-        user.token.musicbytes,
-      {
-        item: song!.id,
-      }
-    );
+    await axiosIntercept().post(getState().app.apiBaseURL + "v1/collection", {
+      item: song!.id,
+    });
 
     dispatch(actionLikeSong(song, isExist));
 

@@ -6,6 +6,9 @@ import { ConvertDurationToNumber } from "helpers/duration";
 import { store } from "redux/store/configureStore";
 import { SongDetail } from "./SongDetail";
 import { find, remove } from "lodash";
+import { axiosIntercept } from "./Connection";
+import { storeUpdateToken } from "helpers/localStorage";
+import { actionUpdateToken, actionShowToast } from "redux/actions/app";
 
 export const SearchSong = (
   query: string,
@@ -56,6 +59,29 @@ export const SearchSong = (
         });
       })
       .catch((err: any) => {
+        // .then(async (data: any) => {
+        const status = err.response ? err.response.status : null;
+
+        if (status === 401) {
+          axiosIntercept()
+            .post(`${store.getState().app.apiBaseURL}v1/refreshgoogletoken`)
+            .then(
+              (response: any) => {
+                const token = { google: response.data.access_token };
+                storeUpdateToken(token);
+                store.dispatch(actionUpdateToken(token));
+                store.dispatch(actionShowToast("Token Refreshed"));
+                console.log(response);
+                resolve(
+                  SearchSong(query, total, nextPageToken, songListenedException)
+                );
+              },
+              (error) => {
+                console.log(error);
+                reject(err);
+              }
+            );
+        }
         reject(err);
       });
   });

@@ -139,6 +139,12 @@ export const libraryReducer = (
   let playlistIndex;
 
   switch (action.type) {
+    case "CLEAR_ALL_LIBRARY":
+      return {
+        ...state,
+        playlists: [],
+        collection: [],
+      };
     case "LOAD_COLLECTION":
       console.log(action.collection);
       return {

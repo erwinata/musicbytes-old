@@ -20,6 +20,7 @@ import { Loading } from "components/Loading/Loading";
 import { LoadingType } from "types/LoadingType";
 import { UserData } from "types/UserData";
 import { convertToSongGridItems } from "helpers/array";
+import { axiosIntercept } from "api/Connection";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -67,12 +68,8 @@ const Library: React.FC<Props> = ({
     if (playlists.length == 0) {
       setLoadingPlaylist(true);
 
-      axios
-        .get(
-          `${store.getState().app.apiBaseURL}v1/playlist?token=${
-            userData.token.musicbytes
-          }`
-        )
+      axiosIntercept()
+        .get(`${store.getState().app.apiBaseURL}v1/playlist`)
         .then(
           async (response: any) => {
             const playlistsRaw = response.data.playlists;
@@ -93,8 +90,6 @@ const Library: React.FC<Props> = ({
 
             loadPlaylists(playlistsNew);
             setLoadingPlaylist(false);
-
-            console.log(playlistsNew);
           },
           (error) => {
             console.log(error);
@@ -106,13 +101,8 @@ const Library: React.FC<Props> = ({
   const checkLoadCollection = (userData: UserData) => {
     if (collection.length == 0) {
       setLoadingCollection(true);
-
-      axios
-        .get(
-          `${store.getState().app.apiBaseURL}v1/collection?token=${
-            userData.token.musicbytes
-          }`
-        )
+      axiosIntercept()
+        .get(`${store.getState().app.apiBaseURL}v1/collection`)
         .then(
           async (response: any) => {
             const collectionRaw = response.data.collection;
@@ -125,8 +115,6 @@ const Library: React.FC<Props> = ({
 
             loadCollection(collectionNew);
             setLoadingCollection(false);
-
-            console.log(collectionNew);
           },
           (error) => {
             console.log(error);
@@ -138,7 +126,12 @@ const Library: React.FC<Props> = ({
   useEffect(() => {
     if (user) {
       const asd = async () => {
-        await Promise.all([checkLoadCollection(user), checkLoadPlaylist(user)]);
+        await Promise.all([
+          setTimeout(() => {
+            checkLoadCollection(user);
+          }, 150),
+          checkLoadPlaylist(user),
+        ]);
         // await Promise.all([checkLoadPlaylist(user)]);
       };
       asd();

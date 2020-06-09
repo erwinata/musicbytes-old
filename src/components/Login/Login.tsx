@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Login.scss";
 import GoogleLogin from "react-google-login";
 import axios from "axios";
-import Cookies from "js-cookie";
 import LoginButton from "components/LoginButton/LoginButton";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import { bindActionCreators } from "redux";
@@ -21,55 +20,94 @@ interface DispatchProps {
 }
 
 const Login: React.FC<Props> = ({ loginUser }) => {
-  const [loginState, setLoginState] = useState({
+  const [loginState, setLoginState] = useState<{
+    logInAction: any;
+    loading: boolean;
+  }>({
+    logInAction: undefined,
     loading: false,
   });
 
   const clickLoginButton = () => {
-    setLoginState({ loading: true });
+    setLoginState({ logInAction: undefined, loading: true });
   };
 
   const responseFailed = (response: any) => {
-    setLoginState({ loading: false });
+    setLoginState({ logInAction: undefined, loading: false });
   };
 
   const responseSuccess = (response: any) => {
-    console.log(response);
-
-    const name = response.profileObj.name;
-    const email = response.profileObj.email;
-    const googleKey = response.accessToken;
-
-    axios
-      .post(`${store.getState().app.apiBaseURL}v1/login`, {
-        idtoken: response.tokenId,
-        email: email,
-        name: name,
-      })
-      .then(
-        (response: any) => {
-          const musicbytesKey = response.data.token;
-          const token = {
-            google: googleKey,
-            musicbytes: musicbytesKey,
-          };
-
-          loginUser({
-            name: name,
-            email: email,
-            token: token,
-          });
-
-          Cookies.set("name", name, { expires: 7 });
-          Cookies.set("email", email, { expires: 7 });
-          Cookies.set("token_google", token.google, { expires: 7 });
-          Cookies.set("token_musicbytes", token.musicbytes, { expires: 7 });
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    // if (loginState.loading) {
+    setLoginState({ ...loginState, logInAction: response });
+    // }
   };
+
+  useEffect(() => {
+    if (loginState.logInAction) {
+      const response = loginState.logInAction;
+
+      console.log(response);
+
+      const code = response.code;
+
+      axios
+        .post(`${store.getState().app.apiBaseURL}v1/login`, {
+          code: code,
+        })
+        .then(
+          (response: any) => {
+            console.log(response);
+            const musicbytesKey = response.data.token;
+            const googleKey = response.data.access_token.access_token;
+            const email = response.data.user.email;
+            const name = response.data.user.name;
+
+            const token = {
+              google: googleKey,
+              musicbytes: "Bearer " + musicbytesKey,
+            };
+
+            loginUser({
+              name: name,
+              email: email,
+              token: token,
+            });
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+
+      // const name = response.profileObj.name;
+      // const email = response.profileObj.email;
+      // const googleKey = response.accessToken;
+
+      // axios
+      //   .post(`${store.getState().app.apiBaseURL}v1/login`, {
+      //     idtoken: response.tokenId,
+      //     email: email,
+      //     name: name,
+      //   })
+      //   .then(
+      //     (response: any) => {
+      //       const musicbytesKey = response.data.token;
+      //       const token = {
+      //         google: googleKey,
+      //         musicbytes: "Bearer " + musicbytesKey,
+      //       };
+
+      //       loginUser({
+      //         name: name,
+      //         email: email,
+      //         token: token,
+      //       });
+      //     },
+      //     (error) => {
+      //       console.log(error);
+      //     }
+      //   );
+    }
+  }, [loginState.logInAction]);
 
   return (
     <div className="Login">
@@ -81,6 +119,7 @@ const Login: React.FC<Props> = ({ loginUser }) => {
           <ScaleLoader color={"rgb(58, 89, 140)"} />
         ) : (
           <LoginButton
+            isSignedIn={loginState.loading}
             onClick={clickLoginButton}
             responseSuccess={responseSuccess}
             responseFailed={responseFailed}

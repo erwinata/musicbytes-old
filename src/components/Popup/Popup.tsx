@@ -103,7 +103,6 @@ const Popup: React.FC<Props> = ({
   const closePopup = () => {
     setPopupMenu(PopupMenuType.NONE);
     setPopupHeaderText("");
-    console.log("CLOSEPOP");
   };
 
   useEffect(() => {
@@ -135,8 +134,6 @@ const Popup: React.FC<Props> = ({
   }, [popupState]);
 
   useEffect(() => {
-    console.log("HEI");
-    console.log(height);
     setContentHeight(height);
   }, [height]);
 
@@ -178,8 +175,6 @@ const Popup: React.FC<Props> = ({
       if (popupState.menuState === PopupMenuType.ADDING_SONG_TO_PLAYLIST) {
         addToPlaylist(playlist, [popupState.songAdding!]);
       } else if (popupState.menuState === PopupMenuType.PLAYLIST_SAVING_MERGE) {
-        console.log("MERGEWO");
-        console.log(playlist);
         addToPlaylist(playlist, songs!.list, true);
       }
 

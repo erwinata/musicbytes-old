@@ -42,11 +42,8 @@ export const arrayRemoveObjectByAttr = (
 };
 
 export const arrayRemoveObjectAtIndex = (array: any[], index: number) => {
-  console.log("order " + index);
   var firstSlice = array.slice(0, index);
-  console.log(firstSlice);
   var secondSlice = array.slice(index + 1, array.length);
-  console.log(secondSlice);
   return [...firstSlice, ...secondSlice];
 };
 

@@ -1,6 +1,7 @@
 import { Song } from "types/Song";
 import { Playlist } from "types/Playlist";
 
+export const CLEAR_ALL_LIBRARY = "CLEAR_ALL_LIBRARY";
 export const LOAD_PLAYLISTS = "LOAD_PLAYLISTS";
 export const LOAD_COLLECTION = "LOAD_COLLECTION";
 
@@ -15,6 +16,9 @@ export const MERGE_TO_PLAYLIST = "MERGE_TO_PLAYLIST";
 
 export const LIKE_SONG = "LIKE_SONG";
 
+export interface ClearAllLibraryAction {
+  type: typeof CLEAR_ALL_LIBRARY;
+}
 export interface LoadPlaylistsAction {
   type: typeof LOAD_PLAYLISTS;
   playlists: Playlist[];
@@ -61,6 +65,7 @@ export interface LikeSongAction {
 }
 
 export type LibraryActionTypes =
+  | ClearAllLibraryAction
   | LoadPlaylistsAction
   | LoadCollectionAction
   | AddToPlaylistAction

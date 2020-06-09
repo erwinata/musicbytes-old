@@ -76,13 +76,11 @@ const PlayerThumbnail: React.FC<Props> = ({
   };
 
   const handleOnStateChange = (event: any) => {
-    console.log(event);
     switch (event.data) {
       case 0:
         autoNextSong();
         break;
       case 1:
-        console.log("123123");
         setVideoIsRunning(true);
         break;
       case 2:
@@ -99,7 +97,6 @@ const PlayerThumbnail: React.FC<Props> = ({
     if (state.ready) {
       if (playerState.playState == PlayState.PLAYING) {
         state.youtubePlayer.playVideo();
-        console.log(state.youtubePlayer.getCurrentTime());
       } else if (playerState.playState == PlayState.PAUSED) {
         state.youtubePlayer.pauseVideo();
       }

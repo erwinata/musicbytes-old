@@ -66,7 +66,6 @@ const Listen: React.FC<Props> = ({
       resultIndex.push(indexSong);
       remove(indexPool, (indexPoolItem) => indexPoolItem === indexSong);
     }
-    console.log(resultIndex);
     return resultIndex;
   };
 

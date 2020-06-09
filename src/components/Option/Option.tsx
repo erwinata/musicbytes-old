@@ -146,8 +146,6 @@ const Option: React.FC<Props> = ({
     var borderRadius = "10px 10px 10px 10px";
 
     if (optionState.show) {
-      console.log("---------------");
-
       if (optionState.position?.y) {
         top = optionState.position!.y;
       }

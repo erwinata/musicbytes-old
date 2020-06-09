@@ -13,12 +13,14 @@ import { connect } from "react-redux";
 type Props = PassingProps;
 
 interface PassingProps {
+  isSignedIn: boolean;
   onClick: () => any;
   responseSuccess: (response: any) => any;
   responseFailed: (response: any) => any;
 }
 
 const LoginButton: React.FC<Props> = ({
+  isSignedIn,
   onClick,
   responseSuccess,
   responseFailed,
@@ -30,6 +32,9 @@ const LoginButton: React.FC<Props> = ({
         onSuccess={responseSuccess}
         onFailure={responseFailed}
         cookiePolicy={"single_host_origin"}
+        // isSignedIn={isSignedIn}
+        // accessType="offline"
+        responseType="code"
         scope="https://www.googleapis.com/auth/youtube.readonly"
         render={(renderProps) => (
           <button onClick={renderProps.onClick} disabled={renderProps.disabled}>

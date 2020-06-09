@@ -76,8 +76,6 @@ const MiniPlayer: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    console.log("MEAS");
-    console.log(titleMeasure.width);
     if (titleMeasure.width > infoMeasure.width) {
       setTitleOffset(titleMeasure.width - infoMeasure.width);
     } else {
