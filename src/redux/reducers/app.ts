@@ -15,7 +15,7 @@ import { UserData } from "types/UserData";
 
 export interface IAppState {
   user?: UserData;
-  defaultKey: string;
+  apiKey: number;
   apiBaseURL: string;
   tabState: {
     currentTab: NavigationTab;
@@ -144,7 +144,7 @@ const samplePlaylist = [
 
 const appReducerDefaultState: IAppState = {
   user: undefined,
-  defaultKey: "AIzaSyBQ5KGEWWK9-A0O87RLepRrmX3yz7kU4iA",
+  apiKey: 1,
   apiBaseURL: "",
   tabState: {
     currentTab: NavigationTab.LISTEN,
@@ -180,6 +180,11 @@ export const appReducer = (
   action: AppActionTypes
 ): IAppState => {
   switch (action.type) {
+    case "SET_API_KEY":
+      return {
+        ...state,
+        apiKey: action.index,
+      };
     case "SET_API_BASE_URL":
       return {
         ...state,

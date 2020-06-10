@@ -21,7 +21,6 @@ interface PassingProps {
   songs: Song[];
   resetPlaylist: boolean;
   optionList: OptionActionType[];
-  miniPlayerShown?: boolean;
   loadMore?: (pageNumber: number) => any;
 }
 interface StateProps {
@@ -41,7 +40,6 @@ const SongList: React.FC<Props> = ({
   optionList,
   resetPlaylist,
   collection,
-  miniPlayerShown,
   loadMore,
   setOption,
 }: Props) => {
@@ -52,9 +50,8 @@ const SongList: React.FC<Props> = ({
 
   useEffect(() => {
     setItemHeight(height);
-    var miniPlayerHeight = miniPlayerShown ? "12.5vh" : "0px";
-    setContentHeight(`calc(${height * songs.length}px + ${miniPlayerHeight} )`);
-  }, [height, miniPlayerShown, songs]);
+    setContentHeight(`${height * songs.length}px`);
+  }, [height, songs]);
 
   const transitions = useTransition(
     songs.map((data, i) => ({ ...data, y: i * itemHeight, x: 0 })),

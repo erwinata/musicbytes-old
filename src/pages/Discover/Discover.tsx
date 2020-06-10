@@ -126,13 +126,16 @@ export const Discover: React.FC<Props> = ({
           songs={songs}
           optionList={optionList}
           resetPlaylist={true}
-          miniPlayerShown={songPlaying ? true : false}
           loadMore={loadMore}
         />
       </div>
       <div style={{ position: "relative", height: 100 }}>
         <Loading show={loadingMore.show} type={LoadingType.Beat} />
       </div>
+
+      {songPlaying && !isDesktop ? (
+        <div className="miniPlayerPadding"></div>
+      ) : null}
     </div>
   );
 };

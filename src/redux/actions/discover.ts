@@ -4,6 +4,7 @@ import { AppState } from "redux/store/configureStore";
 import { SearchSong } from "api/Search";
 import { Song } from "types/Song";
 import { find } from "lodash";
+import { SongDetail } from "api/SongDetail";
 
 export const actionSearchSong = (
   query: string,
@@ -23,6 +24,7 @@ export const searchSong = (query: string, nextPage?: boolean) => {
     if (!nextPage) {
       let total = 10;
       let result = await SearchSong(query, total);
+      let resultSongs = await SongDetail(result.ids);
 
       // result.songs.map((song) => {
       // 	var songExist = find(
@@ -34,7 +36,7 @@ export const searchSong = (query: string, nextPage?: boolean) => {
       // 	}
       // })
 
-      dispatch(actionSearchSong(query, result.nextPageToken, result.songs));
+      dispatch(actionSearchSong(query, result.nextPageToken, resultSongs));
     } else {
       let total = 5;
       let result = await SearchSong(
@@ -42,8 +44,10 @@ export const searchSong = (query: string, nextPage?: boolean) => {
         total,
         getState().discover.nextPageToken
       );
+      let resultSongs = await SongDetail(result.ids);
+
       dispatch(
-        actionSearchSong(query, result.nextPageToken, result.songs, true)
+        actionSearchSong(query, result.nextPageToken, resultSongs, true)
       );
     }
   };

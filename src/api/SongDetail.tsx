@@ -12,13 +12,29 @@ import {
   actionUpdateToken,
   showToast,
   actionShowToast,
+  actionSetAPIKey,
 } from "redux/actions/app";
 import { ToastType } from "types/ToastType";
 
-export const SongDetail = (ids: string): Promise<Song[]> => {
+export const SongDetail = (
+  ids: string,
+  forceApiKey?: number
+): Promise<Song[]> => {
   const state = store.getState();
 
-  const API_KEY = state.app.user?.token.google ? "" : state.app.defaultKey;
+  // const API_KEY = state.app.user?.token.google ? "" : state.app.defaultKey;
+  let API_KEY = "";
+  switch (state.app.apiKey) {
+    case 1:
+      API_KEY = process.env.REACT_APP_API_KEY_GOOGLE_1!;
+      break;
+    case 2:
+      API_KEY = process.env.REACT_APP_API_KEY_GOOGLE_2!;
+      break;
+    default:
+      API_KEY = process.env.REACT_APP_API_KEY_GOOGLE_1!;
+      break;
+  }
   const api = new YoutubeDataAPI(API_KEY);
 
   let resultSongs: Song[] = [];
@@ -52,9 +68,9 @@ export const SongDetail = (ids: string): Promise<Song[]> => {
     } else {
       api
         .searchVideo(ids, {
-          access_token: state.app.user?.token.google
-            ? state.app.user!.token.google
-            : "",
+          // access_token: state.app.user?.token.google
+          //   ? state.app.user!.token.google
+          //   : "",
         })
         .then(async (data: any) => {
           await Promise.all(
@@ -95,24 +111,30 @@ export const SongDetail = (ids: string): Promise<Song[]> => {
           // .then(async (data: any) => {
           const status = err.response ? err.response.status : null;
 
-          if (status === 401) {
-            axiosIntercept()
-              .post(`${store.getState().app.apiBaseURL}v1/refreshgoogletoken`)
-              .then(
-                (response: any) => {
-                  const token = { google: response.data.access_token };
-                  storeUpdateToken(token);
-                  store.dispatch(actionUpdateToken(token));
-                  store.dispatch(actionShowToast("Token Refreshed"));
-                  console.log(response);
-                  resolve(SongDetail(ids));
-                },
-                (error) => {
-                  console.log(error);
-                  reject(err);
-                }
-              );
+          if (status === 403 && store.getState().app.apiKey == 1) {
+            store.dispatch(actionSetAPIKey(2));
+
+            return SongDetail(ids, 2);
           }
+
+          // if (status === 401) {
+          //   axiosIntercept()
+          //     .post(`${store.getState().app.apiBaseURL}v1/refreshgoogletoken`)
+          //     .then(
+          //       (response: any) => {
+          //         const token = { google: response.data.access_token };
+          //         storeUpdateToken(token);
+          //         store.dispatch(actionUpdateToken(token));
+          //         store.dispatch(actionShowToast("Token Refreshed"));
+          //         console.log(response);
+          //         resolve(SongDetail(ids));
+          //       },
+          //       (error) => {
+          //         console.log(error);
+          //         reject(err);
+          //       }
+          //     );
+          // }
           reject(err);
         });
     }

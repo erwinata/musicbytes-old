@@ -49,21 +49,22 @@ const Login: React.FC<Props> = ({ loginUser }) => {
       console.log(response);
 
       const code = response.code;
+      const id_token = response.tokenId;
 
       axios
         .post(`${store.getState().app.apiBaseURL}v1/login`, {
-          code: code,
+          // code: code,
+          id_token: id_token,
         })
         .then(
           (response: any) => {
             console.log(response);
             const musicbytesKey = response.data.token;
-            const googleKey = response.data.access_token.access_token;
             const email = response.data.user.email;
             const name = response.data.user.name;
 
             const token = {
-              google: googleKey,
+              google: undefined!,
               musicbytes: "Bearer " + musicbytesKey,
             };
 

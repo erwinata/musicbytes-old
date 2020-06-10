@@ -21,6 +21,7 @@ import {
   setAPIBaseURL,
   setDevice,
   showToast,
+  setAPIKey,
 } from "redux/actions/app";
 import PlaylistView from "pages/PlaylistView/PlaylistView";
 import Popup from "components/Popup/Popup";
@@ -35,6 +36,7 @@ import { UserData } from "types/UserData";
 import { isBrowser } from "react-device-detect";
 import { ToastType } from "types/ToastType";
 import { loadUser } from "helpers/localStorage";
+import { ConvertDurationToNumber } from "helpers/duration";
 declare module "react-spring" {
   export const animated: any;
 }
@@ -52,6 +54,7 @@ interface StateProps {
 }
 interface DispatchProps {
   setDevice: (isDesktop: boolean) => any;
+  setAPIKey: (index: number) => any;
   setAPIBaseURL: (url: string) => any;
   loginUser: (userData: UserData) => any;
   changeTab: (to: NavigationTab) => any;
@@ -64,6 +67,7 @@ const App: React.FC<Props> = ({
   songs,
   showPlayer,
   setDevice,
+  setAPIKey,
   setAPIBaseURL,
   loginUser,
   changeTab,
@@ -111,8 +115,10 @@ const App: React.FC<Props> = ({
       setAPIBaseURL(process.env.REACT_APP_API_BASE_LOCAL!);
     }
 
-    setAPIBaseURL(process.env.REACT_APP_API_BASE_LIVE!);
-    // setAPIBaseURL(process.env.REACT_APP_API_BASE_LOCAL!);
+    // setAPIBaseURL(process.env.REACT_APP_API_BASE_LIVE!);
+    setAPIBaseURL(process.env.REACT_APP_API_BASE_LOCAL!);
+
+    setAPIKey(1);
   };
 
   const [windowSize, setWindowSize] = React.useState({
@@ -184,6 +190,7 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AllActions>) => ({
   setDevice: bindActionCreators(setDevice, dispatch),
+  setAPIKey: bindActionCreators(setAPIKey, dispatch),
   setAPIBaseURL: bindActionCreators(setAPIBaseURL, dispatch),
   loginUser: bindActionCreators(loginUser, dispatch),
   changeTab: bindActionCreators(changeTab, dispatch),

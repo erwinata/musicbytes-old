@@ -15,6 +15,7 @@ export const LOGIN_USER = "LOGIN_USER";
 export const UPDATE_TOKEN = "UPDATE_TOKEN";
 export const LOGOUT_USER = "LOGOUT_USER";
 export const SET_API_BASE_URL = "SET_API_BASE_URL";
+export const SET_API_KEY = "SET_API_KEY";
 
 export const CHANGE_TAB = "CHANGE_TAB";
 export const SHOW_TOAST = "SHOW_TOAST";
@@ -29,6 +30,11 @@ export const SET_CLICK_OVERLAY = "SET_CLICK_OVERLAY";
 export const SET_OPTION = "SET_OPTION";
 
 export const SET_DEVICE = "SET_DEVICE";
+
+export interface SetAPIKeyAction {
+  type: typeof SET_API_KEY;
+  index: number;
+}
 
 export interface SetAPIBaseURLAction {
   type: typeof SET_API_BASE_URL;
@@ -99,6 +105,7 @@ export type AppActionTypes =
   | LoginUserAction
   | UpdateTokenAction
   | LogoutUserAction
+  | SetAPIKeyAction
   | SetAPIBaseURLAction
   | ChangeTabAction
   | ShowToastAction

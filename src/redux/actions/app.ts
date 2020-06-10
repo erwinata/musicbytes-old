@@ -16,6 +16,10 @@ export const actionSetAPIBaseURL = (url: string): AllActions => ({
   type: "SET_API_BASE_URL",
   url,
 });
+export const actionSetAPIKey = (index: number): AllActions => ({
+  type: "SET_API_KEY",
+  index,
+});
 export const actionLoginUser = (userData: UserData): AllActions => ({
   type: "LOGIN_USER",
   userData,
@@ -86,6 +90,11 @@ export const actionSetDevice = (isDesktop: boolean): AllActions => ({
   isDesktop,
 });
 
+export const setAPIKey = (index: number) => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionSetAPIKey(index));
+  };
+};
 export const setAPIBaseURL = (url: string) => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionSetAPIBaseURL(url));

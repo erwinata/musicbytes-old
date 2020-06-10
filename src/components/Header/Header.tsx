@@ -71,8 +71,6 @@ const Header: React.FC<Props> = ({
 
   return (
     <div className="Header">
-      <div onClick={clickRefresh}>Refresh</div>
-
       <img src={res_logo} alt="Logo" />
 
       {user ? (

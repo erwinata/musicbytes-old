@@ -32,10 +32,7 @@ const LoginButton: React.FC<Props> = ({
         onSuccess={responseSuccess}
         onFailure={responseFailed}
         cookiePolicy={"single_host_origin"}
-        // isSignedIn={isSignedIn}
-        // accessType="offline"
-        responseType="code"
-        scope="https://www.googleapis.com/auth/youtube.readonly"
+        // responseType="code"
         render={(renderProps) => (
           <button onClick={renderProps.onClick} disabled={renderProps.disabled}>
             Login with Google

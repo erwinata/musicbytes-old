@@ -1,27 +1,40 @@
 export const ConvertDurationToNumber = (durationRaw: string) => {
-  var durationRaw = durationRaw.replace("PT", "");
-  var minute = 0;
-  var second = 0;
-  if (durationRaw.indexOf("M") !== -1) {
-    var durationRawSplit = durationRaw.split("M");
-    var minute = parseInt(durationRawSplit[0].toString().replace(/\D/g, ""));
-    var second = parseInt(durationRawSplit[1].toString().replace(/\D/g, ""));
-  } else {
-    var durationRaw = durationRaw.replace("S", "");
-    var second = parseInt(durationRaw);
+  durationRaw = durationRaw.replace("PT", "");
+
+  let hour = 0;
+  let minute = 0;
+  let second = 0;
+
+  let indexH = durationRaw.indexOf("H");
+  let indexM = durationRaw.indexOf("M");
+  let indexS = durationRaw.indexOf("S");
+
+  if (indexH !== -1) {
+    let durationRawSplit = durationRaw.split("H");
+    hour = parseInt(durationRawSplit[0]);
+    durationRaw = durationRawSplit[1];
   }
-  return minute * 60 + second;
+  if (indexM !== -1) {
+    let durationRawSplit = durationRaw.split("M");
+    minute = parseInt(durationRawSplit[0]);
+    durationRaw = durationRawSplit[1];
+  }
+  if (indexS !== -1) {
+    let durationRawSplit = durationRaw.split("S");
+    second = parseInt(durationRawSplit[0]);
+  }
+  return hour * 3600 + minute * 60 + second;
 };
 
 export const ToMinutes = (duration: number) => {
-  var result = "";
-  var minutes = Math.floor(duration / 60);
+  let result = "";
+  let minutes = Math.floor(duration / 60);
   return (result += minutes);
 };
 
 export const ToSeconds = (duration: number) => {
-  var result = "";
-  var seconds = Math.round(duration % 60);
+  let result = "";
+  let seconds = Math.round(duration % 60);
   if (seconds < 10) {
     result += "0";
   }

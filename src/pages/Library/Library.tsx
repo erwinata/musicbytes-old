@@ -166,8 +166,10 @@ const Library: React.FC<Props> = ({
             songs={collection}
             optionList={optionList}
             resetPlaylist={true}
-            miniPlayerShown={songPlaying ? true : false}
           />
+          {songPlaying && !isDesktop ? (
+            <div className="miniPlayerPadding"></div>
+          ) : null}
         </>
       ) : (
         <Login />
