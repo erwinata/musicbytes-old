@@ -7,7 +7,11 @@ import { store } from "redux/store/configureStore";
 import { SongDetail } from "./SongDetail";
 import { find, remove } from "lodash";
 import { axiosIntercept } from "./Connection";
-import { storeUpdateToken } from "helpers/localStorage";
+import {
+  storeUpdateToken,
+  getSearchSongIds,
+  storeSearchSongIds,
+} from "helpers/localStorage";
 import {
   actionUpdateToken,
   actionShowToast,
@@ -41,78 +45,87 @@ export const SearchSong = (
   // const api = new YoutubeDataAPI("");
 
   return new Promise((resolve, reject) => {
-    api
-      .searchAll(query, total, {
-        type: "video",
-        videoCategoryId: 10,
-        part: "snippet",
-        pageToken: nextPageToken,
-        // access_token: state.app.user?.token.google
-        //   ? state.app.user!.token.google
-        //   : "",
-      })
-      .then(async (data: any) => {
-        let cachedSongPlayed: { song: string; total: number }[] = [];
-        if (localStorage.getItem("song_played")) {
-          cachedSongPlayed = JSON.parse(localStorage.getItem("song_played")!);
-        }
+    const cacheSearch = getSearchSongIds(query);
+    console.log(cacheSearch);
 
-        if (songListenedException) {
-          cachedSongPlayed.map((songId) => {
-            remove(data.items, (o: any) => {
-              return o.id.videoId === songId.song;
+    if (cacheSearch && nextPageToken === undefined) {
+      resolve(cacheSearch);
+    } else {
+      api
+        .searchAll(query, total, {
+          type: "video",
+          videoCategoryId: 10,
+          part: "snippet",
+          pageToken: nextPageToken,
+          // access_token: state.app.user?.token.google
+          //   ? state.app.user!.token.google
+          //   : "",
+        })
+        .then(async (data: any) => {
+          let cachedSongPlayed: { song: string; total: number }[] = [];
+          if (localStorage.getItem("song_played")) {
+            cachedSongPlayed = JSON.parse(localStorage.getItem("song_played")!);
+          }
+
+          if (songListenedException) {
+            cachedSongPlayed.map((songId) => {
+              remove(data.items, (o: any) => {
+                return o.id.videoId === songId.song;
+              });
             });
+          }
+
+          let ids = "";
+
+          data.items.map((video: any, index: number) => {
+            ids += video.id.videoId;
+            if (index < data.items.length - 1) ids += ",";
           });
-        }
 
-        let ids = "";
-        let songs: Song[] = [];
+          storeSearchSongIds(query, ids, data.nextPageToken);
 
-        data.items.map((video: any) => {
-          ids += video.id.videoId + ",";
+          resolve({
+            nextPageToken: data.nextPageToken,
+            ids: ids,
+          });
+        })
+        .catch((err: any) => {
+          const status = err.response ? err.response.status : null;
+
+          if (status === 403 && store.getState().app.apiKey == 1) {
+            store.dispatch(actionSetAPIKey(2));
+
+            return SearchSong(
+              query,
+              total,
+              nextPageToken,
+              songListenedException,
+              2
+            );
+          }
+
+          // if (status === 401) {
+          //   axiosIntercept()
+          //     .post(`${store.getState().app.apiBaseURL}v1/refreshgoogletoken`)
+          //     .then(
+          //       (response: any) => {
+          //         const token = { google: response.data.access_token };
+          //         storeUpdateToken(token);
+          //         store.dispatch(actionUpdateToken(token));
+          //         store.dispatch(actionShowToast("Token Refreshed"));
+          //         console.log(response);
+          //         resolve(
+          //           SearchSong(query, total, nextPageToken, songListenedException)
+          //         );
+          //       },
+          //       (error) => {
+          //         console.log(error);
+          //         reject(err);
+          //       }
+          //     );
+          // }
+          reject(err);
         });
-
-        resolve({
-          nextPageToken: data.nextPageToken,
-          ids: ids,
-        });
-      })
-      .catch((err: any) => {
-        const status = err.response ? err.response.status : null;
-
-        if (status === 403 && store.getState().app.apiKey == 1) {
-          store.dispatch(actionSetAPIKey(2));
-
-          return SearchSong(
-            query,
-            total,
-            nextPageToken,
-            songListenedException,
-            2
-          );
-        }
-
-        // if (status === 401) {
-        //   axiosIntercept()
-        //     .post(`${store.getState().app.apiBaseURL}v1/refreshgoogletoken`)
-        //     .then(
-        //       (response: any) => {
-        //         const token = { google: response.data.access_token };
-        //         storeUpdateToken(token);
-        //         store.dispatch(actionUpdateToken(token));
-        //         store.dispatch(actionShowToast("Token Refreshed"));
-        //         console.log(response);
-        //         resolve(
-        //           SearchSong(query, total, nextPageToken, songListenedException)
-        //         );
-        //       },
-        //       (error) => {
-        //         console.log(error);
-        //         reject(err);
-        //       }
-        //     );
-        // }
-        reject(err);
-      });
+    }
   });
 };

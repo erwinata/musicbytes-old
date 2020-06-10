@@ -28,6 +28,12 @@ export const getTitleAndArtist = (text: string) => {
     return result;
   }
 
+  result[0] = result[0].trim();
+  result[1] = result[1].trim();
+
+  result[0] = result[0] === "" ? text : result[0];
+  result[1] = result[1] === "" ? text : result[1];
+
   return result;
 };
 
@@ -66,5 +72,12 @@ export const normalizeTitle = (title: string) => {
   // result = result.replace("official", "");
   // result = result.replace("video", "");
   // result = encodeURIComponent(result);
+
+  result = result.trim();
+
+  if (result === "") {
+    result = title;
+  }
+
   return result;
 };

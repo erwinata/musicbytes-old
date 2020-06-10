@@ -77,14 +77,6 @@ export const Discover: React.FC<Props> = ({
 
     let pos = target.scrollHeight - target.scrollTop;
 
-    console.log(
-      target.scrollHeight +
-        " - " +
-        target.scrollTop +
-        " = " +
-        target.clientHeight
-    );
-
     // if (loadingMore.scrollLock) {
     //   target.scrollTop = target.scrollHeight + 100;
     // }

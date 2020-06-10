@@ -5,6 +5,8 @@ import { SearchSong } from "api/Search";
 import { Song } from "types/Song";
 import { find } from "lodash";
 import { SongDetail } from "api/SongDetail";
+import { axiosIntercept } from "api/Connection";
+import axios from "axios";
 
 export const actionSetQuery = (query: string): AllActions => ({
   type: "SET_QUERY",
@@ -32,10 +34,12 @@ export const setQuery = (query: string) => {
 
 export const searchSong = (query: string, nextPage?: boolean) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    let resultSongs = [];
+
     if (!nextPage) {
       let total = 40;
       let result = await SearchSong(query, total);
-      let resultSongs = await SongDetail(result.ids);
+      resultSongs = await SongDetail(result.ids);
 
       dispatch(actionSearchSong(query, result.nextPageToken, resultSongs));
     } else {
@@ -45,11 +49,15 @@ export const searchSong = (query: string, nextPage?: boolean) => {
         total,
         getState().discover.nextPageToken
       );
-      let resultSongs = await SongDetail(result.ids);
+      resultSongs = await SongDetail(result.ids);
 
       dispatch(
         actionSearchSong(query, result.nextPageToken, resultSongs, true)
       );
     }
+
+    axios.post(`${getState().app.apiBaseURL}v1/song`, {
+      songs: resultSongs,
+    });
   };
 };
