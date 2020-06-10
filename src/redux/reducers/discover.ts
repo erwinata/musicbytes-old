@@ -1,4 +1,8 @@
-import { DiscoverActionTypes, SONG_SEARCH } from "redux/types/discover";
+import {
+  DiscoverActionTypes,
+  SONG_SEARCH,
+  SET_QUERY,
+} from "redux/types/discover";
 import { Song } from "types/Song";
 import { concat, uniqBy } from "lodash";
 
@@ -156,8 +160,12 @@ export const discoverReducer = (
   action: DiscoverActionTypes
 ): IDiscoverState => {
   switch (action.type) {
+    case SET_QUERY:
+      return {
+        ...state,
+        query: action.query,
+      };
     case SONG_SEARCH:
-      // console.log("REDUCER" + action.query);
       var songs = state.songs;
       if (action.addSongs) {
         songs = concat(songs, action.songs);

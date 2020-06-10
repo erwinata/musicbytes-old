@@ -6,6 +6,11 @@ import { Song } from "types/Song";
 import { find } from "lodash";
 import { SongDetail } from "api/SongDetail";
 
+export const actionSetQuery = (query: string): AllActions => ({
+  type: "SET_QUERY",
+  query,
+});
+
 export const actionSearchSong = (
   query: string,
   nextPageToken: string,
@@ -19,26 +24,22 @@ export const actionSearchSong = (
   addSongs,
 });
 
+export const setQuery = (query: string) => {
+  return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    actionSetQuery(query);
+  };
+};
+
 export const searchSong = (query: string, nextPage?: boolean) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     if (!nextPage) {
-      let total = 10;
+      let total = 40;
       let result = await SearchSong(query, total);
       let resultSongs = await SongDetail(result.ids);
 
-      // result.songs.map((song) => {
-      // 	var songExist = find(
-      // 		getState().discover.songs,
-      // 		(item) => item.id == song.id
-      // 	);
-      // 	if (songExist) {
-
-      // 	}
-      // })
-
       dispatch(actionSearchSong(query, result.nextPageToken, resultSongs));
     } else {
-      let total = 5;
+      let total = 40;
       let result = await SearchSong(
         query,
         total,

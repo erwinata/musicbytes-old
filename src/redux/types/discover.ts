@@ -1,6 +1,12 @@
 import { Song } from "types/Song";
 
+export const SET_QUERY = "SET_QUERY";
 export const SONG_SEARCH = "SONG_SEARCH";
+
+export interface SetQueryAction {
+  type: typeof SET_QUERY;
+  query: string;
+}
 
 export interface SongSearchAction {
   type: typeof SONG_SEARCH;
@@ -10,4 +16,4 @@ export interface SongSearchAction {
   addSongs?: boolean;
 }
 
-export type DiscoverActionTypes = SongSearchAction;
+export type DiscoverActionTypes = SetQueryAction | SongSearchAction;

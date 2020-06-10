@@ -176,7 +176,7 @@ const Listen: React.FC<Props> = ({
 
   useEffect(() => {
     if (recommendation.length === 0) {
-      generateRecommendation();
+      // generateRecommendation();
     }
   }, []);
 

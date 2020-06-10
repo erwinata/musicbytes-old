@@ -55,7 +55,6 @@ export const Discover: React.FC<Props> = ({
   const [loadingMore, setLoadingMore] = useState({
     show: false,
     top: 0,
-    scrollLock: false,
   });
 
   const [contentHeight, setContentHeight] = useState(500);
@@ -66,15 +65,8 @@ export const Discover: React.FC<Props> = ({
   const { x, y } = useScroll(scrollRef);
 
   useEffect(() => {
-    setLoadingMore({ ...loadingMore, show: false, scrollLock: false });
+    setLoadingMore({ ...loadingMore, show: false });
   }, [songs]);
-
-  useEffect(() => {
-    setLoadingMore({
-      ...loadingMore,
-      top: 0,
-    });
-  }, [height]);
 
   const loadMore = () => {
     console.log("loadMore");
@@ -99,20 +91,17 @@ export const Discover: React.FC<Props> = ({
 
     if (pos >= target.clientHeight - 5 && pos <= target.clientHeight) {
       if (!loadingMore.show) {
-        setLoadingMore({
-          ...loadingMore,
-          show: true,
-          scrollLock: true,
-        });
-        setTimeout(() => {
-          setLoadingMore({
-            ...loadingMore,
-            scrollLock: false,
-          });
-        }, 500);
-        searchSong(query, true);
+        startSearchSong(query, true);
       }
     }
+  };
+
+  const startSearchSong = (query: string, nextPage?: boolean) => {
+    setLoadingMore({
+      ...loadingMore,
+      show: true,
+    });
+    searchSong(query, nextPage);
   };
 
   return (
@@ -120,7 +109,7 @@ export const Discover: React.FC<Props> = ({
       className={`Discover ${isDesktop ? "desktop" : ""}`}
       onScroll={handleScroll}
     >
-      <SearchBar />
+      <SearchBar startSearchSong={startSearchSong} />
       <div ref={ref}>
         <SongList
           songs={songs}
