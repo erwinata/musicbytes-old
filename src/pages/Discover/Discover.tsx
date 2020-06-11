@@ -57,6 +57,8 @@ export const Discover: React.FC<Props> = ({
     top: 0,
   });
 
+  const [showMore, setShowMore] = useState(false);
+
   const [contentHeight, setContentHeight] = useState(500);
   const [ref, { height }] = useMeasure();
   // const [refScroll, { y }] = useScroll(refScroll);
@@ -68,10 +70,6 @@ export const Discover: React.FC<Props> = ({
     setLoadingMore({ ...loadingMore, show: false });
   }, [songs]);
 
-  const loadMore = () => {
-    console.log("loadMore");
-  };
-
   const handleScroll = (e: any) => {
     const target = e.target;
 
@@ -82,9 +80,13 @@ export const Discover: React.FC<Props> = ({
     // }
 
     if (pos >= target.clientHeight - 5 && pos <= target.clientHeight) {
-      if (!loadingMore.show) {
-        startSearchSong(query, true);
-      }
+      // if (!loadingMore.show) {
+      //   startSearchSong(query, true);
+      // }
+      setShowMore(true);
+      setTimeout(() => {
+        setShowMore(false);
+      }, 100);
     }
   };
 
@@ -107,7 +109,7 @@ export const Discover: React.FC<Props> = ({
           songs={songs}
           optionList={optionList}
           resetPlaylist={true}
-          loadMore={loadMore}
+          showMore={showMore}
         />
       </div>
       <div style={{ position: "relative", height: 100 }}>

@@ -163,12 +163,8 @@ export const addToPlaylist = (
         if (index < songs.length - 1) songIds += ",";
       });
 
-      await axios.patch(
-        getState().app.apiBaseURL +
-          "v1/playlist/" +
-          playlist!.id +
-          "?token=" +
-          user.token.musicbytes,
+      await axiosIntercept().patch(
+        getState().app.apiBaseURL + "v1/playlist/" + playlist!.id,
         {
           item: songIds,
         }
@@ -206,12 +202,8 @@ export const removeFromPlaylist = (playlist: Playlist, song: Song) => {
       dispatch(actionShowToast("Playlist deleted"));
       dispatch(actionViewPlaylist(undefined!));
     } else {
-      await axios.patch(
-        getState().app.apiBaseURL +
-          "v1/playlist/" +
-          playlist!.id +
-          "?token=" +
-          user.token.musicbytes,
+      await axiosIntercept().patch(
+        getState().app.apiBaseURL + "v1/playlist/" + playlist!.id,
         {
           item: song.id,
         }
@@ -234,12 +226,8 @@ export const savePlaylist = (playlist: Playlist, songs: Song[]) => {
       return false;
     }
 
-    await axios.patch(
-      getState().app.apiBaseURL +
-        "v1/playlist/" +
-        playlist!.id +
-        "?token=" +
-        user.token.musicbytes,
+    await axiosIntercept().patch(
+      getState().app.apiBaseURL + "v1/playlist/" + playlist!.id,
       {
         song: songs,
       }
@@ -262,12 +250,8 @@ export const renamePlaylist = (playlist: Playlist, title: string) => {
       return false;
     }
 
-    await axios.patch(
-      getState().app.apiBaseURL +
-        "v1/playlist/" +
-        playlist!.id +
-        "?token=" +
-        user.token.musicbytes,
+    await axiosIntercept().patch(
+      getState().app.apiBaseURL + "v1/playlist/" + playlist!.id,
       {
         title: title,
       }
@@ -284,12 +268,8 @@ export const deletePlaylist = (playlist: Playlist) => {
       return false;
     }
 
-    await axios.delete(
-      getState().app.apiBaseURL +
-        "v1/playlist/" +
-        playlist!.id +
-        "?token=" +
-        user.token.musicbytes
+    await axiosIntercept().delete(
+      getState().app.apiBaseURL + "v1/playlist/" + playlist!.id
     );
 
     dispatch(actionDeletePlaylist(playlist));
@@ -313,11 +293,8 @@ export const newPlaylist = (
       if (index < songs.length - 1) songIds += ",";
     });
 
-    const response = await axios.post(
-      getState().app.apiBaseURL +
-        "v1/playlist" +
-        "?token=" +
-        user.token.musicbytes,
+    const response = await axiosIntercept().post(
+      getState().app.apiBaseURL + "v1/playlist",
       {
         title: title,
         song: songIds,
@@ -355,9 +332,12 @@ export const likeSong = (song: Song) => {
       findIndex(getState().library.collection, (item) => item.id == song!.id) >
       -1;
 
-    await axiosIntercept().post(getState().app.apiBaseURL + "v1/collection", {
-      item: song!.id,
-    });
+    await axiosIntercept().post(
+      getState().app.apiBaseURL + "v1/userdata/collection",
+      {
+        item: song!.id,
+      }
+    );
 
     dispatch(actionLikeSong(song, isExist));
 

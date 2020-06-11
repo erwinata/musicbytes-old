@@ -14,12 +14,14 @@ export const actionAddRecommendation = (
   recommendation,
 });
 
-export const actionAddRecent = (item: {
-  song?: Song;
-  playlist?: Playlist;
-}): AllActions => ({
+export const actionSetRecent = (
+  recent: {
+    song?: Song;
+    playlist?: Playlist;
+  }[]
+): AllActions => ({
   type: "ADD_RECENT",
-  item,
+  recent,
 });
 
 export const addRecommendation = (recommendation: Recommendation) => {
@@ -28,8 +30,8 @@ export const addRecommendation = (recommendation: Recommendation) => {
   };
 };
 
-export const addRecent = (item: { song?: Song; playlist?: Playlist }) => {
+export const setRecent = (recent: { song?: Song; playlist?: Playlist }[]) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    dispatch(actionAddRecent(item));
+    dispatch(actionSetRecent(recent));
   };
 };

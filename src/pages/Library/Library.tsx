@@ -102,18 +102,19 @@ const Library: React.FC<Props> = ({
     if (collection.length == 0) {
       setLoadingCollection(true);
       axiosIntercept()
-        .get(`${store.getState().app.apiBaseURL}v1/collection`)
+        .get(`${store.getState().app.apiBaseURL}v1/userdata/collection`)
         .then(
           async (response: any) => {
             const collectionRaw = response.data.collection;
 
-            const collectionNew = await new Promise<Song[]>(
-              (resolve, reject) => {
-                resolve(SongDetail(collectionRaw));
-              }
-            );
-
-            loadCollection(collectionNew);
+            if (collectionRaw !== "") {
+              const collectionNew = await new Promise<Song[]>(
+                (resolve, reject) => {
+                  resolve(SongDetail(collectionRaw));
+                }
+              );
+              loadCollection(collectionNew);
+            }
             setLoadingCollection(false);
           },
           (error) => {

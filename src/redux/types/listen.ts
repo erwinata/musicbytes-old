@@ -9,12 +9,12 @@ export interface AddRecommendationAction {
   type: typeof ADD_RECOMMENDATION;
   recommendation: Recommendation;
 }
-export interface AddRecentAction {
+export interface SetRecentAction {
   type: typeof ADD_RECENT;
-  item: {
+  recent: {
     song?: Song;
     playlist?: Playlist;
-  };
+  }[];
 }
 
-export type ListenActionTypes = AddRecommendationAction | AddRecentAction;
+export type ListenActionTypes = AddRecommendationAction | SetRecentAction;

@@ -29,7 +29,7 @@ export const SearchSongLocal = (
   return new Promise((resolve, reject) => {
     axios
       .get(
-        `http://localhost/musicbytes-api/v1/search?reference=` +
+        `${state.app.apiBaseURL}v1/search?reference=` +
           reference +
           `&` +
           `query=` +

@@ -34,15 +34,9 @@ export const listenReducer = (
         recommendation: [...state.recommendation, action.recommendation],
       };
     case ADD_RECENT:
-      let recent = [action.item, ...state.recent];
-
-      if (state.recent.length > 10) {
-        recent.pop();
-      }
-
       return {
         ...state,
-        recent: recent,
+        recent: action.recent,
       };
     default:
       return state;

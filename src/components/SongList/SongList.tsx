@@ -7,7 +7,7 @@ import { OptionAction, OptionActionType } from "types/Option";
 import Option from "components/Option/Option";
 import { AppState } from "redux/store/configureStore";
 import { connect } from "react-redux";
-import { findIndex } from "lodash";
+import { findIndex, concat } from "lodash";
 import { useMeasure } from "react-use";
 import { bindActionCreators } from "redux";
 import { ThunkDispatch } from "redux-thunk";
@@ -21,7 +21,7 @@ interface PassingProps {
   songs: Song[];
   resetPlaylist: boolean;
   optionList: OptionActionType[];
-  loadMore?: (pageNumber: number) => any;
+  showMore?: boolean;
 }
 interface StateProps {
   collection: Song[];
@@ -40,9 +40,11 @@ const SongList: React.FC<Props> = ({
   optionList,
   resetPlaylist,
   collection,
-  loadMore,
+  showMore,
   setOption,
 }: Props) => {
+  const [songsDisplayed, setSongsDisplayed] = useState<Song[]>([]);
+
   const [contentHeight, setContentHeight] = useState("0px");
   const [itemHeight, setItemHeight] = useState(50);
 
@@ -50,11 +52,39 @@ const SongList: React.FC<Props> = ({
 
   useEffect(() => {
     setItemHeight(height);
-    setContentHeight(`${height * songs.length}px`);
-  }, [height, songs]);
+    setContentHeight(`${height * songsDisplayed.length}px`);
+  }, [height, songsDisplayed]);
+
+  useEffect(() => {
+    let songsToDisplay: Song[] = [];
+    for (let i = 0; i < Math.min(songs.length, 10); i++) {
+      songsToDisplay.push(songs[i]);
+    }
+    setSongsDisplayed(songsToDisplay);
+  }, [songs]);
+
+  useEffect(() => {
+    console.log(songsDisplayed);
+  }, [songsDisplayed]);
+
+  useEffect(() => {
+    if (songs.length > songsDisplayed.length && songsDisplayed.length !== 0) {
+      let songsToDisplay = [];
+      for (
+        let i = songsDisplayed.length;
+        i <
+        songsDisplayed.length +
+          Math.min(songs.length - songsDisplayed.length, 5);
+        i++
+      ) {
+        songsToDisplay.push(songs[i]);
+      }
+      setSongsDisplayed(concat(songsDisplayed, songsToDisplay));
+    }
+  }, [showMore]);
 
   const transitions = useTransition(
-    songs.map((data, i) => ({ ...data, y: i * itemHeight, x: 0 })),
+    songsDisplayed.map((data, i) => ({ ...data, y: i * itemHeight, x: 0 })),
     (d) => d.id,
     {
       from: {
@@ -69,28 +99,7 @@ const SongList: React.FC<Props> = ({
     }
   );
 
-  const [optionState, setOptionState] = useState<{
-    index: number;
-    song?: Song;
-  }>({
-    index: -1,
-    song: undefined,
-  });
-
-  const dismissOption = () => {
-    setOption(false);
-  };
-
-  const loadMoreFunction = (pageNumber: number) => {
-    loadMore!(pageNumber);
-  };
-
   const clickButtonOption = (index: number, song: Song, event: any) => {
-    setOptionState({
-      index,
-      song,
-    });
-
     setOption(true, songs[index], optionList, {
       x: event.pageX,
       y: event.pageY,

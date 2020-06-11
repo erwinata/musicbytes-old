@@ -12,7 +12,7 @@ import { SearchSong } from "api/Search";
 import { Song } from "types/Song";
 import { clamp } from "helpers/math";
 import { OptionActionType } from "types/Option";
-import { addRecommendation } from "redux/actions/listen";
+import { addRecommendation, setRecent } from "redux/actions/listen";
 import { bindActionCreators } from "redux";
 import { Recommendation, RecommendationType } from "types/Recommendation";
 import { RecommendationItem } from "components/RecommendationItem/RecommendationItem";
@@ -38,6 +38,7 @@ interface StateProps {
 }
 interface DispatchProps {
   addRecommendation: (recommendation: Recommendation) => any;
+  setRecent: (recent: { song?: Song; playlist?: Playlist }[]) => any;
 }
 
 interface SongListen {
@@ -51,6 +52,7 @@ const Listen: React.FC<Props> = ({
   isDesktop,
   songs,
   addRecommendation,
+  setRecent,
 }: Props) => {
   const optionList: OptionActionType[] = [
     OptionActionType.ADD_TO_NOW_PLAYING,
@@ -81,14 +83,16 @@ const Listen: React.FC<Props> = ({
   const retrieveRecommendation = async (songSelected: Song) => {
     // setTimeout(resolve, 100, 'foo');
 
-    let totalTags = Math.round(
-      clamp(
-        songSelected!.tags.length / 2,
-        Math.min(songSelected!.tags.length, 10),
-        15
-      )
-    );
-    let tags = shuffle(songSelected!.tags);
+    // let totalTags = Math.round(
+    //   clamp(
+    //     songSelected!.tags.length / 2,
+    //     Math.min(songSelected!.tags.length, 10),
+    //     15
+    //   )
+    // );
+    let totalTags = songSelected!.tags.length;
+    // let tags = shuffle(songSelected!.tags);
+    let tags = songSelected!.tags;
     let tagsQuery = "";
     for (let i = 0; i < totalTags; i++) {
       tagsQuery += tags[i] + ",";
@@ -106,7 +110,7 @@ const Listen: React.FC<Props> = ({
     //   },
     // };
 
-    return songsResult;
+    return shuffle(songsResult);
 
     // addRecommendation(recommendationAdd);
   };
@@ -124,10 +128,13 @@ const Listen: React.FC<Props> = ({
         let cachedSong: Song[] = JSON.parse(localStorage.getItem("song")!);
 
         let songSearchResult = await Promise.all(
-          songSelectedIndexes.map((songSelectedIndex) => {
+          songSelectedIndexes.map(async (songSelectedIndex) => {
             let songSelectedId = cachedSongPlayed[songSelectedIndex].song;
-            let songSelected = find(cachedSong, { id: songSelectedId });
-            return retrieveRecommendation(songSelected!);
+            let songSelected = await SongDetail(songSelectedId);
+            if (songSelected) {
+              return retrieveRecommendation(songSelected![0]);
+            }
+            return [];
           })
         );
 
@@ -145,31 +152,23 @@ const Listen: React.FC<Props> = ({
         let resultSongs = songSearchResult;
 
         await Promise.all(
-          songSelectedIndexes.map((songSelectedIndex, index) => {
-            let songSelectedId = cachedSongPlayed[songSelectedIndex].song;
-            let songSelected = find(cachedSong, { id: songSelectedId });
+          songSelectedIndexes.map(async (songSelectedIndex, index) => {
+            if (resultSongs[index].length >= 3) {
+              let songSelectedId = cachedSongPlayed[songSelectedIndex].song;
+              let songSelectedArray = await SongDetail(songSelectedId);
+              let songSelected = songSelectedArray[0];
 
-            // let idsSplit = songSearchResult[index].ids.split(",");
-            // let songs: Song[] = [];
+              let recommendationAdd: Recommendation = {
+                title: "Related to " + songSelected?.title,
+                song: resultSongs[index],
+                reference: {
+                  song: songSelected!,
+                  type: RecommendationType.TAGS,
+                },
+              };
 
-            // idsSplit.map((id) => {
-            //   let song = find(resultSongs, { id: id });
-
-            //   if (song) {
-            //     songs.push(song);
-            //   }
-            // });
-
-            let recommendationAdd: Recommendation = {
-              title: "Related to " + songSelected?.title,
-              song: resultSongs[index],
-              reference: {
-                song: songSelected!,
-                type: RecommendationType.TAGS,
-              },
-            };
-
-            addRecommendation(recommendationAdd);
+              addRecommendation(recommendationAdd);
+            }
           })
         );
       }
@@ -177,8 +176,15 @@ const Listen: React.FC<Props> = ({
   };
 
   useEffect(() => {
+    if (localStorage.getItem("history")) {
+      setRecent(JSON.parse(localStorage.getItem("history")!));
+    }
+
     if (recommendation.length === 0) {
-      generateRecommendation();
+      const asd = async () => {
+        await Promise.all([setTimeout(generateRecommendation, 150)]);
+      };
+      asd();
     }
   }, []);
 
@@ -228,6 +234,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<any, any, AppActionTypes>
 ) => ({
   addRecommendation: bindActionCreators(addRecommendation, dispatch),
+  setRecent: bindActionCreators(setRecent, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Listen);

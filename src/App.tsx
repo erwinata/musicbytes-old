@@ -108,6 +108,23 @@ const App: React.FC<Props> = ({
     }
   };
 
+  const scheduleTask = (syncSongPlayedMinute: number) => {
+    let scheduler = {
+      syncSongPlayed: Date.now() + syncSongPlayedMinute * 60 * 1000,
+    };
+    if (localStorage.getItem("scheduler")) {
+      scheduler = JSON.parse(localStorage.getItem("scheduler")!);
+      if (scheduler.syncSongPlayed) {
+        if (scheduler.syncSongPlayed <= Date.now()) {
+          scheduler.syncSongPlayed =
+            Date.now() + syncSongPlayedMinute * 60 * 1000;
+        }
+      }
+    }
+
+    localStorage.setItem("scheduler", JSON.stringify(scheduler));
+  };
+
   const checkAPI = () => {
     if (window.location.href.indexOf("localhost") === -1) {
       setAPIBaseURL(process.env.REACT_APP_API_BASE_LIVE!);
@@ -129,6 +146,8 @@ const App: React.FC<Props> = ({
   useEffectOnce(() => {
     checkUserCookies();
     checkAPI();
+
+    scheduleTask(1);
 
     window.addEventListener("resize", () =>
       setWindowSize({ w: window.innerWidth, h: window.innerHeight })

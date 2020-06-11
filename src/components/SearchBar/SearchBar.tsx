@@ -63,11 +63,12 @@ const SearchBar: React.FC<Props> = ({ query, startSearchSong }: Props) => {
 
     axios
       .get(
-        "http://suggestqueries.google.com/complete/search?callback=hi&output=toolbar&hl=en&ds=yt&client=youtube&hjson=t&cp=1&format=5&alt=json&q=" +
+        "https://suggestqueries.google.com/complete/search?callback=hi&output=toolbar&hl=en&ds=yt&client=youtube&hjson=t&cp=1&format=5&alt=json&q=" +
           query,
         { adapter: jsonpAdapter }
       )
       .then((response) => {
+        console.log(response);
         let suggestionList: string[] = [];
         response.data[1].map((item: any) => {
           suggestionList.push(item[0]);
