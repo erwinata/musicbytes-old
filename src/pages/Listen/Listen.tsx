@@ -19,6 +19,7 @@ import { RecommendationItem } from "components/RecommendationItem/Recommendation
 import { Playlist } from "types/Playlist";
 import { resolve } from "url";
 import { SongDetail } from "api/SongDetail";
+import { SearchSongLocal } from "api/SearchLocal";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -82,18 +83,19 @@ const Listen: React.FC<Props> = ({
 
     let totalTags = Math.round(
       clamp(
-        songSelected!.tags.length / 6,
-        Math.min(songSelected!.tags.length, 6),
-        10
+        songSelected!.tags.length / 2,
+        Math.min(songSelected!.tags.length, 10),
+        15
       )
     );
     let tags = shuffle(songSelected!.tags);
     let tagsQuery = "";
     for (let i = 0; i < totalTags; i++) {
-      tagsQuery += tags[i] + " ";
+      tagsQuery += tags[i] + ",";
     }
 
-    let songsResultIds = await SearchSong(tagsQuery, 10, undefined, true);
+    // let songsResultIds = await SearchSong(tagsQuery, 10, undefined, true);
+    let songsResult = await SearchSongLocal(tagsQuery, songSelected.id);
 
     // let recommendationAdd: Recommendation = {
     //   title: "Related to " + songSelected?.title,
@@ -104,7 +106,7 @@ const Listen: React.FC<Props> = ({
     //   },
     // };
 
-    return songsResultIds;
+    return songsResult;
 
     // addRecommendation(recommendationAdd);
   };
@@ -116,7 +118,7 @@ const Listen: React.FC<Props> = ({
       cachedSongPlayed = JSON.parse(localStorage.getItem("song_played")!);
       // let songSelectedId = cachedSongPlayed[0].song;
 
-      let songSelectedIndexes = getRandomSongReference(cachedSongPlayed, 1);
+      let songSelectedIndexes = getRandomSongReference(cachedSongPlayed, 5);
 
       if (localStorage.getItem("song")) {
         let cachedSong: Song[] = JSON.parse(localStorage.getItem("song")!);
@@ -129,38 +131,38 @@ const Listen: React.FC<Props> = ({
           })
         );
 
-        console.log("songIds");
-        console.log(songSearchResult);
+        // console.log("songIds");
+        // console.log(songSearchResult);
 
-        let ids = "";
-        songSearchResult.map((songSearchResultItem) => {
-          ids += songSearchResultItem.ids + ",";
-        });
+        // let ids = "";
+        // songSearchResult.map((songSearchResultItem) => {
+        //   ids += songSearchResultItem.ids + ",";
+        // });
 
-        console.log("rec songs");
-        console.log(ids);
+        // console.log("rec songs");
+        // console.log(ids);
 
-        let resultSongs = await SongDetail(ids);
+        let resultSongs = songSearchResult;
 
         await Promise.all(
           songSelectedIndexes.map((songSelectedIndex, index) => {
             let songSelectedId = cachedSongPlayed[songSelectedIndex].song;
             let songSelected = find(cachedSong, { id: songSelectedId });
 
-            let idsSplit = songSearchResult[index].ids.split(",");
-            let songs: Song[] = [];
+            // let idsSplit = songSearchResult[index].ids.split(",");
+            // let songs: Song[] = [];
 
-            idsSplit.map((id) => {
-              let song = find(resultSongs, { id: id });
+            // idsSplit.map((id) => {
+            //   let song = find(resultSongs, { id: id });
 
-              if (song) {
-                songs.push(song);
-              }
-            });
+            //   if (song) {
+            //     songs.push(song);
+            //   }
+            // });
 
             let recommendationAdd: Recommendation = {
               title: "Related to " + songSelected?.title,
-              song: songs,
+              song: resultSongs[index],
               reference: {
                 song: songSelected!,
                 type: RecommendationType.TAGS,
@@ -176,7 +178,7 @@ const Listen: React.FC<Props> = ({
 
   useEffect(() => {
     if (recommendation.length === 0) {
-      // generateRecommendation();
+      generateRecommendation();
     }
   }, []);
 
