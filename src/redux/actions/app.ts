@@ -10,7 +10,14 @@ import { OptionActionType } from "types/Option";
 import { XY } from "types/XY";
 import { UserData } from "types/UserData";
 import Cookies from "js-cookie";
-import { storeUpdateToken, storeUser } from "helpers/localStorage";
+import {
+  storeUpdateToken,
+  storeUser,
+  removeUser,
+  scheduleTask,
+} from "helpers/localStorage";
+import { checkLoadSongPlayed } from "api/Library";
+import { generateRecommendation } from "api/Listen";
 
 export const actionSetAPIBaseURL = (url: string): AllActions => ({
   type: "SET_API_BASE_URL",
@@ -100,10 +107,18 @@ export const setAPIBaseURL = (url: string) => {
     dispatch(actionSetAPIBaseURL(url));
   };
 };
-export const loginUser = (userData: UserData) => {
-  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+export const loginUser = (userData: UserData, startup?: boolean) => {
+  return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     storeUser(userData);
+    scheduleTask(3);
     dispatch(actionLoginUser(userData));
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    await checkLoadSongPlayed(!startup);
+
+    console.log("RC 1");
+    generateRecommendation(2);
   };
 };
 export const updateToken = (token: {
@@ -117,6 +132,7 @@ export const updateToken = (token: {
 };
 export const logoutUser = () => {
   return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    removeUser();
     dispatch(actionLogoutUser());
   };
 };

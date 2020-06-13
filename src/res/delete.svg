@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16.075" height="17.639" viewBox="0 0 16.075 17.639">
+  <g id="delete" transform="translate(-2 -1)">
+    <path id="Path_26" data-name="Path 26" d="M3,6H17.075" transform="translate(0 -0.872)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    <path id="Path_27" data-name="Path 27" d="M15.947,5.128V16.075a1.564,1.564,0,0,1-1.564,1.564H6.564A1.564,1.564,0,0,1,5,16.075V5.128m2.346,0V3.564A1.564,1.564,0,0,1,8.91,2h3.128A1.564,1.564,0,0,1,13.6,3.564V5.128" transform="translate(-0.436 0)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    <line id="Line_28" data-name="Line 28" y2="5" transform="translate(8.038 8.819)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    <line id="Line_29" data-name="Line 29" y2="5" transform="translate(12.038 8.819)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  </g>
+</svg>

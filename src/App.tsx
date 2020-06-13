@@ -11,9 +11,9 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import { AllActions } from "redux/types/app";
-import { AppState } from "redux/store/configureStore";
+import { AppState, store } from "redux/store/configureStore";
 import { Song } from "types/Song";
-import { useTransition, animated } from "react-spring";
+import { useTransition, animated, useSpring } from "react-spring";
 import { NavigationTab } from "types/Navigation";
 import {
   changeTab,
@@ -37,6 +37,19 @@ import { isBrowser } from "react-device-detect";
 import { ToastType } from "types/ToastType";
 import { loadUser } from "helpers/localStorage";
 import { ConvertDurationToNumber } from "helpers/duration";
+import { Loading } from "components/Loading/Loading";
+import { LoadingType } from "types/LoadingType";
+import { res_logo } from "res";
+import {
+  checkLoadPlaylist,
+  checkLoadCollection,
+  checkLoadSongPlayed,
+} from "api/Library";
+import { Recommendation } from "types/Recommendation";
+import { setRecent } from "redux/actions/listen";
+import { Playlist } from "types/Playlist";
+import { generateRecommendation } from "api/Listen";
+import { axiosIntercept } from "api/Connection";
 declare module "react-spring" {
   export const animated: any;
 }
@@ -44,6 +57,8 @@ declare module "react-spring" {
 type Props = StateProps & DispatchProps;
 
 interface StateProps {
+  user?: UserData;
+  recommendation: Recommendation[];
   isDesktop: boolean;
   tabState: {
     currentTab: NavigationTab;
@@ -53,19 +68,23 @@ interface StateProps {
   showPlayer: boolean;
 }
 interface DispatchProps {
+  setRecent: (recent: { song?: Song; playlist?: Playlist }[]) => any;
   setDevice: (isDesktop: boolean) => any;
   setAPIKey: (index: number) => any;
   setAPIBaseURL: (url: string) => any;
-  loginUser: (userData: UserData) => any;
+  loginUser: (userData: UserData, startup?: boolean) => any;
   changeTab: (to: NavigationTab) => any;
   showToast: (text: string, toastType: ToastType) => any;
 }
 
 const App: React.FC<Props> = ({
+  user,
+  recommendation,
   isDesktop,
   tabState,
   songs,
   showPlayer,
+  setRecent,
   setDevice,
   setAPIKey,
   setAPIBaseURL,
@@ -101,28 +120,24 @@ const App: React.FC<Props> = ({
     );
   });
 
-  const checkUserCookies = () => {
+  const checkUserCookies = async () => {
     let user = loadUser();
     if (user) {
-      loginUser(user);
+      await axiosIntercept({
+        headers: {
+          Authorization: user.token.musicbytes,
+        },
+      })
+        .get(`${store.getState().app.apiBaseURL}v1/checktoken`)
+        .then(async (response) => {
+          await loginUser(user, true);
+          return true;
+        })
+        .catch(() => {
+          return false;
+        });
     }
-  };
-
-  const scheduleTask = (syncSongPlayedMinute: number) => {
-    let scheduler = {
-      syncSongPlayed: Date.now() + syncSongPlayedMinute * 60 * 1000,
-    };
-    if (localStorage.getItem("scheduler")) {
-      scheduler = JSON.parse(localStorage.getItem("scheduler")!);
-      if (scheduler.syncSongPlayed) {
-        if (scheduler.syncSongPlayed <= Date.now()) {
-          scheduler.syncSongPlayed =
-            Date.now() + syncSongPlayedMinute * 60 * 1000;
-        }
-      }
-    }
-
-    localStorage.setItem("scheduler", JSON.stringify(scheduler));
+    return false;
   };
 
   const checkAPI = () => {
@@ -132,8 +147,8 @@ const App: React.FC<Props> = ({
       setAPIBaseURL(process.env.REACT_APP_API_BASE_LOCAL!);
     }
 
-    // setAPIBaseURL(process.env.REACT_APP_API_BASE_LIVE!);
-    setAPIBaseURL(process.env.REACT_APP_API_BASE_LOCAL!);
+    setAPIBaseURL(process.env.REACT_APP_API_BASE_LIVE!);
+    // setAPIBaseURL(process.env.REACT_APP_API_BASE_LOCAL!);
 
     setAPIKey(1);
   };
@@ -143,28 +158,7 @@ const App: React.FC<Props> = ({
     h: window.innerHeight,
   });
 
-  useEffectOnce(() => {
-    checkUserCookies();
-    checkAPI();
-
-    scheduleTask(1);
-
-    window.addEventListener("resize", () =>
-      setWindowSize({ w: window.innerWidth, h: window.innerHeight })
-    );
-
-    switch (location.pathname) {
-      case "/":
-        changeTab(NavigationTab.LISTEN);
-        break;
-      case "/Discover":
-        changeTab(NavigationTab.DISCOVER);
-        break;
-      case "/Library":
-        changeTab(NavigationTab.LIBRARY);
-        break;
-    }
-  });
+  useEffectOnce(() => {});
 
   useEffect(() => {
     if (windowSize.w > windowSize.h && isBrowser) {
@@ -174,32 +168,112 @@ const App: React.FC<Props> = ({
     }
   }, [windowSize]);
 
+  useEffect(() => {
+    const fetchAllData = async () => {
+      checkAPI();
+
+      await checkUserCookies();
+
+      window.addEventListener("resize", () =>
+        setWindowSize({ w: window.innerWidth, h: window.innerHeight })
+      );
+
+      switch (location.pathname) {
+        case "/":
+          changeTab(NavigationTab.LISTEN);
+          break;
+        case "/Discover":
+          changeTab(NavigationTab.DISCOVER);
+          break;
+        case "/Library":
+          changeTab(NavigationTab.LIBRARY);
+          break;
+      }
+
+      if (localStorage.getItem("history")) {
+        setRecent(JSON.parse(localStorage.getItem("history")!));
+      }
+
+      // // if (recommendation.length === 0) {
+      // const fetchListenData = async () => {
+      //   // return new Promise((resolve) => setTimeout(resolve, 5000));
+      //   return new Promise((resolve) => {
+      //     resolve(generateRecommendation(2));
+      //   });
+      // };
+      // await fetchListenData();
+      // // }
+
+      setAppLoading({
+        ...appLoading,
+        loading: false,
+      });
+    };
+
+    fetchAllData();
+  }, []);
+
+  useEffect(() => {
+    const asd = async () => {
+      if (user) {
+        await Promise.all([
+          setTimeout(() => {
+            checkLoadCollection(user);
+          }, 150),
+          checkLoadPlaylist(user),
+        ]);
+        // await Promise.all([checkLoadPlaylist(user)]);
+      }
+    };
+
+    asd();
+  }, [user]);
+
+  const [appLoading, setAppLoading] = useState({
+    loading: true,
+    text: "Fetching Awesome things!",
+  });
+
   return (
     <div className="App">
-      <div className={`wrapper ${isDesktop ? "desktop" : ""}`}>
-        <Overlay />
-        <ClickOverlay />
-        <MiniPlayer />
-        <Toast />
-        <Popup />
-        <Option />
+      {appLoading.loading ? (
+        <div className="AppLoading">
+          <img src={res_logo} alt="Logo" />
 
-        <div className={`leftWrapper ${isDesktop ? "desktop" : ""}`}>
-          <Player />
+          <Loading
+            show={appLoading.loading}
+            type={LoadingType.Moon}
+            text={appLoading.text}
+          />
         </div>
-        <div className={`rightWrapper ${isDesktop ? "desktop" : ""}`}>
-          <Header />
-          <PlaylistView />
-          <Navbar />
-          {page}
+      ) : (
+        <div className={`wrapper ${isDesktop ? "desktop" : ""}`}>
+          <Overlay />
+          <ClickOverlay />
+          <MiniPlayer />
+          <Toast />
+          <Popup />
+          <Option />
+
+          <div className={`leftWrapper ${isDesktop ? "desktop" : ""}`}>
+            <Player />
+          </div>
+          <div className={`rightWrapper ${isDesktop ? "desktop" : ""}`}>
+            <Header />
+            <PlaylistView />
+            <Navbar />
+            {page}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
 
 const mapStateToProps = (state: AppState) => {
   return {
+    user: state.app.user,
+    recommendation: state.listen.recommendation,
     isDesktop: state.app.isDesktop,
     tabState: state.app.tabState,
     songs: state.player.songs,
@@ -208,6 +282,7 @@ const mapStateToProps = (state: AppState) => {
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AllActions>) => ({
+  setRecent: bindActionCreators(setRecent, dispatch),
   setDevice: bindActionCreators(setDevice, dispatch),
   setAPIKey: bindActionCreators(setAPIKey, dispatch),
   setAPIBaseURL: bindActionCreators(setAPIBaseURL, dispatch),

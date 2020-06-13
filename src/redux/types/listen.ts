@@ -1,14 +1,29 @@
 import { Song } from "types/Song";
-import { Recommendation } from "types/Recommendation";
+import { Recommendation, RecommendationType } from "types/Recommendation";
 import { Playlist } from "types/Playlist";
 
 export const ADD_RECOMMENDATION = "ADD_RECOMMENDATION";
+export const FILL_RECOMMENDATION = "FILL_RECOMMENDATION";
+export const REMOVE_RECOMMENDATION = "REMOVE_RECOMMENDATION";
 export const ADD_RECENT = "ADD_RECENT";
 
 export interface AddRecommendationAction {
   type: typeof ADD_RECOMMENDATION;
   recommendation: Recommendation;
 }
+export interface FillRecommendationAction {
+  type: typeof FILL_RECOMMENDATION;
+  song: Song[];
+  reference: { song: Song; type: RecommendationType };
+}
+export interface RemoveRecommendationAction {
+  type: typeof REMOVE_RECOMMENDATION;
+  reference: {
+    song: Song;
+    type: RecommendationType;
+  };
+}
+
 export interface SetRecentAction {
   type: typeof ADD_RECENT;
   recent: {
@@ -17,4 +32,8 @@ export interface SetRecentAction {
   }[];
 }
 
-export type ListenActionTypes = AddRecommendationAction | SetRecentAction;
+export type ListenActionTypes =
+  | AddRecommendationAction
+  | FillRecommendationAction
+  | RemoveRecommendationAction
+  | SetRecentAction;

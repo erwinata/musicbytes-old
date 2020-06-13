@@ -78,35 +78,6 @@ const Login: React.FC<Props> = ({ loginUser }) => {
             console.log(error);
           }
         );
-
-      // const name = response.profileObj.name;
-      // const email = response.profileObj.email;
-      // const googleKey = response.accessToken;
-
-      // axios
-      //   .post(`${store.getState().app.apiBaseURL}v1/login`, {
-      //     idtoken: response.tokenId,
-      //     email: email,
-      //     name: name,
-      //   })
-      //   .then(
-      //     (response: any) => {
-      //       const musicbytesKey = response.data.token;
-      //       const token = {
-      //         google: googleKey,
-      //         musicbytes: "Bearer " + musicbytesKey,
-      //       };
-
-      //       loginUser({
-      //         name: name,
-      //         email: email,
-      //         token: token,
-      //       });
-      //     },
-      //     (error) => {
-      //       console.log(error);
-      //     }
-      //   );
     }
   }, [loginState.logInAction]);
 
@@ -137,4 +108,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AllActions>) => ({
   loginUser: bindActionCreators(loginUser, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(null, mapDispatchToProps)(Login);

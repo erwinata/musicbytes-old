@@ -2,9 +2,11 @@ import {
   ListenActionTypes,
   ADD_RECOMMENDATION,
   ADD_RECENT,
+  FILL_RECOMMENDATION,
+  REMOVE_RECOMMENDATION,
 } from "redux/types/listen";
 import { Song } from "types/Song";
-import { concat, uniqBy } from "lodash";
+import { concat, uniqBy, findIndex, remove, filter } from "lodash";
 import { Recommendation } from "types/Recommendation";
 import { Playlist } from "types/Playlist";
 
@@ -32,6 +34,34 @@ export const listenReducer = (
       return {
         ...state,
         recommendation: [...state.recommendation, action.recommendation],
+      };
+    case FILL_RECOMMENDATION:
+      let indexTarget = findIndex(state.recommendation, {
+        reference: action.reference,
+      });
+      console.log("indexTarget");
+      console.log(indexTarget);
+      if (indexTarget === -1) return state;
+      else
+        return {
+          ...state,
+          recommendation: state.recommendation.map((item, index) => {
+            if (index === indexTarget) {
+              return { ...item, song: action.song };
+            }
+            return item;
+          }),
+        };
+    case REMOVE_RECOMMENDATION:
+      let recommendation = state.recommendation;
+      recommendation = filter(recommendation, (recommendationItem) => {
+        return (
+          recommendationItem.reference.song.id !== action.reference.song.id
+        );
+      });
+      return {
+        ...state,
+        recommendation: recommendation,
       };
     case ADD_RECENT:
       return {

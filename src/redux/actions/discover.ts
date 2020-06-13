@@ -38,6 +38,7 @@ export const searchSong = (query: string, nextPage?: boolean) => {
 
     if (!nextPage) {
       let total = 40;
+
       let result = await SearchSong(query, total);
       resultSongs = await SongDetail(result.ids);
 

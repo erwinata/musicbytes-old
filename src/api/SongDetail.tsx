@@ -121,7 +121,7 @@ export const SongDetail = (
                     high: snippet.thumbnails.high.url,
                   },
                   duration: duration,
-                  tags: snippet.tags,
+                  tags: snippet.tags ? snippet.tags : [],
                 };
 
                 cachedSong.push(song);

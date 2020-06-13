@@ -29,7 +29,7 @@ const PlaylistOption: React.FC<Props> = ({
   return (
     <animated.div className="PlaylistList" style={playlistOptionStyle}>
       {playlistOptionList.map((item) => {
-        return <PlaylistOptionItem data={item} />;
+        return <PlaylistOptionItem data={item} key={item.label} />;
       })}
     </animated.div>
   );

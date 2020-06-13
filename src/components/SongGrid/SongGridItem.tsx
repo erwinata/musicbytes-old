@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import { AppActionTypes } from "redux/types/app";
 import { viewPlaylist } from "redux/actions/app";
 import { res_like_active } from "res";
+import { useSpring, animated } from "react-spring";
 
 type Props = PassingProps & DispatchProps;
 
@@ -41,10 +42,22 @@ const SongGridItem: React.FC<Props> = ({
     }
   };
 
+  const style = useSpring({
+    to: {
+      transform: "translate(0px,0px)",
+      opacity: 1,
+    },
+    from: {
+      transform: "translate(0px,50px)",
+      opacity: 0.5,
+    },
+  });
+
   return (
-    <div
+    <animated.div
       className={`SongGridItem ${!isSong ? "playlist" : ""}`}
-      onClick={(e) => handleClick(e)}
+      onClick={(e: any) => handleClick(e)}
+      // style={style}
     >
       <div
         className="image"
@@ -61,7 +74,7 @@ const SongGridItem: React.FC<Props> = ({
       </div>
       <h1>{isSong ? song!.title : playlist!.title}</h1>
       <h2>{isSong ? song!.channel : playlist!.songs.length + " songs"}</h2>
-    </div>
+    </animated.div>
   );
 };
 

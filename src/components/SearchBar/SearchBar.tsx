@@ -53,7 +53,10 @@ const SearchBar: React.FC<Props> = ({ query, startSearchSong }: Props) => {
       setSearchSuggestionList([]);
     }
     if (e.keyCode === 13) {
-      let query = searchSuggestionList[cursor];
+      let query = currentInput;
+      if (cursor > -1) {
+        query = searchSuggestionList[cursor];
+      }
       clickSuggestion(query);
     }
   };

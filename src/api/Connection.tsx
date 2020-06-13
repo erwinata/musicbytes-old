@@ -5,16 +5,22 @@ import {
   actionUpdateToken,
   updateToken,
   actionShowToast,
+  logoutUser,
 } from "redux/actions/app";
 import { storeUpdateToken } from "helpers/localStorage";
+import { bindActionCreators } from "redux";
 
 export const axiosIntercept = (options = {}) => {
-  // def.headers = { Authorization: store.getters.auth.getToken() };
-  const config = {
-    headers: {
-      Authorization: store.getState().app.user?.token.musicbytes,
-    },
-  };
+  const state = store.getState();
+  const dispatch = store.dispatch;
+
+  const config = store.getState().app.user
+    ? {
+        headers: {
+          Authorization: store.getState().app.user?.token.musicbytes,
+        },
+      }
+    : {};
   const instance = axios.create(defaults(config, options));
 
   // instance.interceptors.request.use(
@@ -36,8 +42,8 @@ export const axiosIntercept = (options = {}) => {
       if (newtoken) {
         newtoken = { musicbytes: newtoken };
         storeUpdateToken(newtoken);
-        store.dispatch(actionUpdateToken(newtoken));
-        store.dispatch(actionShowToast("New JWT Token"));
+        dispatch(actionUpdateToken(newtoken));
+        dispatch(actionShowToast("New JWT Token"));
       }
       console.log(response);
       return response;
@@ -45,7 +51,7 @@ export const axiosIntercept = (options = {}) => {
     function (error) {
       switch (error.response.status) {
         case 401:
-          // store.dispatch("logoff");
+          bindActionCreators(logoutUser, dispatch)();
           break;
         default:
           console.log(error.response);

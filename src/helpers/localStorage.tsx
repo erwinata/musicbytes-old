@@ -6,6 +6,8 @@ export const storeUser = (user: UserData) => {
 };
 
 export const removeUser = () => {
+  localStorage.removeItem("song_played");
+  localStorage.removeItem("scheduler");
   localStorage.removeItem("user");
 };
 
@@ -71,4 +73,21 @@ export const getSearchSongIds = (query: string) => {
       return { nextPageToken: result.nextPageToken, ids: result.songs };
   }
   return undefined;
+};
+
+export const scheduleTask = (syncSongPlayedMinute: number) => {
+  let scheduler = {
+    syncSongPlayed: Date.now() + syncSongPlayedMinute * 60 * 1000,
+  };
+  if (localStorage.getItem("scheduler")) {
+    scheduler = JSON.parse(localStorage.getItem("scheduler")!);
+    if (scheduler.syncSongPlayed) {
+      if (scheduler.syncSongPlayed <= Date.now()) {
+        scheduler.syncSongPlayed =
+          Date.now() + syncSongPlayedMinute * 60 * 1000;
+      }
+    }
+  }
+
+  localStorage.setItem("scheduler", JSON.stringify(scheduler));
 };

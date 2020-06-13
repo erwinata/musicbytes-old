@@ -1,5 +1,5 @@
 import { AllActions } from "redux/types/app";
-import { Dispatch } from "redux";
+import { Dispatch, bindActionCreators } from "redux";
 import { AppState } from "redux/store/configureStore";
 import { Song } from "types/Song";
 import { PlayState } from "types/PlayState";
@@ -196,14 +196,18 @@ export const clearPlaylist = () => {
 
 export const addToNowPlaying = (song: Song) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
-    var songExist = findIndex(
+    let songExist = findIndex(
       getState().player.songs?.list,
       (item) => item.id == song.id
     );
+    let songlistEmpty = !getState().player.songs;
     if (songExist > -1) {
       dispatch(actionShowToast("Song already exists in player"));
     } else {
       dispatch(actionAddToNowPlaying(song));
+      if (songlistEmpty) {
+        bindActionCreators(playSong, dispatch)(song, false);
+      }
       dispatch(actionShowToast("Songs added to Now Playing"));
     }
   };

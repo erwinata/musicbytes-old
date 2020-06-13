@@ -14,15 +14,18 @@ import { bindActionCreators } from "redux";
 import { setOption } from "redux/actions/app";
 import { XY } from "types/XY";
 import { find } from "lodash";
+import { Loading } from "components/Loading/Loading";
+import { LoadingType } from "types/LoadingType";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
 interface PassingProps {
-  items?: {
+  items: {
     song?: Song;
     playlist?: Playlist;
   }[];
   optionList: OptionActionType[];
+  isLoading?: boolean;
 }
 interface StateProps {
   collection: Song[];
@@ -39,6 +42,7 @@ interface DispatchProps {
 const SongGrid: React.FC<Props> = ({
   items,
   optionList,
+  isLoading,
   collection,
   setOption,
 }) => {
@@ -81,8 +85,9 @@ const SongGrid: React.FC<Props> = ({
 
   return (
     <animated.div className="SongGrid" style={style.songGrid}>
+      <Loading show={isLoading ? true : false} type={LoadingType.Scale} />
       {/* <div className="SongGrid" onWheel={(e) => onWheel(e)}> */}
-      <div ref={ref}>
+      <div className="container" ref={ref}>
         {items !== undefined
           ? items!.map((item, index) => {
               if (item.song) {
@@ -102,7 +107,7 @@ const SongGrid: React.FC<Props> = ({
                 return (
                   <SongGridItem
                     playlist={item.playlist}
-                    key={item.playlist!.createdAt}
+                    key={item.playlist!.title}
                     index={index}
                     clickSong={clickSong}
                   />

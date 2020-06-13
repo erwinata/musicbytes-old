@@ -412,11 +412,11 @@ export const playerReducer = (
           list: [action.song],
           playing: action.song,
         };
-        time = {
-          ...state.time,
-          current: 0,
-          total: action.song.duration,
-        };
+        // time = {
+        //   ...state.time,
+        //   current: 0,
+        //   total: action.song.duration,
+        // };
       }
 
       return {

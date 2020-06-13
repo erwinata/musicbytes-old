@@ -17,6 +17,7 @@ export const RecommendationItem: React.FC<{
       <SongGrid
         items={convertToSongGridItems(recommendation.song)}
         optionList={optionList}
+        isLoading={recommendation.song.length === 0}
       />
     </div>
   );
