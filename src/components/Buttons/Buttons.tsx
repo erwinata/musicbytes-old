@@ -19,6 +19,8 @@ import {
   res_shuffle_active,
   res_save,
   res_close,
+  res_delete,
+  res_back,
 } from "res";
 
 export const ButtonCapsuleText: React.FC<{ text: string; onClick: any }> = ({
@@ -277,6 +279,22 @@ export const ButtonClose: React.FC<any> = ({ onClick }: any) => {
   return (
     <div className="Button ButtonClose" onClick={onClick}>
       <img src={res_close} alt="Close" />
+    </div>
+  );
+};
+
+export const ButtonDelete: React.FC<any> = ({ onClick }: any) => {
+  return (
+    <div className="Button ButtonDelete" onClick={onClick}>
+      <img src={res_delete} alt="Delete" />
+    </div>
+  );
+};
+
+export const ButtonBack: React.FC<any> = ({ onClick }: any) => {
+  return (
+    <div className="Button ButtonBack" onClick={onClick}>
+      <img src={res_back} alt="Back" />
     </div>
   );
 };

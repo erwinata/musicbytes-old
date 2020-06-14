@@ -24,13 +24,40 @@
     box-shadow: 0px 10px 20px $color-pitch-black-overlay-25;
   }
 
-  .ButtonClose {
+  button {
+    margin: 1rem auto;
+    display: block;
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+
+  .buttonContainer {
     position: absolute;
     top: 2rem;
-    right: 2rem;
+    left: 5%;
+    width: 90%;
+    height: 2px;
 
-    img {
-      width: 2rem;
+    > div {
+      position: absolute;
+      left: 0;
+      display: inline-block;
+      img {
+        width: 2rem;
+      }
+    }
+
+    // .ButtonBack {
+    //   position: absolute;
+    //   left: 0;
+    //   display: inline-block;
+    //   img {
+    //     width: 2rem;
+    //   }
+    // }
+    .ButtonDelete {
+      left: auto;
+      right: 0;
     }
   }
 }

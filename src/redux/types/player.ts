@@ -7,6 +7,7 @@ export const SHOW_PLAYER = "SHOW_PLAYER";
 export const PLAY_SONG = "PLAY_SONG";
 export const SET_VIDEO_IS_RUNNING = "SET_VIDEO_IS_RUNNING";
 export const PLAY_PLAYLIST = "PLAY_PLAYLIST";
+export const CLEAR_PLAYER = "CLEAR_PLAYER";
 export const CLEAR_PLAYLIST = "CLEAR_PLAYLIST";
 export const TOGGLE_PLAYING = "TOGGLE_PLAYING";
 
@@ -42,6 +43,9 @@ export interface PlayPlaylistAction {
 }
 export interface ClearPlaylistAction {
   type: typeof CLEAR_PLAYLIST;
+}
+export interface ClearPlayerAction {
+  type: typeof CLEAR_PLAYER;
 }
 export interface TogglePlayingAction {
   type: typeof TOGGLE_PLAYING;
@@ -100,6 +104,7 @@ export type PlayerActionTypes =
   | PlaySongAction
   | PlayPlaylistAction
   | ClearPlaylistAction
+  | ClearPlayerAction
   | TogglePlayingAction
   | SetVideoIsRunningAction
   | AutoNextSongAction

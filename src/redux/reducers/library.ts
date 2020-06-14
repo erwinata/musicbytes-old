@@ -220,14 +220,13 @@ export const libraryReducer = (
         ],
       };
     case "DELETE_PLAYLIST":
-      playlistIndex = findIndex(state.playlists, { id: action.playlist.id });
-
+      let playlists = state.playlists;
+      playlists = filter(playlists, (playlistItem) => {
+        return playlistItem.id !== action.playlist.id;
+      });
       return {
         ...state,
-        playlists: [
-          ...state.playlists.slice(0, playlistIndex),
-          ...state.playlists.slice(playlistIndex + 1),
-        ],
+        playlists: playlists,
       };
     case "NEW_PLAYLIST":
       return {

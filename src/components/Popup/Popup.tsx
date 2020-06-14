@@ -11,17 +11,24 @@ import { Song } from "types/Song";
 import { animated, useSpring } from "react-spring";
 import { useMeasure } from "react-use";
 import { bindActionCreators } from "redux";
-import { showToast, setPopupMenu, setOverlay } from "redux/actions/app";
+import {
+  showToast,
+  setPopupMenu,
+  setOverlay,
+  viewPlaylist,
+} from "redux/actions/app";
 import {
   addToPlaylist,
   newPlaylist,
   savePlaylist,
+  deletePlaylist,
 } from "redux/actions/library";
 import { ToastType } from "types/ToastType";
 import { PopupMenuType } from "types/PopupMenuType";
 import { Playlist } from "types/Playlist";
 import { concat } from "lodash";
 import { res_save, res_edit, res_merge } from "res";
+import PopupDialog from "components/PopupDialog/PopupDialog";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -32,8 +39,9 @@ interface StateProps {
     songAdding?: Song;
   };
   songs?: { list: Song[]; playing: Song };
-  playlist?: Playlist;
-  // playlistPlaying?: Playlist;
+  // playlist?: Playlist;
+  playlistPlaying?: Playlist;
+  playlistViewing?: Playlist;
 }
 interface DispatchProps {
   setPopupMenu: (menuState: PopupMenuType, songAdding?: Song) => any;
@@ -50,18 +58,22 @@ interface DispatchProps {
   newPlaylist: (title: string, songs: Song[], isMergeTo?: boolean) => any;
 
   savePlaylist: (playlist: Playlist, songs: Song[]) => any;
+  deletePlaylist: (playlist: Playlist) => any;
+  viewPlaylist: (playlist: Playlist) => any;
 }
 
 const Popup: React.FC<Props> = ({
   popupState,
   songs,
-  playlist,
-  // playlistPlaying,
+  playlistPlaying,
+  playlistViewing,
   setPopupMenu,
   setOverlay,
   addToPlaylist,
   newPlaylist,
   savePlaylist,
+  deletePlaylist,
+  viewPlaylist,
 }) => {
   // console.log(popupState);
 
@@ -75,7 +87,7 @@ const Popup: React.FC<Props> = ({
       icon: res_save,
       label: "Save Playlist",
       action: () => {
-        savePlaylist(playlist!, songs!.list);
+        savePlaylist(playlistPlaying!, songs!.list);
         setPopupMenu(PopupMenuType.NONE);
       },
     },
@@ -96,6 +108,18 @@ const Popup: React.FC<Props> = ({
     },
   ];
 
+  const [popupDialogState, setPopupDialogState] = useState<{
+    show: boolean;
+    text: string;
+    actionConfirm: any;
+    actionCancel: any;
+  }>({
+    show: false,
+    text: "",
+    actionConfirm: undefined,
+    actionCancel: undefined,
+  });
+
   const [playlistOptionList, setPlaylistOptionList] = useState(
     playlistOptionListDefault
   );
@@ -103,6 +127,13 @@ const Popup: React.FC<Props> = ({
   const closePopup = () => {
     setPopupMenu(PopupMenuType.NONE);
     setPopupHeaderText("");
+
+    setPopupDialogState({
+      show: false,
+      text: "",
+      actionConfirm: undefined,
+      actionCancel: undefined,
+    });
   };
 
   useEffect(() => {
@@ -114,7 +145,7 @@ const Popup: React.FC<Props> = ({
         break;
       case PopupMenuType.PLAYLIST_SAVING:
         setPopupHeaderText("Save Playlist");
-        if (playlist !== undefined) {
+        if (playlistPlaying !== undefined) {
           setPlaylistOptionList(
             concat(
               playlistOptionListDefault.slice(0, 1),
@@ -129,6 +160,21 @@ const Popup: React.FC<Props> = ({
         break;
       case PopupMenuType.PLAYLIST_SAVING_MERGE:
         setPopupHeaderText("Merge to Playlist");
+        break;
+      case PopupMenuType.PLAYLIST_DELETE_CONFIRMATION:
+        setPopupHeaderText("Delete Playlist");
+        setPopupDialogState({
+          show: true,
+          text: "Are you sure to delete this playlist permanently",
+          actionConfirm: () => {
+            deletePlaylist(playlistViewing!);
+            viewPlaylist(undefined!);
+            closePopup();
+          },
+          actionCancel: () => {
+            closePopup();
+          },
+        });
         break;
     }
   }, [popupState]);
@@ -165,6 +211,12 @@ const Popup: React.FC<Props> = ({
       display:
         popupState.menuState == PopupMenuType.ADDING_SONG_NEW_PLAYLIST ||
         popupState.menuState == PopupMenuType.PLAYLIST_SAVING_SAVE_NEW
+          ? "block"
+          : "none",
+    },
+    popupDialog: {
+      display:
+        popupState.menuState == PopupMenuType.PLAYLIST_DELETE_CONFIRMATION
           ? "block"
           : "none",
     },
@@ -218,6 +270,12 @@ const Popup: React.FC<Props> = ({
             playlistNamingStyle={style.playlistNaming}
             saveNewPlaylist={handle.clickSaveNewPlaylist}
           />
+          <PopupDialog
+            show={popupDialogState.show}
+            text={popupDialogState.text}
+            actionCancel={popupDialogState.actionCancel}
+            actionConfirm={popupDialogState.actionConfirm}
+          />
         </div>
       </animated.div>
     </div>
@@ -228,7 +286,8 @@ const mapStateToProps = (state: AppState) => {
   return {
     popupState: state.app.popupState,
     songs: state.player.songs,
-    playlist: state.player.playlist,
+    playlistPlayer: state.player.playlist,
+    playlistViewing: state.app.playlistViewing,
     // playlistPlaying: state.library.playlists.slice(
     //   state.player.playlistIndexPlaying,
     //   1
@@ -245,6 +304,8 @@ const mapDispatchToProps = (
   newPlaylist: bindActionCreators(newPlaylist, dispatch),
 
   savePlaylist: bindActionCreators(savePlaylist, dispatch),
+  deletePlaylist: bindActionCreators(deletePlaylist, dispatch),
+  viewPlaylist: bindActionCreators(viewPlaylist, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Popup);

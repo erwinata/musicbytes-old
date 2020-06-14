@@ -5,7 +5,12 @@ import { SearchSong } from "api/Search";
 import { Song } from "types/Song";
 import { actionShowToast, actionViewPlaylist } from "./app";
 import { find, findIndex } from "lodash";
-import { actionPlayPlaylist, playPlaylist } from "./player";
+import {
+  actionPlayPlaylist,
+  playPlaylist,
+  actionClearPlaylist,
+  actionClearPlayer,
+} from "./player";
 import { Playlist } from "types/Playlist";
 import axios from "axios";
 import { UserData } from "types/UserData";
@@ -273,6 +278,8 @@ export const deletePlaylist = (playlist: Playlist) => {
     );
 
     dispatch(actionDeletePlaylist(playlist));
+    dispatch(actionClearPlaylist());
+    dispatch(actionShowToast("Playlist deleted"));
   };
 };
 
@@ -302,11 +309,11 @@ export const newPlaylist = (
     );
 
     const playlist: Playlist = {
-      id: response.data.id,
+      id: response.data.playlist.id,
       title: title,
       songs: songs,
-      createdAt: response.data.created_at,
-      updatedAt: response.data.updated_at,
+      createdAt: response.data.playlist.created_at,
+      updatedAt: response.data.playlist.updated_at,
     };
 
     dispatch(actionNewPlaylist(playlist));

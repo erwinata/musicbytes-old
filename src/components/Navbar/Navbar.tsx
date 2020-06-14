@@ -40,19 +40,28 @@ const Navbar: React.FC<Props> = ({
     >
       <Link to="/Discover">
         <NavbarItem
-          active={!showPlayer && tabState.currentTab === NavigationTab.DISCOVER}
+          active={
+            ((!showPlayer && !isDesktop) || isDesktop) &&
+            tabState.currentTab === NavigationTab.DISCOVER
+          }
           type={NavigationTab.DISCOVER}
         />
       </Link>
       <Link to="/">
         <NavbarItem
-          active={!showPlayer && tabState.currentTab === NavigationTab.LISTEN}
+          active={
+            ((!showPlayer && !isDesktop) || isDesktop) &&
+            tabState.currentTab === NavigationTab.LISTEN
+          }
           type={NavigationTab.LISTEN}
         />
       </Link>
       <Link to="/Library">
         <NavbarItem
-          active={!showPlayer && tabState.currentTab === NavigationTab.LIBRARY}
+          active={
+            ((!showPlayer && !isDesktop) || isDesktop) &&
+            tabState.currentTab === NavigationTab.LIBRARY
+          }
           type={NavigationTab.LIBRARY}
         />
       </Link>

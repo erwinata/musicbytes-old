@@ -45,6 +45,7 @@ export const axiosIntercept = (options = {}) => {
         dispatch(actionUpdateToken(newtoken));
         dispatch(actionShowToast("New JWT Token"));
       }
+      console.log("INTERCEPT BENER");
       console.log(response);
       return response;
     },

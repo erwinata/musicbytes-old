@@ -28,6 +28,9 @@ export const actionPlayPlaylist = (playlist: Playlist): AllActions => ({
 export const actionClearPlaylist = (): AllActions => ({
   type: "CLEAR_PLAYLIST",
 });
+export const actionClearPlayer = (): AllActions => ({
+  type: "CLEAR_PLAYER",
+});
 export const actionDurationIncrement = (): AllActions => ({
   type: "DURATION_INCREMENT",
 });
@@ -141,7 +144,7 @@ export const playSong = (song: Song, resetPlaylist: boolean) => {
     dispatch(actionSetRecent(cachedHistory));
 
     if (resetPlaylist) {
-      dispatch(actionClearPlaylist());
+      dispatch(actionClearPlayer());
     }
     dispatch(actionPlaySong(song, resetPlaylist));
     dispatch(actionTogglePlaying(PlayState.PLAYING));
@@ -153,7 +156,7 @@ export const playPlaylist = (playlist: Playlist) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     const songs = playlist.songs;
 
-    dispatch(actionClearPlaylist());
+    dispatch(actionClearPlayer());
 
     songs.forEach((song) => {
       dispatch(actionAddToNowPlaying(song));
@@ -194,6 +197,12 @@ export const clearPlaylist = () => {
   };
 };
 
+export const clearPlayer = () => {
+  return (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionClearPlayer());
+  };
+};
+
 export const addToNowPlaying = (song: Song) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     let songExist = findIndex(
@@ -215,10 +224,14 @@ export const addToNowPlaying = (song: Song) => {
 
 export const removeFromNowPlaying = (song: Song) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    // if (getState().player.songs!.list.length > 1) {
     if (song.id === getState().player.songs?.playing.id) {
       dispatch(actionNextSong());
     }
     dispatch(actionRemoveFromNowPlaying(song));
+    // } else {
+    //   dispatch(actionRemoveFromNowPlaying(song));
+    // }
     dispatch(actionShowToast("Song removed from Now Playing"));
   };
 };

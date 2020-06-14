@@ -7,7 +7,7 @@ import {
   arrayGetObjectByAttr,
   arrayRemoveObjectAtIndex,
 } from "helpers/array";
-import { shuffle, orderBy, remove, findIndex } from "lodash";
+import { shuffle, orderBy, remove, findIndex, filter } from "lodash";
 import { seekTo } from "redux/actions/player";
 import { Playlist } from "types/Playlist";
 
@@ -213,13 +213,22 @@ export const playerReducer = (
           // seeking: true,
         },
       };
-    case "CLEAR_PLAYLIST":
+    case "CLEAR_PLAYER":
       return {
         ...state,
         songs: undefined,
         playlist: undefined,
+        time: {
+          current: 0,
+          total: 0,
+          seeking: false,
+        },
       };
-
+    case "CLEAR_PLAYLIST":
+      return {
+        ...state,
+        playlist: undefined,
+      };
     case "TOGGLE_PLAYING":
       let newPlayState = state.playerState.playState;
       if (action.state !== undefined) {
@@ -428,12 +437,20 @@ export const playerReducer = (
     case "REMOVE_FROM_NOW_PLAYING":
       // action.song.playOrder = state.songs.length;
       let removedSongs;
+      let removedTime = state.time;
 
       if (state.songs!.list.length === 1) {
         removedSongs = undefined!;
+        removedTime = {
+          current: 0,
+          total: 0,
+          seeking: false,
+        };
       } else {
         let removedSongsList = state.songs!.list;
-        remove(removedSongsList, { id: action.song.id });
+        removedSongsList = filter(removedSongsList, (item) => {
+          return item.id !== action.song.id;
+        });
         removedSongs = {
           ...state.songs!,
           list: removedSongsList,
@@ -443,6 +460,7 @@ export const playerReducer = (
       return {
         ...state,
         songs: removedSongs,
+        time: removedTime,
       };
 
     case "DURATION_INCREMENT":

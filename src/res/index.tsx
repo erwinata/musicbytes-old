@@ -29,4 +29,7 @@ export const res_option = require("./option.svg");
 export const res_plus = require("./plus.svg");
 export const res_video = require("./video.svg");
 
+export const res_play_white = require("./play_white.svg");
 export const res_close = require("./close.svg");
+export const res_delete = require("./delete.svg");
+export const res_back = require("./back.svg");
