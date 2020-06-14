@@ -8,7 +8,7 @@ import { concat, uniqBy } from "lodash";
 
 export interface IDiscoverState {
   nextPageToken: string;
-  songs: Song[];
+  songs?: Song[];
   loading: boolean;
   query: string;
 }
@@ -149,10 +149,10 @@ const sampleSearchSong = [
 
 const discoverReducerDefaultState: IDiscoverState = {
   nextPageToken: "",
-  songs: [],
+  songs: undefined,
   // songs: sampleSearchSong,
   loading: true,
-  query: "michael jackson",
+  query: "",
 };
 
 export const discoverReducer = (
@@ -166,7 +166,7 @@ export const discoverReducer = (
         query: action.query,
       };
     case SONG_SEARCH:
-      var songs = state.songs;
+      var songs = state.songs ? state.songs : [];
       if (action.addSongs) {
         songs = concat(songs, action.songs);
       } else {

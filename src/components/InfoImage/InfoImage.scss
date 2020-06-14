@@ -1,0 +1,27 @@
+@import "_base.scss";
+
+.InfoImage {
+  text-align: center;
+  position: relative;
+  height: 10rem;
+
+  .containerStyle {
+    margin: 0.25rem 0;
+    position: absolute;
+    display: inline-block;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    .LoadingObject {
+      display: inline-block;
+    }
+
+    .text {
+      margin: 1rem 0;
+      text-align: center;
+      color: $color-blue;
+      white-space: nowrap;
+    }
+  }
+}

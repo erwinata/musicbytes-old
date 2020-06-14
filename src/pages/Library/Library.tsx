@@ -94,6 +94,7 @@ const Library: React.FC<Props> = ({
           <SongGrid
             items={convertToSongGridItems(undefined, playlists)}
             optionList={optionList}
+            textNodata="You don't have any playlist yet"
           />
 
           <CategoryTitle text="Liked Songs" />
@@ -107,6 +108,7 @@ const Library: React.FC<Props> = ({
             songs={collection}
             optionList={optionList}
             resetPlaylist={true}
+            textNodata="You don't have any liked songs"
           />
           {songPlaying && !isDesktop ? (
             <div className="miniPlayerPadding"></div>

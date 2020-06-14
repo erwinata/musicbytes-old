@@ -11,6 +11,8 @@ import { AllActions } from "redux/types/app";
 import { AppState, store } from "redux/store/configureStore";
 import { connect } from "react-redux";
 import { UserData } from "types/UserData";
+import { InfoImage } from "components/InfoImage/InfoImage";
+import { InfoImageType } from "types/InfoImage";
 
 type Props = StateProps & DispatchProps;
 
@@ -84,8 +86,12 @@ const Login: React.FC<Props> = ({ loginUser }) => {
   return (
     <div className="Login">
       <div className="content">
-        <h1>Want to access these features?</h1>
-        <h2>Please login using your Google account</h2>
+        {/* <h1>Save Playlist and Collect your favorites songs!	</h1> */}
+
+        <InfoImage type={InfoImageType.LIBRARY} show={true} />
+
+        <h1>Save Playlist and Collect your favorites songs!</h1>
+        <h2>Please login to use these features</h2>
 
         {loginState.loading ? (
           <ScaleLoader color={"rgb(58, 89, 140)"} />

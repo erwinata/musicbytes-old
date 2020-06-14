@@ -14,6 +14,8 @@ import { ThunkDispatch } from "redux-thunk";
 import { AppActionTypes } from "redux/types/app";
 import { setOverlay, setOption } from "redux/actions/app";
 import { XY } from "types/XY";
+import { InfoImage } from "components/InfoImage/InfoImage";
+import { InfoImageType } from "types/InfoImage";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -22,6 +24,7 @@ interface PassingProps {
   resetPlaylist: boolean;
   optionList: OptionActionType[];
   showMore?: boolean;
+  textNodata?: string;
 }
 interface StateProps {
   collection: Song[];
@@ -41,6 +44,7 @@ const SongList: React.FC<Props> = ({
   resetPlaylist,
   collection,
   showMore,
+  textNodata,
   setOption,
 }: Props) => {
   const [songsDisplayed, setSongsDisplayed] = useState<Song[]>([]);
@@ -133,6 +137,11 @@ const SongList: React.FC<Props> = ({
           </animated.div>
         );
       })}
+      <InfoImage
+        show={songs.length === 0}
+        text={textNodata}
+        type={InfoImageType.NODATA}
+      />
     </div>
   );
 };

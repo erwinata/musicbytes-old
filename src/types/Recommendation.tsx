@@ -13,3 +13,8 @@ export interface Recommendation {
     type: RecommendationType;
   };
 }
+
+export interface CommonRecommendation {
+  title: string;
+  song: Song[];
+}

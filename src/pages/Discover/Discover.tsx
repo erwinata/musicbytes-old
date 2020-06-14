@@ -19,13 +19,15 @@ import { Loading } from "components/Loading/Loading";
 import { LoadingType } from "types/LoadingType";
 import { relative } from "path";
 import { useSpring } from "react-spring";
+import { InfoImage } from "components/InfoImage/InfoImage";
+import { InfoImageType } from "types/InfoImage";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
 interface PassingProps {}
 interface StateProps {
   query: string;
-  songs: Song[];
+  songs?: Song[];
   songPlaying?: Song;
   isDesktop: boolean;
 }
@@ -105,11 +107,21 @@ export const Discover: React.FC<Props> = ({
     >
       <SearchBar startSearchSong={startSearchSong} />
       <div ref={ref}>
-        <SongList
-          songs={songs}
-          optionList={optionList}
-          resetPlaylist={true}
-          showMore={showMore}
+        {songs ? (
+          <SongList
+            songs={songs}
+            optionList={optionList}
+            resetPlaylist={true}
+            showMore={showMore}
+            textNodata="No song matches"
+          />
+        ) : null}
+      </div>
+      <div style={{ marginTop: "2rem" }}>
+        <InfoImage
+          show={songs ? false : true}
+          type={InfoImageType.DISCOVER}
+          text="Search by title, artist, or albums"
         />
       </div>
       <div style={{ position: "relative", height: 100 }}>

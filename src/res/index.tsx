@@ -1,5 +1,8 @@
 export const res_logo = require("./logo.png");
 export const res_logo_thumbnail = require("./logo_thumbnail.jpg");
+export const res_info_nodata = require("./info_nodata.svg");
+export const res_info_discover = require("./info_discover.svg");
+export const res_info_library = require("./info_library.svg");
 
 export const res_discover = require("./discover.svg");
 export const res_discover_active = require("./discover_active.svg");

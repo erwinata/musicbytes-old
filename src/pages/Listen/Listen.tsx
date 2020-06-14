@@ -14,12 +14,18 @@ import { clamp } from "helpers/math";
 import { OptionActionType } from "types/Option";
 import { addRecommendation, setRecent } from "redux/actions/listen";
 import { bindActionCreators } from "redux";
-import { Recommendation, RecommendationType } from "types/Recommendation";
+import {
+  Recommendation,
+  RecommendationType,
+  CommonRecommendation,
+} from "types/Recommendation";
 import { RecommendationItem } from "components/RecommendationItem/RecommendationItem";
 import { Playlist } from "types/Playlist";
 import { resolve } from "url";
 import { SongDetail } from "api/SongDetail";
 import { SearchSongLocal } from "api/SearchLocal";
+import { InfoImage } from "components/InfoImage/InfoImage";
+import { InfoImageType } from "types/InfoImage";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -30,6 +36,7 @@ interface StateProps {
     playlist?: Playlist;
   }[];
   recommendation: Recommendation[];
+  commonRecommendation: CommonRecommendation[];
   isDesktop: boolean;
   songs?: {
     playing: Song;
@@ -44,6 +51,7 @@ interface DispatchProps {
 const Listen: React.FC<Props> = ({
   recent,
   recommendation,
+  commonRecommendation,
   isDesktop,
   songs,
   addRecommendation,
@@ -68,17 +76,44 @@ const Listen: React.FC<Props> = ({
           <SongGrid items={recent} optionList={optionList} />{" "}
         </>
       ) : null}
+
+      {commonRecommendation.length > 0 ? (
+        <>
+          <CategoryTitle text="Musicbytes Recommendation" />
+
+          {commonRecommendation.map((recommendationItem, index) => {
+            return (
+              <RecommendationItem
+                recommendation={recommendationItem}
+                optionList={optionList}
+                key={index}
+              />
+            );
+          })}
+        </>
+      ) : null}
+
       <CategoryTitle text="You might like these" />
 
-      {recommendation.map((recommendationItem) => {
-        return (
-          <RecommendationItem
-            recommendation={recommendationItem}
-            optionList={optionList}
-            key={recommendationItem.reference.song.id}
-          />
-        );
-      })}
+      {recommendation.length > 0 ? (
+        <>
+          {recommendation.map((recommendationItem) => {
+            return (
+              <RecommendationItem
+                recommendation={recommendationItem}
+                optionList={optionList}
+                key={recommendationItem.reference.song.id}
+              />
+            );
+          })}
+        </>
+      ) : (
+        <InfoImage
+          show={true}
+          type={InfoImageType.NODATA}
+          text="There is no recommendation right now"
+        />
+      )}
 
       <div className="end">
         <h1>Wanna see more recommendation?</h1>
@@ -96,6 +131,7 @@ const mapStateToProps = (state: AppState) => {
   return {
     recent: state.listen.recent,
     recommendation: state.listen.recommendation,
+    commonRecommendation: state.listen.commonRecommendation,
     isDesktop: state.app.isDesktop,
     songs: state.player.songs,
   };

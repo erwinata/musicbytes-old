@@ -4,8 +4,19 @@ import { AppState } from "redux/store/configureStore";
 import { SearchSong } from "api/Search";
 import { Song } from "types/Song";
 import { find } from "lodash";
-import { Recommendation, RecommendationType } from "types/Recommendation";
+import {
+  Recommendation,
+  RecommendationType,
+  CommonRecommendation,
+} from "types/Recommendation";
 import { Playlist } from "types/Playlist";
+
+export const actionAddCommonRecommendation = (
+  recommendation: CommonRecommendation
+): AllActions => ({
+  type: "ADD_COMMON_RECOMMENDATION",
+  recommendation,
+});
 
 export const actionAddRecommendation = (
   recommendation: Recommendation
@@ -40,6 +51,14 @@ export const actionSetRecent = (
   type: "ADD_RECENT",
   recent,
 });
+
+export const addCommonRecommendation = (
+  recommendation: CommonRecommendation
+) => {
+  return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionAddCommonRecommendation(recommendation));
+  };
+};
 
 export const addRecommendation = (recommendation: Recommendation) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {

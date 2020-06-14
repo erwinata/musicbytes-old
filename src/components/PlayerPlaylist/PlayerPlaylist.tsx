@@ -48,20 +48,17 @@ const PlayerPlaylist: React.FC<Props> = ({
 
   return (
     <div className="PlayerPlaylist">
-      {songs ? (
-        <>
-          <PlayerPlaylistHeader
-            onClick={handleClickButtonSave}
-            songs={songs!.list}
-            playlist={playlist}
-          />
-          <SongList
-            songs={songs!.list}
-            optionList={optionList}
-            resetPlaylist={false}
-          />
-        </>
-      ) : null}
+      <PlayerPlaylistHeader
+        onClick={handleClickButtonSave}
+        songs={songs ? songs.list : []}
+        playlist={playlist}
+      />
+      <SongList
+        songs={songs ? songs.list : []}
+        optionList={optionList}
+        resetPlaylist={false}
+        textNodata="Try to play songs :)"
+      />
     </div>
   );
 };
@@ -93,10 +90,18 @@ const PlayerPlaylistHeader: React.FC<{
 
   return (
     <div className="PlayerPlaylistHeader">
-      <ButtonSave onClick={onClick} />
+      {songs.length > 0 ? <ButtonSave onClick={onClick} /> : null}
       <h1>
-        {playlist ? playlist.title : "Untitled Playlist"}
-        {playlistChanged ? <span className="new"></span> : null}
+        {songs.length > 0
+          ? playlist
+            ? playlist.title
+            : "Untitled Playlist"
+          : ""}
+        {songs.length > 0 ? (
+          playlistChanged ? (
+            <span className="new"></span>
+          ) : null
+        ) : null}
       </h1>
     </div>
   );

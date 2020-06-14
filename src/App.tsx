@@ -48,7 +48,10 @@ import {
 import { Recommendation } from "types/Recommendation";
 import { setRecent } from "redux/actions/listen";
 import { Playlist } from "types/Playlist";
-import { generateRecommendation } from "api/Listen";
+import {
+  generateRecommendation,
+  generateCommonRecommendation,
+} from "api/Listen";
 import { axiosIntercept } from "api/Connection";
 declare module "react-spring" {
   export const animated: any;
@@ -170,13 +173,17 @@ const App: React.FC<Props> = ({
 
   useEffect(() => {
     const fetchAllData = async () => {
-      checkAPI();
-
-      await checkUserCookies();
-
       window.addEventListener("resize", () =>
         setWindowSize({ w: window.innerWidth, h: window.innerHeight })
       );
+
+      checkAPI();
+
+      const userLoggedIn = await checkUserCookies();
+
+      if (!userLoggedIn) {
+        generateCommonRecommendation();
+      }
 
       switch (location.pathname) {
         case "/":

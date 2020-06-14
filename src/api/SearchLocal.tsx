@@ -29,12 +29,31 @@ export const SearchSongLocal = (
   return new Promise((resolve, reject) => {
     axios
       .get(
-        `${state.app.apiBaseURL}v1/search?reference=` +
+        `${state.app.apiBaseURL}v1/recommendation/search?reference=` +
           reference +
           `&` +
           `query=` +
           query
       )
+      // .get(`${state.app.apiBaseURL}v1/search?query=` + query)
+      .then((response) => {
+        console.log(response);
+        let resultSongs: Song[] = [];
+        response.data.songs.map((song: any) => {
+          let songItem: Song = convertSongFromDB(song);
+          resultSongs.push(songItem);
+        });
+        resolve(resultSongs);
+      });
+  });
+};
+
+export const SearchPeopleFavorites = (): Promise<Song[]> => {
+  const state = store.getState();
+
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${state.app.apiBaseURL}v1/recommendation/peoplefavorites`)
       // .get(`${state.app.apiBaseURL}v1/search?query=` + query)
       .then((response) => {
         console.log(response);

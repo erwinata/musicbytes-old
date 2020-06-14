@@ -4,15 +4,17 @@ import {
   ADD_RECENT,
   FILL_RECOMMENDATION,
   REMOVE_RECOMMENDATION,
+  ADD_COMMON_RECOMMENDATION,
 } from "redux/types/listen";
 import { Song } from "types/Song";
 import { concat, uniqBy, findIndex, remove, filter } from "lodash";
-import { Recommendation } from "types/Recommendation";
+import { Recommendation, CommonRecommendation } from "types/Recommendation";
 import { Playlist } from "types/Playlist";
 
 export interface IListenState {
   playlist: Playlist[];
   recommendation: Recommendation[];
+  commonRecommendation: CommonRecommendation[];
   recent: {
     song?: Song;
     playlist?: Playlist;
@@ -22,6 +24,7 @@ export interface IListenState {
 const listenReducerDefaultState: IListenState = {
   playlist: [],
   recommendation: [],
+  commonRecommendation: [],
   recent: [],
 };
 
@@ -30,6 +33,14 @@ export const listenReducer = (
   action: ListenActionTypes
 ): IListenState => {
   switch (action.type) {
+    case ADD_COMMON_RECOMMENDATION:
+      return {
+        ...state,
+        commonRecommendation: [
+          ...state.commonRecommendation,
+          action.recommendation,
+        ],
+      };
     case ADD_RECOMMENDATION:
       return {
         ...state,

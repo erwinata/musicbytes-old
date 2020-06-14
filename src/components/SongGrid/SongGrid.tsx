@@ -16,6 +16,8 @@ import { XY } from "types/XY";
 import { find } from "lodash";
 import { Loading } from "components/Loading/Loading";
 import { LoadingType } from "types/LoadingType";
+import { InfoImage } from "components/InfoImage/InfoImage";
+import { InfoImageType } from "types/InfoImage";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -26,6 +28,7 @@ interface PassingProps {
   }[];
   optionList: OptionActionType[];
   isLoading?: boolean;
+  textNodata?: string;
 }
 interface StateProps {
   collection: Song[];
@@ -43,6 +46,7 @@ const SongGrid: React.FC<Props> = ({
   items,
   optionList,
   isLoading,
+  textNodata,
   collection,
   setOption,
 }) => {
@@ -87,6 +91,7 @@ const SongGrid: React.FC<Props> = ({
     <animated.div className="SongGrid" style={style.songGrid}>
       <Loading show={isLoading ? true : false} type={LoadingType.Scale} />
       {/* <div className="SongGrid" onWheel={(e) => onWheel(e)}> */}
+
       <div className="container" ref={ref}>
         {items !== undefined
           ? items!.map((item, index) => {
@@ -116,6 +121,11 @@ const SongGrid: React.FC<Props> = ({
             })
           : null}
       </div>
+      <InfoImage
+        show={items.length === 0 && !isLoading}
+        text={textNodata}
+        type={InfoImageType.NODATA}
+      />
     </animated.div>
   );
 };

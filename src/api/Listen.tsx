@@ -1,14 +1,19 @@
 import { remove, shuffle, find } from "lodash";
 import { Song } from "types/Song";
-import { SearchSongLocal } from "./SearchLocal";
+import { SearchSongLocal, SearchPeopleFavorites } from "./SearchLocal";
 import { SongDetail } from "./SongDetail";
-import { Recommendation, RecommendationType } from "types/Recommendation";
+import {
+  Recommendation,
+  RecommendationType,
+  CommonRecommendation,
+} from "types/Recommendation";
 import { store } from "redux/store/configureStore";
 import { bindActionCreators } from "redux";
 import {
   addRecommendation,
   fillRecommendation,
   removeRecommendation,
+  addCommonRecommendation,
 } from "redux/actions/listen";
 
 export const getRandomSongReference = (
@@ -82,7 +87,7 @@ export const generateRecommendation = async (total: number) => {
     let songSelectedIndexes = getRandomSongReference(cachedSongPlayed, total);
 
     if (localStorage.getItem("song")) {
-      let songSearchResult = await Promise.all(
+      let resultSongsIds = await Promise.all(
         songSelectedIndexes.map(async (songSelectedIndex) => {
           let songSelectedId = cachedSongPlayed[songSelectedIndex].song;
           let songSelected = (await SongDetail(songSelectedId))[0];
@@ -105,10 +110,8 @@ export const generateRecommendation = async (total: number) => {
         })
       );
 
-      let resultSongs = songSearchResult;
-
       console.log("resultSongs");
-      console.log(resultSongs);
+      console.log(resultSongsIds);
       console.log(songSelectedIndexes);
 
       await Promise.all(
@@ -120,9 +123,9 @@ export const generateRecommendation = async (total: number) => {
             type: RecommendationType.TAGS,
           };
 
-          if (resultSongs[index].length >= 3) {
+          if (resultSongsIds[index].length >= 3) {
             bindActionCreators(fillRecommendation, dispatch)(
-              resultSongs[index],
+              resultSongsIds[index],
               reference
             );
           } else {
@@ -132,4 +135,18 @@ export const generateRecommendation = async (total: number) => {
       );
     }
   }
+};
+
+export const generateCommonRecommendation = async () => {
+  const dispatch = store.dispatch;
+
+  let resultSongs = await SearchPeopleFavorites();
+  resultSongs = shuffle(resultSongs);
+
+  let recommendationAdd: CommonRecommendation = {
+    title: "Some people's favorites",
+    song: resultSongs,
+  };
+
+  bindActionCreators(addCommonRecommendation, dispatch)(recommendationAdd);
 };
