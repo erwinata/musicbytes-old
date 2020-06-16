@@ -1,11 +1,7 @@
-import {
-  LibraryActionTypes,
-  ADD_TO_PLAYLIST,
-  SAVE_PLAYLIST,
-} from "redux/types/library";
-import { Song } from "types/Song";
+import { concat, filter, findIndex, remove, uniqBy } from "lodash";
+import { LibraryActionTypes } from "redux/types/library";
 import { Playlist } from "types/Playlist";
-import { now, filter, concat, uniqBy, remove, findIndex } from "lodash";
+import { Song } from "types/Song";
 
 export interface ILibraryState {
   playlists: Playlist[];

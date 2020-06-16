@@ -1,14 +1,13 @@
-import { defaults, get } from "lodash";
 import axios from "axios";
-import { store } from "redux/store/configureStore";
+import { storeUpdateToken } from "helpers/localStorage";
+import { defaults, get } from "lodash";
+import { bindActionCreators } from "redux";
 import {
-  actionUpdateToken,
-  updateToken,
   actionShowToast,
+  actionUpdateToken,
   logoutUser,
 } from "redux/actions/app";
-import { storeUpdateToken } from "helpers/localStorage";
-import { bindActionCreators } from "redux";
+import { store } from "redux/store/configureStore";
 
 export const axiosIntercept = (options = {}) => {
   const state = store.getState();

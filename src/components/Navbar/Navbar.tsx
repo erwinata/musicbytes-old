@@ -1,16 +1,15 @@
 import React from "react";
-import "./Navbar.scss";
-import { Link } from "react-router-dom";
-import { ThunkDispatch } from "redux-thunk";
-import { AllActions } from "redux/types/app";
-import { bindActionCreators } from "redux";
-import { showPlayer } from "redux/actions/player";
 import { connect } from "react-redux";
-import { NavigationTab } from "types/Navigation";
-import NavbarItem from "./NavbarItem";
-import { AppState } from "redux/store/configureStore";
+import { Link } from "react-router-dom";
+import { bindActionCreators } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import { viewPlaylist } from "redux/actions/app";
+import { AppState } from "redux/store/configureStore";
+import { AllActions } from "redux/types/app";
+import { NavigationTab } from "types/Navigation";
 import { Playlist } from "types/Playlist";
+import "./Navbar.scss";
+import NavbarItem from "./NavbarItem";
 
 type Props = StateProps & DispatchProps;
 

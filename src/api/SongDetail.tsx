@@ -1,22 +1,12 @@
-import React from "react";
-import { YoutubeDataAPI } from "youtube-v3-api";
-import { Song } from "types/Song";
-import { store } from "redux/store/configureStore";
-import { ConvertDurationToNumber } from "helpers/duration";
-import { decodeText, normalizeTitle, getTitleAndArtist } from "helpers/string";
 import axios from "axios";
-import { find, remove, uniq, filter } from "lodash";
-import { axiosIntercept } from "./Connection";
-import { storeUpdateToken } from "helpers/localStorage";
-import {
-  actionUpdateToken,
-  showToast,
-  actionShowToast,
-  actionSetAPIKey,
-} from "redux/actions/app";
-import { ToastType } from "types/ToastType";
-import { resolve } from "url";
+import { ConvertDurationToNumber } from "helpers/duration";
 import { convertSongFromDB } from "helpers/song";
+import { decodeText, getTitleAndArtist, normalizeTitle } from "helpers/string";
+import { filter, find, uniq } from "lodash";
+import { actionSetAPIKey } from "redux/actions/app";
+import { store } from "redux/store/configureStore";
+import { Song } from "types/Song";
+import { YoutubeDataAPI } from "youtube-v3-api";
 
 export const SongDetail = (
   ids: string,

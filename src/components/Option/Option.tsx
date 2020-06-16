@@ -1,22 +1,21 @@
-import React, { useState, Dispatch, SetStateAction, useEffect } from "react";
-import "./Option.scss";
-import { StateSongListItem } from "components/SongList/SongListItem";
-import { AllActions } from "redux/types/app";
-import { ThunkDispatch } from "redux-thunk";
-import { AppState } from "redux/store/configureStore";
-import { connect } from "react-redux";
-import { Song } from "types/Song";
-import { addToNowPlaying, removeFromNowPlaying } from "redux/actions/player";
-import { bindActionCreators } from "redux";
-import { OptionAction, OptionActionType } from "types/Option";
-import { useSpring, animated, config } from "react-spring";
-import { setPopupMenu, setOption, setOverlay } from "redux/actions/app";
-import { likeSong, removeFromPlaylist } from "redux/actions/library";
 import { findIndex } from "lodash";
-import { PopupMenuType } from "types/PopupMenuType";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { animated, config, useSpring } from "react-spring";
 import { useMeasure } from "react-use";
-import { XY } from "types/XY";
+import { bindActionCreators } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { setOption, setOverlay, setPopupMenu } from "redux/actions/app";
+import { likeSong, removeFromPlaylist } from "redux/actions/library";
+import { addToNowPlaying, removeFromNowPlaying } from "redux/actions/player";
+import { AppState } from "redux/store/configureStore";
+import { AllActions } from "redux/types/app";
+import { OptionAction, OptionActionType } from "types/Option";
 import { Playlist } from "types/Playlist";
+import { PopupMenuType } from "types/PopupMenuType";
+import { Song } from "types/Song";
+import { XY } from "types/XY";
+import "./Option.scss";
 
 type Props = PassingProps & StateProps & DispatchProps;
 interface PassingProps {

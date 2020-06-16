@@ -1,17 +1,17 @@
+import { filter, findIndex } from "lodash";
 import {
-  ListenActionTypes,
-  ADD_RECOMMENDATION,
-  ADD_RECENT,
-  FILL_RECOMMENDATION,
-  REMOVE_RECOMMENDATION,
   ADD_COMMON_RECOMMENDATION,
+  ADD_RECENT,
+  ADD_RECOMMENDATION,
   ADD_SONG_SEARCHED,
+  FILL_RECOMMENDATION,
+  ListenActionTypes,
+  REMOVE_RECOMMENDATION,
   SET_LOADING_RECOMMENDATION,
 } from "redux/types/listen";
-import { Song } from "types/Song";
-import { concat, uniqBy, findIndex, remove, filter } from "lodash";
-import { Recommendation, CommonRecommendation } from "types/Recommendation";
 import { Playlist } from "types/Playlist";
+import { CommonRecommendation, Recommendation } from "types/Recommendation";
+import { Song } from "types/Song";
 
 export interface IListenState {
   playlist: Playlist[];

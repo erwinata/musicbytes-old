@@ -1,13 +1,13 @@
 import React from "react";
-import "./PlaylistList.scss";
 import { connect } from "react-redux";
-import { ThunkDispatch } from "redux-thunk";
-import { AppActionTypes } from "redux/types/app";
-import { AppState } from "redux/store/configureStore";
-import { Playlist } from "types/Playlist";
 import { animated } from "react-spring";
-import { PopupMenuType } from "types/PopupMenuType";
+import { ThunkDispatch } from "redux-thunk";
+import { AppState } from "redux/store/configureStore";
+import { AppActionTypes } from "redux/types/app";
 import { res_library, res_plus } from "res";
+import { Playlist } from "types/Playlist";
+import { PopupMenuType } from "types/PopupMenuType";
+import "./PlaylistList.scss";
 
 type Props = PassingProps & StateProps & DispatchProps;
 

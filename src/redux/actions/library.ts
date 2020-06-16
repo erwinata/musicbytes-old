@@ -1,20 +1,14 @@
-import { AllActions } from "redux/types/app";
-import { Dispatch } from "redux";
-import { AppState, store } from "redux/store/configureStore";
-import { SearchSong } from "api/Search";
-import { Song } from "types/Song";
-import { actionShowToast, actionViewPlaylist } from "./app";
-import { find, findIndex } from "lodash";
-import {
-  actionPlayPlaylist,
-  playPlaylist,
-  actionClearPlaylist,
-  actionClearPlayer,
-} from "./player";
-import { Playlist } from "types/Playlist";
-import axios from "axios";
-import { UserData } from "types/UserData";
 import { axiosIntercept } from "api/Connection";
+import axios from "axios";
+import { find, findIndex } from "lodash";
+import { Dispatch } from "redux";
+import { AppState } from "redux/store/configureStore";
+import { AllActions } from "redux/types/app";
+import { Playlist } from "types/Playlist";
+import { Song } from "types/Song";
+import { UserData } from "types/UserData";
+import { actionShowToast, actionViewPlaylist } from "./app";
+import { actionClearPlaylist, actionPlayPlaylist } from "./player";
 
 export const actionClearAllLibrary = (): AllActions => ({
   type: "CLEAR_ALL_LIBRARY",

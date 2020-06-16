@@ -1,14 +1,11 @@
 import React from "react";
-import "./PlaylistOption.scss";
 import { connect } from "react-redux";
-import { ThunkDispatch } from "redux-thunk";
-import { AppActionTypes } from "redux/types/app";
-import { AppState } from "redux/store/configureStore";
-import { Playlist } from "types/Playlist";
 import { animated } from "react-spring";
-import { savePlaylist } from "redux/actions/library";
-import { bindActionCreators } from "redux";
-import { Song } from "types/Song";
+import { ThunkDispatch } from "redux-thunk";
+import { AppState } from "redux/store/configureStore";
+import { AppActionTypes } from "redux/types/app";
+import { Playlist } from "types/Playlist";
+import "./PlaylistOption.scss";
 
 type Props = PassingProps & StateProps & DispatchProps;
 

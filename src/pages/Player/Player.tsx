@@ -1,24 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useSpring } from "react-spring";
-import PlayerThumbnail from "components/PlayerThumbnail/PlayerThumbnail";
 import PlayerControl from "components/PlayerControl/PlayerControl";
 import PlayerPlaylist from "components/PlayerPlaylist/PlayerPlaylist";
+import PlayerThumbnail from "components/PlayerThumbnail/PlayerThumbnail";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { AppState } from "redux/store/configureStore";
-import { Song } from "types/Song";
-import { Repeat } from "types/Repeat";
-import {
-  durationIncrement,
-  togglePlaying,
-  addToNowPlaying,
-} from "redux/actions/player";
-import { ThunkDispatch } from "redux-thunk";
-import { AllActions } from "redux/types/app";
+import { animated, useSpring } from "react-spring";
 import { bindActionCreators } from "redux";
-import { PlayState } from "types/PlayState";
-import { animated } from "react-spring";
-import "./Player.scss";
+import { ThunkDispatch } from "redux-thunk";
+import { addToNowPlaying, durationIncrement } from "redux/actions/player";
+import { AppState } from "redux/store/configureStore";
+import { AllActions } from "redux/types/app";
 import { Playlist } from "types/Playlist";
+import { PlayState } from "types/PlayState";
+import { Repeat } from "types/Repeat";
+import { Song } from "types/Song";
+import "./Player.scss";
 
 type Props = StateProps & DispatchProps;
 interface StateProps {

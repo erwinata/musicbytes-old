@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import "./SearchSuggestion.scss";
-import { useMeasure } from "react-use";
+import React from "react";
 import { animated, useSpring } from "react-spring";
+import "./SearchSuggestion.scss";
 
 export const SearchSuggestion: React.FC<{
   suggestionList: string[];

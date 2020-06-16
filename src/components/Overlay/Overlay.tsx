@@ -1,12 +1,12 @@
-import React, { useState, Dispatch, SetStateAction, useEffect } from "react";
-import "./Overlay.scss";
-import { AllActions } from "redux/types/app";
-import { ThunkDispatch } from "redux-thunk";
-import { AppState } from "redux/store/configureStore";
+import React from "react";
 import { connect } from "react-redux";
+import { animated, useSpring } from "react-spring";
 import { bindActionCreators } from "redux";
-import { useSpring, animated, config } from "react-spring";
+import { ThunkDispatch } from "redux-thunk";
 import { setOverlay } from "redux/actions/app";
+import { AppState } from "redux/store/configureStore";
+import { AllActions } from "redux/types/app";
+import "./Overlay.scss";
 
 type Props = PassingProps & StateProps & DispatchProps;
 interface PassingProps {}

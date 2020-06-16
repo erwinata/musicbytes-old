@@ -1,11 +1,11 @@
-import React from "react";
-import "./PlayerProgress.scss";
 import {
-  ToMinutes,
-  ToSeconds,
   DurationToPercentage,
   PercentageToDuration,
+  ToMinutes,
+  ToSeconds,
 } from "helpers/duration";
+import React from "react";
+import "./PlayerProgress.scss";
 
 interface TimeProps {
   time: {

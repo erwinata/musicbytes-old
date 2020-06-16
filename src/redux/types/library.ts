@@ -1,5 +1,5 @@
-import { Song } from "types/Song";
 import { Playlist } from "types/Playlist";
+import { Song } from "types/Song";
 
 export const CLEAR_ALL_LIBRARY = "CLEAR_ALL_LIBRARY";
 export const LOAD_PLAYLISTS = "LOAD_PLAYLISTS";

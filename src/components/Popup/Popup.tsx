@@ -1,34 +1,28 @@
-import React, { useState, useEffect } from "react";
-import "./Popup.scss";
 import PlaylistList from "components/PlaylistList/PlaylistList";
-import PlaylistOption from "components/PlaylistOption/PlaylistOption";
 import PlaylistNaming from "components/PlaylistNaming/PlaylistNaming";
-import { AppState } from "redux/store/configureStore";
-import { ThunkDispatch } from "redux-thunk";
-import { AppActionTypes } from "redux/types/app";
+import PlaylistOption from "components/PlaylistOption/PlaylistOption";
+import PopupDialog from "components/PopupDialog/PopupDialog";
+import { concat } from "lodash";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Song } from "types/Song";
 import { animated, useSpring } from "react-spring";
 import { useMeasure } from "react-use";
 import { bindActionCreators } from "redux";
-import {
-  showToast,
-  setPopupMenu,
-  setOverlay,
-  viewPlaylist,
-} from "redux/actions/app";
+import { ThunkDispatch } from "redux-thunk";
+import { setOverlay, setPopupMenu, viewPlaylist } from "redux/actions/app";
 import {
   addToPlaylist,
+  deletePlaylist,
   newPlaylist,
   savePlaylist,
-  deletePlaylist,
 } from "redux/actions/library";
-import { ToastType } from "types/ToastType";
-import { PopupMenuType } from "types/PopupMenuType";
+import { AppState } from "redux/store/configureStore";
+import { AppActionTypes } from "redux/types/app";
+import { res_edit, res_merge, res_save } from "res";
 import { Playlist } from "types/Playlist";
-import { concat } from "lodash";
-import { res_save, res_edit, res_merge } from "res";
-import PopupDialog from "components/PopupDialog/PopupDialog";
+import { PopupMenuType } from "types/PopupMenuType";
+import { Song } from "types/Song";
+import "./Popup.scss";
 
 type Props = PassingProps & StateProps & DispatchProps;
 

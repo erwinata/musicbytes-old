@@ -1,10 +1,10 @@
-import { Song } from "types/Song";
+import { Playlist } from "types/Playlist";
 import {
+  CommonRecommendation,
   Recommendation,
   RecommendationType,
-  CommonRecommendation,
 } from "types/Recommendation";
-import { Playlist } from "types/Playlist";
+import { Song } from "types/Song";
 
 export const ADD_COMMON_RECOMMENDATION = "ADD_COMMON_RECOMMENDATION";
 

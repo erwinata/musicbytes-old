@@ -1,30 +1,24 @@
+import { InfoImage } from "components/InfoImage/InfoImage";
+import { Loading } from "components/Loading/Loading";
+import { find } from "lodash";
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { animated, useSpring } from "react-spring";
+import { useMeasure } from "react-use";
+import { bindActionCreators } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { setOption } from "redux/actions/app";
+import { AppState } from "redux/store/configureStore";
+import { AppActionTypes } from "redux/types/app";
+import { res_circle_left, res_circle_right } from "res";
+import { InfoImageType } from "types/InfoImage";
+import { LoadingType } from "types/LoadingType";
+import { OptionActionType } from "types/Option";
+import { Playlist } from "types/Playlist";
+import { Song } from "types/Song";
+import { XY } from "types/XY";
 import "./SongGrid.scss";
 import SongGridItem from "./SongGridItem";
-import { Song } from "types/Song";
-import { connect } from "react-redux";
-import { AppState } from "redux/store/configureStore";
-import { Playlist } from "types/Playlist";
-import { useMeasure } from "react-use";
-import { useSpring, animated } from "react-spring";
-import { OptionActionType } from "types/Option";
-import { ThunkDispatch } from "redux-thunk";
-import { AppActionTypes } from "redux/types/app";
-import { bindActionCreators } from "redux";
-import { setOption } from "redux/actions/app";
-import { XY } from "types/XY";
-import { find } from "lodash";
-import { Loading } from "components/Loading/Loading";
-import { LoadingType } from "types/LoadingType";
-import { InfoImage } from "components/InfoImage/InfoImage";
-import { InfoImageType } from "types/InfoImage";
-import {
-  res_arrow_left,
-  res_arrow_right,
-  res_circle_left,
-  res_circle_right,
-} from "res";
-import HorizontalScroll from "react-scroll-horizontal";
 
 type Props = PassingProps & StateProps & DispatchProps;
 

@@ -1,7 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import "./Loading.scss";
-import { useSpring, animated, config } from "react-spring";
-import { LoadingType } from "types/LoadingType";
+import React, { useState } from "react";
 import BarLoader from "react-spinners/BarLoader";
 import BeatLoader from "react-spinners/BeatLoader";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -10,7 +7,10 @@ import MoonLoader from "react-spinners/MoonLoader";
 import PulseLoader from "react-spinners/PulseLoader";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import SyncLoader from "react-spinners/SyncLoader";
+import { animated, useSpring } from "react-spring";
 import { useMeasure } from "react-use";
+import { LoadingType } from "types/LoadingType";
+import "./Loading.scss";
 
 export const Loading: React.FC<{
   show: boolean;

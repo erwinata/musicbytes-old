@@ -1,5 +1,5 @@
-import { UserData } from "types/UserData";
 import { find } from "lodash";
+import { UserData } from "types/UserData";
 
 export const storeUser = (user: UserData) => {
   localStorage.setItem("user", JSON.stringify(user));

@@ -1,27 +1,21 @@
-import React, { useEffect, useState } from "react";
 import { CategoryTitle } from "components/CategoryTitle/CategoryTitle";
+import { Loading } from "components/Loading/Loading";
+import Login from "components/Login/Login";
 import SongGrid from "components/SongGrid/SongGrid";
+import SongList from "components/SongList/SongList";
+import { convertToSongGridItems } from "helpers/array";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { ThunkDispatch } from "redux-thunk";
-import { AppActionTypes } from "redux/types/app";
-import { AppState, store } from "redux/store/configureStore";
-import SongList from "components/SongList/SongList";
-import { Song } from "types/Song";
-import { OptionAction, OptionActionType } from "types/Option";
+import { loadCollection, loadPlaylists } from "redux/actions/library";
 import { addToNowPlaying } from "redux/actions/player";
-import { Playlist } from "types/Playlist";
-import Login from "components/Login/Login";
-import axios from "axios";
-import { SongDetail } from "api/SongDetail";
-import { loadPlaylists, loadCollection } from "redux/actions/library";
-import ScaleLoader from "react-spinners/ScaleLoader";
-import { Loading } from "components/Loading/Loading";
+import { AppState } from "redux/store/configureStore";
+import { AppActionTypes } from "redux/types/app";
 import { LoadingType } from "types/LoadingType";
-import { UserData } from "types/UserData";
-import { convertToSongGridItems } from "helpers/array";
-import { axiosIntercept } from "api/Connection";
-import { checkLoadPlaylist } from "api/Library";
+import { OptionActionType } from "types/Option";
+import { Playlist } from "types/Playlist";
+import { Song } from "types/Song";
 
 type Props = PassingProps & StateProps & DispatchProps;
 

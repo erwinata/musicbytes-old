@@ -1,10 +1,10 @@
+import { concat, uniqBy } from "lodash";
 import {
   DiscoverActionTypes,
-  SONG_SEARCH,
   SET_QUERY,
+  SONG_SEARCH,
 } from "redux/types/discover";
 import { Song } from "types/Song";
-import { concat, uniqBy } from "lodash";
 
 export interface IDiscoverState {
   nextPageToken: string;

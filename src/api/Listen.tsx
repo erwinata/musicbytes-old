@@ -1,23 +1,22 @@
-import { remove, shuffle, find } from "lodash";
-import { Song } from "types/Song";
-import { SearchSongLocal, SearchPeopleFavorites } from "./SearchLocal";
-import { SongDetail } from "./SongDetail";
-import {
-  Recommendation,
-  RecommendationType,
-  CommonRecommendation,
-} from "types/Recommendation";
-import { store } from "redux/store/configureStore";
+import { find, shuffle } from "lodash";
 import { bindActionCreators } from "redux";
 import {
+  addCommonRecommendation,
   addRecommendation,
+  addSongSearched,
   fillRecommendation,
   removeRecommendation,
-  addCommonRecommendation,
-  addSongSearched,
   setLoadingRecommendation,
 } from "redux/actions/listen";
-import { resolve } from "url";
+import { store } from "redux/store/configureStore";
+import {
+  CommonRecommendation,
+  Recommendation,
+  RecommendationType,
+} from "types/Recommendation";
+import { Song } from "types/Song";
+import { SearchPeopleFavorites, SearchSongLocal } from "./SearchLocal";
+import { SongDetail } from "./SongDetail";
 
 export const getRandomSongReference = (
   cachedSongPlayed: { song: string; total: number }[]

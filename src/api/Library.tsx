@@ -1,12 +1,12 @@
-import { UserData } from "types/UserData";
+import { concat, find, remove } from "lodash";
+import { bindActionCreators } from "redux";
+import { loadCollection, loadPlaylists } from "redux/actions/library";
 import { store } from "redux/store/configureStore";
+import { Playlist } from "types/Playlist";
+import { Song } from "types/Song";
+import { UserData } from "types/UserData";
 import { axiosIntercept } from "./Connection";
 import { SongDetail } from "./SongDetail";
-import { Playlist } from "types/Playlist";
-import { bindActionCreators } from "redux";
-import { loadPlaylists, loadCollection } from "redux/actions/library";
-import { Song } from "types/Song";
-import { find, remove, concat } from "lodash";
 
 export const checkLoadPlaylist = (userData: UserData) => {
   const state = store.getState();

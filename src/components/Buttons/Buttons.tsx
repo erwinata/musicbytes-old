@@ -1,27 +1,27 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import "./Buttons.scss";
-import { useSpring, animated, config } from "react-spring";
-import { Repeat } from "types/Repeat";
-import { PlayState } from "types/PlayState";
+import React, { useLayoutEffect, useState } from "react";
+import { animated, config, useSpring } from "react-spring";
 import {
-  res_play,
-  res_pause,
-  res_video,
+  res_back,
+  res_close,
+  res_delete,
   res_like,
   res_like_active,
-  res_prev,
   res_next,
   res_option,
+  res_pause,
+  res_play,
+  res_prev,
   res_repeat,
   res_repeat_all,
   res_repeat_one,
+  res_save,
   res_shuffle,
   res_shuffle_active,
-  res_save,
-  res_close,
-  res_delete,
-  res_back,
+  res_video,
 } from "res";
+import { PlayState } from "types/PlayState";
+import { Repeat } from "types/Repeat";
+import "./Buttons.scss";
 
 export const ButtonCapsuleText: React.FC<{ text: string; onClick: any }> = ({
   text,

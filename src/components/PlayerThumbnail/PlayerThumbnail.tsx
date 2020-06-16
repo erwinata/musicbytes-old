@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
-import "./PlayerThumbnail.scss";
-import YouTube, { Options } from "react-youtube";
 import { connect } from "react-redux";
-import { ThunkDispatch } from "redux-thunk";
+import YouTube, { Options } from "react-youtube";
 import { bindActionCreators } from "redux";
-import { AppState } from "redux/store/configureStore";
-import { Song } from "types/Song";
-import { AllActions } from "redux/types/app";
+import { ThunkDispatch } from "redux-thunk";
 import {
-  togglePlaying,
-  seekDone,
   autoNextSong,
+  seekDone,
   setVideoIsRunning,
+  togglePlaying,
 } from "redux/actions/player";
-import { PlayState } from "types/PlayState";
+import { AppState } from "redux/store/configureStore";
+import { AllActions } from "redux/types/app";
 import { res_logo_thumbnail } from "res";
+import { PlayState } from "types/PlayState";
+import { Song } from "types/Song";
+import "./PlayerThumbnail.scss";
 
 type Props = StateProps & DispatchProps;
 

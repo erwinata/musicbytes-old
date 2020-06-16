@@ -1,25 +1,23 @@
+import { axiosIntercept } from "api/Connection";
+import axios from "axios";
+import { removeUser, storeUpdateToken } from "helpers/localStorage";
 import React from "react";
-import "./Header.scss";
-import { res_logo } from "res";
-import { AppState, store } from "redux/store/configureStore";
-import { ThunkDispatch } from "redux-thunk";
-import { AllActions } from "redux/types/app";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import {
+  actionShowToast,
+  actionUpdateToken,
   logoutUser,
   showToast,
-  actionUpdateToken,
-  actionShowToast,
 } from "redux/actions/app";
-import { bindActionCreators } from "redux";
-import { UserData } from "types/UserData";
-import Cookies from "js-cookie";
-import axios from "axios";
-import { ToastType } from "types/ToastType";
-import { removeUser, storeUpdateToken } from "helpers/localStorage";
 import { clearAllLibrary } from "redux/actions/library";
-import { GoogleLogout } from "react-google-login";
-import { axiosIntercept } from "api/Connection";
+import { AppState, store } from "redux/store/configureStore";
+import { AllActions } from "redux/types/app";
+import { res_logo } from "res";
+import { ToastType } from "types/ToastType";
+import { UserData } from "types/UserData";
+import "./Header.scss";
 
 type Props = StateProps & DispatchProps;
 

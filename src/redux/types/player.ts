@@ -1,6 +1,6 @@
-import { Song } from "../../types/Song";
-import { PlayState } from "../../types/PlayState";
 import { Playlist } from "types/Playlist";
+import { PlayState } from "../../types/PlayState";
+import { Song } from "../../types/Song";
 
 export const SHOW_PLAYER = "SHOW_PLAYER";
 

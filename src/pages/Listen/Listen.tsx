@@ -1,35 +1,23 @@
-import React, { useEffect, useState } from "react";
-import "./Listen.scss";
-import { CategoryTitle } from "components/CategoryTitle/CategoryTitle";
-import SongGrid from "components/SongGrid/SongGrid";
-import { AppState } from "redux/store/configureStore";
-import { ThunkDispatch } from "redux-thunk";
-import { AppActionTypes } from "redux/types/app";
-import { connect } from "react-redux";
-import { CategorySubtitle } from "components/CategorySubtitle/CategorySubtitle";
-import { find, shuffle, remove } from "lodash";
-import { SearchSong } from "api/Search";
-import { Song } from "types/Song";
-import { clamp } from "helpers/math";
-import { OptionActionType } from "types/Option";
-import { addRecommendation, setRecent } from "redux/actions/listen";
-import { bindActionCreators } from "redux";
-import {
-  Recommendation,
-  RecommendationType,
-  CommonRecommendation,
-} from "types/Recommendation";
-import { RecommendationItem } from "components/RecommendationItem/RecommendationItem";
-import { Playlist } from "types/Playlist";
-import { resolve } from "url";
-import { SongDetail } from "api/SongDetail";
-import { SearchSongLocal } from "api/SearchLocal";
-import { InfoImage } from "components/InfoImage/InfoImage";
-import { InfoImageType } from "types/InfoImage";
-import HorizontalScroll from "react-scroll-horizontal";
-import { Loading } from "components/Loading/Loading";
-import { LoadingType } from "types/LoadingType";
 import { generateRecommendation } from "api/Listen";
+import { CategoryTitle } from "components/CategoryTitle/CategoryTitle";
+import { InfoImage } from "components/InfoImage/InfoImage";
+import { Loading } from "components/Loading/Loading";
+import { RecommendationItem } from "components/RecommendationItem/RecommendationItem";
+import SongGrid from "components/SongGrid/SongGrid";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { addRecommendation, setRecent } from "redux/actions/listen";
+import { AppState } from "redux/store/configureStore";
+import { AppActionTypes } from "redux/types/app";
+import { InfoImageType } from "types/InfoImage";
+import { LoadingType } from "types/LoadingType";
+import { OptionActionType } from "types/Option";
+import { Playlist } from "types/Playlist";
+import { CommonRecommendation, Recommendation } from "types/Recommendation";
+import { Song } from "types/Song";
+import "./Listen.scss";
 
 type Props = PassingProps & StateProps & DispatchProps;
 

@@ -1,15 +1,9 @@
-import { Song } from "types/Song";
-import { Repeat } from "types/Repeat";
-import { PlayState } from "types/PlayState";
+import { filter, findIndex, orderBy, shuffle } from "lodash";
 import { PlayerActionTypes } from "redux/types/player";
-import {
-  arrayGetIndexByAttr,
-  arrayGetObjectByAttr,
-  arrayRemoveObjectAtIndex,
-} from "helpers/array";
-import { shuffle, orderBy, remove, findIndex, filter } from "lodash";
-import { seekTo } from "redux/actions/player";
 import { Playlist } from "types/Playlist";
+import { PlayState } from "types/PlayState";
+import { Repeat } from "types/Repeat";
+import { Song } from "types/Song";
 
 export interface PlayerState {
   showPlayer: boolean;

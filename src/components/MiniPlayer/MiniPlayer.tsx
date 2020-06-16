@@ -1,18 +1,17 @@
-import React, { useRef, useEffect, useState } from "react";
-import "./MiniPlayer.scss";
-import { ThunkDispatch } from "redux-thunk";
-import { AllActions } from "redux/types/app";
-import { connect } from "react-redux";
-import { AppState } from "redux/store/configureStore";
-import { useHistory } from "react-router";
-import { bindActionCreators } from "redux";
-import { showPlayer, togglePlaying, nextSong } from "redux/actions/player";
-import { showToast } from "redux/actions/app";
 import { ButtonNext, ButtonPlay } from "components/Buttons/Buttons";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { animated, useSpring } from "react-spring";
+import { useMeasure } from "react-use";
+import { bindActionCreators } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { showToast } from "redux/actions/app";
+import { nextSong, showPlayer, togglePlaying } from "redux/actions/player";
+import { AppState } from "redux/store/configureStore";
+import { AllActions } from "redux/types/app";
 import { PlayState } from "types/PlayState";
 import { Song } from "types/Song";
-import { useMeasure } from "react-use";
-import { useSpring, animated, config } from "react-spring";
+import "./MiniPlayer.scss";
 
 type Props = StateProps & DispatchProps;
 

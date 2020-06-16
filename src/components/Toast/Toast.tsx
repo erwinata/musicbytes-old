@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from "react";
-import "./Toast.scss";
-import PlaylistList from "components/PlaylistList/PlaylistList";
-import PlaylistNaming from "components/PlaylistNaming/PlaylistNaming";
-import { AppState } from "redux/store/configureStore";
-import { ThunkDispatch } from "redux-thunk";
-import { AppActionTypes } from "redux/types/app";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Song } from "types/Song";
-import { animated, useSpring, config } from "react-spring";
+import { animated, config, useSpring } from "react-spring";
 import { useMeasure } from "react-use";
-import { bindActionCreators } from "redux";
-import { addToPlaylist, newPlaylist } from "redux/actions/library";
+import { ThunkDispatch } from "redux-thunk";
+import { AppState } from "redux/store/configureStore";
+import { AppActionTypes } from "redux/types/app";
 import { ToastType } from "types/ToastType";
+import "./Toast.scss";
 
 type Props = PassingProps & StateProps & DispatchProps;
 

@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from "react";
-import "./PlaylistViewHeader.scss";
-import { AppState } from "redux/store/configureStore";
-import { ThunkDispatch } from "redux-thunk";
-import { AppActionTypes } from "redux/types/app";
-import { bindActionCreators } from "redux";
+import { ButtonBack } from "components/Buttons/Buttons";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import {
-  ButtonCapsuleText,
-  ButtonClose,
-  ButtonDelete,
-  ButtonBack,
-} from "components/Buttons/Buttons";
-import { Playlist } from "types/Playlist";
-import { Song } from "types/Song";
-import { viewPlaylist, setPopupMenu } from "redux/actions/app";
-import { playPlaylist } from "redux/actions/player";
-import { res_delete, res_play_white } from "res";
+import { bindActionCreators } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { setPopupMenu, viewPlaylist } from "redux/actions/app";
 import { deletePlaylist } from "redux/actions/library";
+import { playPlaylist } from "redux/actions/player";
+import { AppState } from "redux/store/configureStore";
+import { AppActionTypes } from "redux/types/app";
+import { res_delete, res_play_white } from "res";
+import { Playlist } from "types/Playlist";
 import { PopupMenuType } from "types/PopupMenuType";
+import { Song } from "types/Song";
+import "./PlaylistViewHeader.scss";
 
 type Props = PassingProps & StateProps & DispatchProps;
 

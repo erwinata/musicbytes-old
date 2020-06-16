@@ -1,12 +1,10 @@
-import { AllActions } from "redux/types/app";
+import { SearchSong } from "api/Search";
+import { SongDetail } from "api/SongDetail";
+import axios from "axios";
 import { Dispatch } from "redux";
 import { AppState } from "redux/store/configureStore";
-import { SearchSong } from "api/Search";
+import { AllActions } from "redux/types/app";
 import { Song } from "types/Song";
-import { find } from "lodash";
-import { SongDetail } from "api/SongDetail";
-import { axiosIntercept } from "api/Connection";
-import axios from "axios";
 
 export const actionSetQuery = (query: string): AllActions => ({
   type: "SET_QUERY",

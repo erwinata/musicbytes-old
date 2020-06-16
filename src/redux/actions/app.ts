@@ -1,23 +1,22 @@
-import { AllActions } from "redux/types/app";
-import { Dispatch } from "redux";
-import { AppState } from "redux/store/configureStore";
-import { Song } from "types/Song";
-import { NavigationTab } from "types/Navigation";
-import { Playlist } from "types/Playlist";
-import { ToastType } from "types/ToastType";
-import { PopupMenuType } from "types/PopupMenuType";
-import { OptionActionType } from "types/Option";
-import { XY } from "types/XY";
-import { UserData } from "types/UserData";
-import Cookies from "js-cookie";
-import {
-  storeUpdateToken,
-  storeUser,
-  removeUser,
-  scheduleTask,
-} from "helpers/localStorage";
 import { checkLoadSongPlayed } from "api/Library";
 import { generateRecommendation } from "api/Listen";
+import {
+  removeUser,
+  scheduleTask,
+  storeUpdateToken,
+  storeUser,
+} from "helpers/localStorage";
+import { Dispatch } from "redux";
+import { AppState } from "redux/store/configureStore";
+import { AllActions } from "redux/types/app";
+import { NavigationTab } from "types/Navigation";
+import { OptionActionType } from "types/Option";
+import { Playlist } from "types/Playlist";
+import { PopupMenuType } from "types/PopupMenuType";
+import { Song } from "types/Song";
+import { ToastType } from "types/ToastType";
+import { UserData } from "types/UserData";
+import { XY } from "types/XY";
 
 export const actionSetAPIBaseURL = (url: string): AllActions => ({
   type: "SET_API_BASE_URL",

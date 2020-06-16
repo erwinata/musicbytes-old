@@ -1,15 +1,14 @@
-import React, { ChangeEvent, useState } from "react";
-import "./SearchBar.scss";
-import { AppState } from "redux/store/configureStore";
-import { connect } from "react-redux";
-import { ThunkDispatch } from "redux-thunk";
-import { AllActions } from "redux/types/app";
-import { bindActionCreators } from "redux";
-import { searchSong, setQuery } from "redux/actions/discover";
-import { res_discover } from "res";
 import axios from "axios";
 import { SearchSuggestion } from "components/SearchSuggestion/SearchSuggestion";
-import { clamp } from "helpers/math";
+import React, { ChangeEvent, useState } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { setQuery } from "redux/actions/discover";
+import { AppState } from "redux/store/configureStore";
+import { AllActions } from "redux/types/app";
+import { res_discover } from "res";
+import "./SearchBar.scss";
 
 type Props = PassingProps & StateProps & DispatchProps;
 

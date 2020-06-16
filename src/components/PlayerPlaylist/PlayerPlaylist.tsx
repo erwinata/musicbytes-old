@@ -1,19 +1,19 @@
-import React, { Dispatch, useEffect, useState } from "react";
-import "./PlayerPlaylist.scss";
-import SongList from "components/SongList/SongList";
 import { ButtonSave } from "components/Buttons/Buttons";
+import SongList from "components/SongList/SongList";
+import { sortBy } from "lodash";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { AppState } from "redux/store/configureStore";
-import { Song } from "types/Song";
-import { Repeat } from "types/Repeat";
-import { OptionAction, OptionActionType } from "types/Option";
-import { ThunkDispatch } from "redux-thunk";
-import { AppActionTypes } from "redux/types/app";
 import { bindActionCreators } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import { setPopupMenu } from "redux/actions/app";
-import { PopupMenuType } from "types/PopupMenuType";
+import { AppState } from "redux/store/configureStore";
+import { AppActionTypes } from "redux/types/app";
+import { OptionActionType } from "types/Option";
 import { Playlist } from "types/Playlist";
-import { isEqual, sortBy } from "lodash";
+import { PopupMenuType } from "types/PopupMenuType";
+import { Repeat } from "types/Repeat";
+import { Song } from "types/Song";
+import "./PlayerPlaylist.scss";
 
 type Props = PassingProps & StateProps & DispatchProps;
 interface PassingProps {}

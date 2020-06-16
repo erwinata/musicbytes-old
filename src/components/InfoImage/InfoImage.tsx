@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import "./InfoImage.scss";
-import { useSpring, animated, config } from "react-spring";
-import { res_info_nodata, res_info_discover, res_info_library } from "res";
+import React from "react";
+import { animated, useSpring } from "react-spring";
+import { res_info_discover, res_info_library, res_info_nodata } from "res";
 import { InfoImageType } from "types/InfoImage";
+import "./InfoImage.scss";
 
 export const InfoImage: React.FC<{
   show: boolean;

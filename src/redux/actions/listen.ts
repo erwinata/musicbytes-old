@@ -1,16 +1,14 @@
-import { AllActions } from "redux/types/app";
+import { getSongPlayed } from "helpers/localStorage";
 import { Dispatch } from "redux";
 import { AppState } from "redux/store/configureStore";
-import { SearchSong } from "api/Search";
-import { Song } from "types/Song";
-import { find } from "lodash";
+import { AllActions } from "redux/types/app";
+import { Playlist } from "types/Playlist";
 import {
+  CommonRecommendation,
   Recommendation,
   RecommendationType,
-  CommonRecommendation,
 } from "types/Recommendation";
-import { Playlist } from "types/Playlist";
-import { getSongPlayed } from "helpers/localStorage";
+import { Song } from "types/Song";
 
 export const actionAddCommonRecommendation = (
   recommendation: CommonRecommendation

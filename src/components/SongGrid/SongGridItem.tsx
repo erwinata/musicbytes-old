@@ -1,15 +1,15 @@
 import React from "react";
-import "./SongGridItem.scss";
-import { Song } from "types/Song";
-import { Playlist } from "types/Playlist";
-import { AppState } from "redux/store/configureStore";
-import { ThunkDispatch } from "redux-thunk";
-import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { AppActionTypes } from "redux/types/app";
+import { animated, useSpring } from "react-spring";
+import { bindActionCreators } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import { viewPlaylist } from "redux/actions/app";
+import { AppState } from "redux/store/configureStore";
+import { AppActionTypes } from "redux/types/app";
 import { res_like_active } from "res";
-import { useSpring, animated } from "react-spring";
+import { Playlist } from "types/Playlist";
+import { Song } from "types/Song";
+import "./SongGridItem.scss";
 
 type Props = PassingProps & DispatchProps;
 

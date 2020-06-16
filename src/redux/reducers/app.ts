@@ -1,18 +1,13 @@
-import {
-  AppActionTypes,
-  CHANGE_TAB,
-  VIEW_PLAYLIST,
-  ADDING_TO_PLAYLIST,
-} from "redux/types/app";
-import { Song } from "types/Song";
-import { NavigationTab } from "types/Navigation";
-import { Playlist } from "types/Playlist";
-import { ToastType } from "types/ToastType";
-import { PopupMenuType } from "types/PopupMenuType";
-import { OptionActionType } from "types/Option";
-import { XY } from "types/XY";
-import { UserData } from "types/UserData";
 import { isMobile } from "react-device-detect";
+import { AppActionTypes } from "redux/types/app";
+import { NavigationTab } from "types/Navigation";
+import { OptionActionType } from "types/Option";
+import { Playlist } from "types/Playlist";
+import { PopupMenuType } from "types/PopupMenuType";
+import { Song } from "types/Song";
+import { ToastType } from "types/ToastType";
+import { UserData } from "types/UserData";
+import { XY } from "types/XY";
 
 export interface IAppState {
   user?: UserData;

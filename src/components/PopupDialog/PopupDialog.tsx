@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import "./PopupDialog.scss";
-import { animated, useSpring } from "react-spring";
+import React from "react";
+import { connect } from "react-redux";
+import { animated } from "react-spring";
+import { ThunkDispatch } from "redux-thunk";
 import { AppState } from "redux/store/configureStore";
 import { AppActionTypes } from "redux/types/app";
-import { ThunkDispatch } from "redux-thunk";
-import { connect } from "react-redux";
+import "./PopupDialog.scss";
 
 type Props = PassingProps & StateProps & DispatchProps;
 

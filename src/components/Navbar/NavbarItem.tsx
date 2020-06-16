@@ -1,23 +1,22 @@
 import React from "react";
-import "./Navbar.scss";
-import { Link } from "react-router-dom";
-import { ThunkDispatch } from "redux-thunk";
-import { AllActions } from "redux/types/app";
-import { bindActionCreators } from "redux";
-import { showPlayer } from "redux/actions/player";
 import { connect } from "react-redux";
-import { NavigationTab } from "types/Navigation";
+import { animated, useSpring } from "react-spring";
+import { bindActionCreators } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import { changeTab, setClickOverlay } from "redux/actions/app";
-import { useSpring, animated } from "react-spring";
+import { showPlayer } from "redux/actions/player";
+import { AllActions } from "redux/types/app";
 import {
   res_discover,
   res_discover_active,
-  res_listen,
-  res_listen_active,
   res_library,
   res_library_active,
+  res_listen,
+  res_listen_active,
 } from "res";
+import { NavigationTab } from "types/Navigation";
 import "_base.scss";
+import "./Navbar.scss";
 
 type Props = PassingProps & DispatchProps;
 

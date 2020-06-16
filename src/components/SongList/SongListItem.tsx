@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from "react";
-import "./SongListItem.scss";
-import { Song } from "types/Song";
-import { useHistory } from "react-router";
-import { AppState } from "redux/store/configureStore";
-import { ThunkDispatch } from "redux-thunk";
-import { AllActions } from "redux/types/app";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
-import { playSong, addToNowPlaying, removeSong } from "redux/actions/player";
-import Option from "components/Option/Option";
 import { ButtonLike, ButtonOption } from "components/Buttons/Buttons";
-import { OptionAction, OptionActionType } from "types/Option";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import { likeSong } from "redux/actions/library";
+import { addToNowPlaying, playSong, removeSong } from "redux/actions/player";
+import { AppState } from "redux/store/configureStore";
+import { AllActions } from "redux/types/app";
+import { Song } from "types/Song";
+import "./SongListItem.scss";
 
 type Props = PassingProps & StateProps & DispatchProps;
 

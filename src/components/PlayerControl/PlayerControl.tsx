@@ -1,7 +1,4 @@
-import React from "react";
-import "./PlayerControl.scss";
 import {
-  ButtonLike,
   ButtonNext,
   ButtonPlay,
   ButtonPrev,
@@ -10,22 +7,24 @@ import {
   ButtonVideo,
 } from "components/Buttons/Buttons";
 import PlayerProgress from "components/PlayerControl/PlayerProgress";
+import React from "react";
 import { connect } from "react-redux";
-import { AppState } from "redux/store/configureStore";
-import { Song } from "types/Song";
-import { Repeat } from "types/Repeat";
-import { ThunkDispatch } from "redux-thunk";
-import { AllActions } from "redux/types/app";
 import { bindActionCreators } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import {
-  togglePlaying,
-  seekTo,
   nextSong,
   prevSong,
-  toggleShuffle,
+  seekTo,
+  togglePlaying,
   toggleRepeat,
+  toggleShuffle,
 } from "redux/actions/player";
+import { AppState } from "redux/store/configureStore";
+import { AllActions } from "redux/types/app";
 import { PlayState } from "types/PlayState";
+import { Repeat } from "types/Repeat";
+import { Song } from "types/Song";
+import "./PlayerControl.scss";
 
 type Props = StateProps & DispatchProps;
 interface StateProps {

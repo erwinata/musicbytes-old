@@ -1,20 +1,17 @@
+import PlaylistViewHeader from "components/PlaylistViewHeader/PlaylistViewHeader";
+import SongList from "components/SongList/SongList";
 import React from "react";
-import Header from "components/Header/Header";
-import { CategoryTitle } from "components/CategoryTitle/CategoryTitle";
-import SongGrid from "components/SongGrid/SongGrid";
 import { connect } from "react-redux";
+import { animated, useSpring } from "react-spring";
 import { bindActionCreators } from "redux";
 import { ThunkDispatch } from "redux-thunk";
-import { AppActionTypes } from "redux/types/app";
+import { addToNowPlaying } from "redux/actions/player";
 import { AppState } from "redux/store/configureStore";
-import SongList from "components/SongList/SongList";
-import { Song } from "types/Song";
-import { OptionAction, OptionActionType } from "types/Option";
-import { addToNowPlaying, playSong } from "redux/actions/player";
+import { AppActionTypes } from "redux/types/app";
+import { OptionActionType } from "types/Option";
 import { Playlist } from "types/Playlist";
+import { Song } from "types/Song";
 import "./PlaylistView.scss";
-import { useSpring, animated } from "react-spring";
-import PlaylistViewHeader from "components/PlaylistViewHeader/PlaylistViewHeader";
 
 type Props = PassingProps & StateProps & DispatchProps;
 

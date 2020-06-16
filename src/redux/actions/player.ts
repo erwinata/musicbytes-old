@@ -1,13 +1,13 @@
-import { AllActions } from "redux/types/app";
-import { Dispatch, bindActionCreators } from "redux";
-import { AppState } from "redux/store/configureStore";
-import { Song } from "types/Song";
-import { PlayState } from "types/PlayState";
-import { Playlist } from "types/Playlist";
-import { actionShowToast } from "./app";
-import { findIndex, find, remove } from "lodash";
-import { actionSetRecent } from "./listen";
 import { axiosIntercept } from "api/Connection";
+import { find, findIndex, remove } from "lodash";
+import { bindActionCreators, Dispatch } from "redux";
+import { AppState } from "redux/store/configureStore";
+import { AllActions } from "redux/types/app";
+import { Playlist } from "types/Playlist";
+import { PlayState } from "types/PlayState";
+import { Song } from "types/Song";
+import { actionShowToast } from "./app";
+import { actionSetRecent } from "./listen";
 
 export const actionShowPlayer = (show: boolean): AllActions => ({
   type: "SHOW_PLAYER",

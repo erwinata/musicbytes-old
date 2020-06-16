@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from "react";
-import "./SongList.scss";
-import SongListItem from "./SongListItem";
-import { Song } from "types/Song";
-import { useTransition, animated, config } from "react-spring";
-import { OptionAction, OptionActionType } from "types/Option";
-import Option from "components/Option/Option";
-import { AppState } from "redux/store/configureStore";
+import { InfoImage } from "components/InfoImage/InfoImage";
+import { concat, findIndex } from "lodash";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { findIndex, concat } from "lodash";
+import { animated, config, useTransition } from "react-spring";
 import { useMeasure } from "react-use";
 import { bindActionCreators } from "redux";
 import { ThunkDispatch } from "redux-thunk";
+import { setOption } from "redux/actions/app";
+import { AppState } from "redux/store/configureStore";
 import { AppActionTypes } from "redux/types/app";
-import { setOverlay, setOption } from "redux/actions/app";
-import { XY } from "types/XY";
-import { InfoImage } from "components/InfoImage/InfoImage";
 import { InfoImageType } from "types/InfoImage";
+import { OptionActionType } from "types/Option";
+import { Song } from "types/Song";
+import { XY } from "types/XY";
+import "./SongList.scss";
+import SongListItem from "./SongListItem";
 
 type Props = PassingProps & StateProps & DispatchProps;
 

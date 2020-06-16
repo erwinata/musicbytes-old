@@ -1,14 +1,6 @@
 import React from "react";
 // import "./LoginButton.scss";
 import GoogleLogin from "react-google-login";
-import axios from "axios";
-import Cookies from "js-cookie";
-import { AppState } from "redux/store/configureStore";
-import { ThunkDispatch } from "redux-thunk";
-import { AllActions } from "redux/types/app";
-import { bindActionCreators } from "redux";
-import { loginUser } from "redux/actions/app";
-import { connect } from "react-redux";
 
 type Props = PassingProps;
 

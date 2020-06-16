@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from "react";
-import "./Login.scss";
-import GoogleLogin from "react-google-login";
 import axios from "axios";
+import { InfoImage } from "components/InfoImage/InfoImage";
 import LoginButton from "components/LoginButton/LoginButton";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import { bindActionCreators } from "redux";
-import { loginUser } from "redux/actions/app";
 import { ThunkDispatch } from "redux-thunk";
-import { AllActions } from "redux/types/app";
+import { loginUser } from "redux/actions/app";
 import { AppState, store } from "redux/store/configureStore";
-import { connect } from "react-redux";
-import { UserData } from "types/UserData";
-import { InfoImage } from "components/InfoImage/InfoImage";
+import { AllActions } from "redux/types/app";
 import { InfoImageType } from "types/InfoImage";
+import { UserData } from "types/UserData";
+import "./Login.scss";
 
 type Props = StateProps & DispatchProps;
 

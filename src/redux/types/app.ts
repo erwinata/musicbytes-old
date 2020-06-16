@@ -1,15 +1,15 @@
-import { DiscoverActionTypes } from "./discover";
-import { PlayerActionTypes } from "./player";
 import { NavigationTab } from "types/Navigation";
-import { LibraryActionTypes } from "./library";
+import { OptionActionType } from "types/Option";
 import { Playlist } from "types/Playlist";
+import { PopupMenuType } from "types/PopupMenuType";
 import { Song } from "types/Song";
 import { ToastType } from "types/ToastType";
-import { PopupMenuType } from "types/PopupMenuType";
-import { OptionActionType } from "types/Option";
-import { XY } from "types/XY";
 import { UserData } from "types/UserData";
+import { XY } from "types/XY";
+import { DiscoverActionTypes } from "./discover";
+import { LibraryActionTypes } from "./library";
 import { ListenActionTypes } from "./listen";
+import { PlayerActionTypes } from "./player";
 
 export const LOGIN_USER = "LOGIN_USER";
 export const UPDATE_TOKEN = "UPDATE_TOKEN";

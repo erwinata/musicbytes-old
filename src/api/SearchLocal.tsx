@@ -1,24 +1,7 @@
-import React from "react";
-import { YoutubeDataAPI } from "youtube-v3-api";
-import { Song } from "types/Song";
-import { decodeText } from "helpers/string";
-import { ConvertDurationToNumber } from "helpers/duration";
-import { store } from "redux/store/configureStore";
-import { SongDetail } from "./SongDetail";
-import { find, remove } from "lodash";
-import { axiosIntercept } from "./Connection";
-import {
-  storeUpdateToken,
-  getSearchSongIds,
-  storeSearchSongIds,
-} from "helpers/localStorage";
-import {
-  actionUpdateToken,
-  actionShowToast,
-  actionSetAPIKey,
-} from "redux/actions/app";
 import axios from "axios";
 import { convertSongFromDB } from "helpers/song";
+import { store } from "redux/store/configureStore";
+import { Song } from "types/Song";
 
 export const SearchSongLocal = (
   query: string,
