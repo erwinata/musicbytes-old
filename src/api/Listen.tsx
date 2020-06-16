@@ -39,9 +39,6 @@ export const getRandomSongReference = (
     }
   });
 
-  console.log("indexPool");
-  console.log(indexPool);
-
   let randomIndex = Math.floor(Math.random() * Math.floor(indexPool.length));
   resultIndex =
     indexPool[randomIndex] !== undefined ? indexPool[randomIndex] : -1;
@@ -88,15 +85,10 @@ export const generateRecommendation = async (total: number) => {
       cachedSongPlayed.length,
       state.listen.recommendation.length + total
     );
-    console.log("limit");
 
     let iteration = 0;
     let limitIteration =
       cachedSongPlayed.length - state.listen.recommendation.length;
-
-    // console.log(limit);
-    // console.log(targetTotal);
-    // console.log(limit);
 
     while (
       currentTotalRecommendation < targetTotal ||
@@ -105,8 +97,6 @@ export const generateRecommendation = async (total: number) => {
       // let songSelectedId = cachedSongPlayed[0].song;
 
       let songSelectedIndex = getRandomSongReference(cachedSongPlayed);
-      console.log("songSelectedIndex");
-      console.log(songSelectedIndex);
 
       if (songSelectedIndex === -1) {
         break;
@@ -133,9 +123,6 @@ export const generateRecommendation = async (total: number) => {
         resolve([]);
       });
 
-      console.log("resultSongs");
-      console.log(resultSongs);
-
       await new Promise(async (resolve) => {
         let reference = {
           song: songSelected!,
@@ -158,9 +145,6 @@ export const generateRecommendation = async (total: number) => {
       });
 
       iteration++;
-
-      console.log("rec " + currentTotalRecommendation + " " + targetTotal);
-      console.log("ite " + iteration + " " + limitIteration);
 
       if (currentTotalRecommendation == targetTotal) {
         break;

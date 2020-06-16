@@ -40,9 +40,7 @@ export const checkLoadPlaylist = (userData: UserData) => {
           // loadPlaylists(playlistsNew);
           // setLoadingPlaylist(false);
         },
-        (error) => {
-          console.log(error);
-        }
+        (error) => {}
       );
   }
 };
@@ -69,9 +67,7 @@ export const checkLoadCollection = (userData: UserData) => {
           }
           // setLoadingCollection(false);
         },
-        (error) => {
-          console.log(error);
-        }
+        (error) => {}
       );
   }
 };
@@ -101,8 +97,6 @@ export const checkLoadSongPlayed = async (merge?: boolean) => {
                 }
                 remove(songPlayedOld, { song: songPlayedOldItem.song });
               });
-              console.log("songPlayedOld");
-              console.log(songPlayedOld);
               songPlayedDB = concat(songPlayedDB, songPlayedOld);
             }
           }
@@ -110,8 +104,6 @@ export const checkLoadSongPlayed = async (merge?: boolean) => {
           localStorage.setItem("song_played", JSON.stringify(songPlayedDB));
         }
       },
-      (error) => {
-        console.log(error);
-      }
+      (error) => {}
     );
 };

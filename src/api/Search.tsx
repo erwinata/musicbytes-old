@@ -32,7 +32,6 @@ export const SearchSong = (
 
   return new Promise((resolve, reject) => {
     const cacheSearch = getSearchSongIds(query);
-    console.log(cacheSearch);
 
     if (cacheSearch && nextPageToken === undefined) {
       resolve(cacheSearch);

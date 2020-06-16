@@ -44,9 +44,7 @@ const Header: React.FC<Props> = ({
         removeUser();
         logoutUser();
       },
-      (error) => {
-        console.log(error);
-      }
+      (error) => {}
     );
   };
 
@@ -59,11 +57,8 @@ const Header: React.FC<Props> = ({
           storeUpdateToken(token);
           store.dispatch(actionUpdateToken(token));
           store.dispatch(actionShowToast("Token Refreshed"));
-          console.log(response);
         },
-        (error) => {
-          console.log(error);
-        }
+        (error) => {}
       );
   };
 

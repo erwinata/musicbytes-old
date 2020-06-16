@@ -48,7 +48,6 @@ const Toast: React.FC<Props> = ({ toastState, deviceInfo }) => {
   }, [toastState]);
 
   useEffect(() => {
-    // console.log(bounds.width + " . " + bounds.height);
     // var width = bounds.width;
     // var height = bounds.height;
     setContentHeight(height);

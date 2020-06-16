@@ -93,7 +93,6 @@ const PlayerThumbnail: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    // console.log("FX " + playing + " " + ready);
     if (state.ready) {
       if (playerState.playState == PlayState.PLAYING) {
         state.youtubePlayer.playVideo();

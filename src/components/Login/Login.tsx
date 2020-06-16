@@ -47,8 +47,6 @@ const Login: React.FC<Props> = ({ loginUser }) => {
     if (loginState.logInAction) {
       const response = loginState.logInAction;
 
-      console.log(response);
-
       const code = response.code;
       const id_token = response.tokenId;
 
@@ -59,7 +57,6 @@ const Login: React.FC<Props> = ({ loginUser }) => {
         })
         .then(
           (response: any) => {
-            console.log(response);
             const musicbytesKey = response.data.token;
             const email = response.data.user.email;
             const name = response.data.user.name;
@@ -75,9 +72,7 @@ const Login: React.FC<Props> = ({ loginUser }) => {
               token: token,
             });
           },
-          (error) => {
-            console.log(error);
-          }
+          (error) => {}
         );
     }
   }, [loginState.logInAction]);

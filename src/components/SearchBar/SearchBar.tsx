@@ -70,7 +70,6 @@ const SearchBar: React.FC<Props> = ({ query, startSearchSong }: Props) => {
         { adapter: jsonpAdapter }
       )
       .then((response) => {
-        console.log(response);
         let suggestionList: string[] = [];
         response.data[1].map((item: any) => {
           suggestionList.push(item[0]);

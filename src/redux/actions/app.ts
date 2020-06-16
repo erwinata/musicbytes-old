@@ -116,7 +116,6 @@ export const loginUser = (userData: UserData, startup?: boolean) => {
 
     await checkLoadSongPlayed(!startup);
 
-    console.log("RC 1");
     await generateRecommendation(2);
   };
 };

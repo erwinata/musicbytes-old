@@ -64,11 +64,6 @@ const Listen: React.FC<Props> = ({
     OptionActionType.LIKE_SONG,
   ];
 
-  useEffect(() => {
-    console.log("recommendation");
-    console.log(recommendation);
-  }, [recommendation]);
-
   const [loadingMore, setLoadingMore] = useState(false);
 
   const handleScroll = (e: any) => {

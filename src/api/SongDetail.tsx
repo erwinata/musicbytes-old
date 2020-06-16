@@ -67,8 +67,6 @@ export const SongDetail = (
       await axios
         .get(`${store.getState().app.apiBaseURL}v1/song/` + ids)
         .then((response: any) => {
-          console.log(response);
-
           response.data.songs.map((song: any) => {
             let songItem: Song = convertSongFromDB(song);
             cachedSong.push(songItem);

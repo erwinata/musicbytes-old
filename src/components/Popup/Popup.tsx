@@ -69,8 +69,6 @@ const Popup: React.FC<Props> = ({
   deletePlaylist,
   viewPlaylist,
 }) => {
-  // console.log(popupState);
-
   const [popupHeaderText, setPopupHeaderText] = useState("");
 
   const [contentHeight, setContentHeight] = useState(500);

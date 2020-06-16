@@ -67,10 +67,6 @@ const SongList: React.FC<Props> = ({
   }, [songs]);
 
   useEffect(() => {
-    console.log(songsDisplayed);
-  }, [songsDisplayed]);
-
-  useEffect(() => {
     if (songs.length > songsDisplayed.length && songsDisplayed.length !== 0) {
       let songsToDisplay = [];
       for (

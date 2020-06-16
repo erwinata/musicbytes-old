@@ -50,7 +50,6 @@ const PlayerProgressBar: React.FC<TimeProps> = ({ time, seekTo }) => {
 
     var percentage = (offsetX / currentTargetRect.right) * 100;
     var newTimeCurrent = PercentageToDuration(percentage, time.total);
-    console.log("%" + newTimeCurrent);
     seekTo!(newTimeCurrent);
   };
 

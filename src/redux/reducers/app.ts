@@ -218,7 +218,6 @@ export const appReducer = (
         user: undefined,
       };
     case "CHANGE_TAB":
-      // console.log("REDUCER" + action.query);
       let transitionDirection = 1;
       if (action.to == NavigationTab.LIBRARY) {
         transitionDirection = -1;

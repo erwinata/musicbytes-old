@@ -62,8 +62,6 @@ export const listenReducer = (
       let indexTarget = findIndex(state.recommendation, {
         reference: action.reference,
       });
-      console.log("indexTarget");
-      console.log(indexTarget);
       if (indexTarget === -1) return state;
       else
         return {

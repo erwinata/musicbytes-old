@@ -20,7 +20,6 @@ export const SearchSongLocal = (
       )
       // .get(`${state.app.apiBaseURL}v1/search?query=` + query)
       .then((response) => {
-        console.log(response);
         let resultSongs: Song[] = [];
         response.data.songs.map((song: any) => {
           let songItem: Song = convertSongFromDB(song);
@@ -39,7 +38,6 @@ export const SearchPeopleFavorites = (): Promise<Song[]> => {
       .get(`${state.app.apiBaseURL}v1/recommendation/peoplefavorites`)
       // .get(`${state.app.apiBaseURL}v1/search?query=` + query)
       .then((response) => {
-        console.log(response);
         let resultSongs: Song[] = [];
         response.data.songs.map((song: any) => {
           let songItem: Song = convertSongFromDB(song);

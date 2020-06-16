@@ -142,13 +142,11 @@ export const libraryReducer = (
         collection: [],
       };
     case "LOAD_COLLECTION":
-      console.log(action.collection);
       return {
         ...state,
         collection: action.collection,
       };
     case "LOAD_PLAYLISTS":
-      console.log(action.playlists);
       return {
         ...state,
         playlists: action.playlists,

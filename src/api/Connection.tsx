@@ -44,8 +44,6 @@ export const axiosIntercept = (options = {}) => {
         dispatch(actionUpdateToken(newtoken));
         dispatch(actionShowToast("New JWT Token"));
       }
-      console.log("INTERCEPT BENER");
-      console.log(response);
       return response;
     },
     function (error) {
@@ -54,7 +52,6 @@ export const axiosIntercept = (options = {}) => {
           bindActionCreators(logoutUser, dispatch)();
           break;
         default:
-          console.log(error.response);
       }
       return Promise.reject(error);
     }
@@ -92,9 +89,7 @@ export const axiosInterceptGoogle = (options = {}) => {
         newtoken = { musicbytes: newtoken };
         storeUpdateToken(newtoken);
         store.dispatch(actionUpdateToken(newtoken));
-        console.log("NEWWWWW TOKEN");
       }
-      console.log(response);
       return response;
     },
     function (error) {
@@ -103,7 +98,6 @@ export const axiosInterceptGoogle = (options = {}) => {
           // store.dispatch("logoff");
           break;
         default:
-          console.log(error.response);
       }
       return Promise.reject(error);
     }

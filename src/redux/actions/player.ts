@@ -104,15 +104,7 @@ export const playSong = (song: Song, resetPlaylist: boolean) => {
 
       if (localStorage.getItem("scheduler")) {
         let scheduler = JSON.parse(localStorage.getItem("scheduler")!);
-        console.log(
-          Date.now() +
-            "  " +
-            scheduler.syncSongPlayed +
-            " " +
-            (Date.now() - scheduler.syncSongPlayed)
-        );
         if (parseInt(scheduler.syncSongPlayed) >= Date.now()) {
-          console.log("SYNC SONG PLAYED");
           axiosIntercept().post(
             `${getState().app.apiBaseURL}v1/userdata/songplayed`,
             {

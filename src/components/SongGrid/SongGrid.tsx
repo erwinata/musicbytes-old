@@ -116,7 +116,6 @@ const SongGrid: React.FC<Props> = ({
   }, [songGridItemMeasure.width, songGridMeasure.width]);
 
   const mouseMove = (e: any, direction: number) => {
-    // console.log(e);
     const currentTargetRect = e.currentTarget.getBoundingClientRect();
     const offsetX = e.pageX - currentTargetRect.left;
     const elementWidth = currentTargetRect.right - currentTargetRect.left;
@@ -136,30 +135,6 @@ const SongGrid: React.FC<Props> = ({
         }, 100)
       );
     }
-
-    // if (percentage > 10 && percentage < 90) {
-    //   stopHovering();
-    // } else {
-    //   if (percentage > 95) {
-    //     setMouseHovering(2);
-    //   } else if (percentage > 90) {
-    //     setMouseHovering(1);
-    //   }
-
-    //   if (percentage < 5) {
-    //     setMouseHovering(-2);
-    //   } else if (percentage < 10) {
-    //     setMouseHovering(-1);
-    //   }
-
-    //   if (scrollingInterval === null) {
-    //     setScrollingInterval(
-    //       setInterval(() => {
-    //         setTick(Date.now());
-    //       }, 100)
-    //     );
-    //   }
-    // }
   };
 
   const stopHovering = () => {
@@ -169,21 +144,6 @@ const SongGrid: React.FC<Props> = ({
   };
 
   const style = {
-    // songgrid: {
-    //   // height:
-    //   //   songGridItemMeasure.height < 120 ? 120 : songGridItemMeasure.height,
-    // },
-    // wrapper: {
-    //   // height: songGridMeasure.width,
-    //   // width:
-    //   //   songGridItemMeasure.height < 120 ? 120 : songGridItemMeasure.height,
-    //   // transform:
-    //   //   "rotate(-90deg) translateX(-" + songGridItemMeasure.height + "px)",
-    // },
-    // container: {
-    //   // transform:
-    //   //   "rotate(90deg) translateY(-" + songGridItemMeasure.height + "px)",
-    // },
     arrowRight: useSpring({
       opacity:
         songGridItemMeasure.width <= songGridMeasure.width ||

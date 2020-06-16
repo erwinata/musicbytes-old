@@ -27,8 +27,6 @@ export const storeUpdateToken = (token: {
       },
     };
 
-    console.log("STORE UP " + token.google);
-
     localStorage.setItem("user", JSON.stringify(user));
   }
 };
