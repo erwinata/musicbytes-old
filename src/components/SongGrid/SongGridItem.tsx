@@ -64,8 +64,8 @@ const SongGridItem: React.FC<Props> = ({
         style={{
           backgroundImage: `url('${
             isSong
-              ? song?.thumbnails?.high
-              : playlist?.songs[0].thumbnails?.high
+              ? song?.thumbnails?.medium
+              : playlist?.songs[0].thumbnails?.medium
           }')`,
         }}
       >

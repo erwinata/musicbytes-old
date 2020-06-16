@@ -41,6 +41,17 @@ export const loadUser = () => {
   return undefined;
 };
 
+export const getSongPlayed = () => {
+  let result: {
+    song: string;
+    total: number;
+  }[] = [];
+  if (localStorage.getItem("song_played")) {
+    result = JSON.parse(localStorage.getItem("song_played")!);
+  }
+  return result;
+};
+
 export const storeSearchSongIds = (
   query: string,
   songIds: string,

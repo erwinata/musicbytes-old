@@ -5,6 +5,8 @@ import {
   FILL_RECOMMENDATION,
   REMOVE_RECOMMENDATION,
   ADD_COMMON_RECOMMENDATION,
+  ADD_SONG_SEARCHED,
+  SET_LOADING_RECOMMENDATION,
 } from "redux/types/listen";
 import { Song } from "types/Song";
 import { concat, uniqBy, findIndex, remove, filter } from "lodash";
@@ -14,6 +16,11 @@ import { Playlist } from "types/Playlist";
 export interface IListenState {
   playlist: Playlist[];
   recommendation: Recommendation[];
+  recommendationState: {
+    loading: boolean;
+    songSearched: string[];
+    isEnded: boolean;
+  };
   commonRecommendation: CommonRecommendation[];
   recent: {
     song?: Song;
@@ -24,6 +31,11 @@ export interface IListenState {
 const listenReducerDefaultState: IListenState = {
   playlist: [],
   recommendation: [],
+  recommendationState: {
+    loading: false,
+    songSearched: [],
+    isEnded: false,
+  },
   commonRecommendation: [],
   recent: [],
 };
@@ -73,6 +85,26 @@ export const listenReducer = (
       return {
         ...state,
         recommendation: recommendation,
+      };
+    case ADD_SONG_SEARCHED:
+      return {
+        ...state,
+        recommendationState: {
+          ...state.recommendationState,
+          songSearched: [
+            ...state.recommendationState.songSearched,
+            action.songId,
+          ],
+          isEnded: action.isEnded,
+        },
+      };
+    case SET_LOADING_RECOMMENDATION:
+      return {
+        ...state,
+        recommendationState: {
+          ...state.recommendationState,
+          loading: action.loading,
+        },
       };
     case ADD_RECENT:
       return {

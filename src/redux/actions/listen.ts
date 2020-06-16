@@ -10,6 +10,7 @@ import {
   CommonRecommendation,
 } from "types/Recommendation";
 import { Playlist } from "types/Playlist";
+import { getSongPlayed } from "helpers/localStorage";
 
 export const actionAddCommonRecommendation = (
   recommendation: CommonRecommendation
@@ -40,6 +41,22 @@ export const actionRemoveRecommendation = (reference: {
 }): AllActions => ({
   type: "REMOVE_RECOMMENDATION",
   reference,
+});
+
+export const actionAddSongSearched = (
+  songId: string,
+  isEnded: boolean
+): AllActions => ({
+  type: "ADD_SONG_SEARCHED",
+  songId,
+  isEnded,
+});
+
+export const actionSetLoadingRecommendation = (
+  loading: boolean
+): AllActions => ({
+  type: "SET_LOADING_RECOMMENDATION",
+  loading,
 });
 
 export const actionSetRecent = (
@@ -81,6 +98,28 @@ export const removeRecommendation = (reference: {
 }) => {
   return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
     dispatch(actionRemoveRecommendation(reference));
+  };
+};
+
+export const addSongSearched = (songId: string) => {
+  return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    let cachedSongPlayed = getSongPlayed();
+    let isEnded = false;
+
+    if (
+      getState().listen.recommendationState.songSearched.length ===
+      cachedSongPlayed.length - 1
+    ) {
+      isEnded = true;
+    }
+
+    dispatch(actionAddSongSearched(songId, isEnded));
+  };
+};
+
+export const setLoadingRecommendation = (loading: boolean) => {
+  return async (dispatch: Dispatch<AllActions>, getState: () => AppState) => {
+    dispatch(actionSetLoadingRecommendation(loading));
   };
 };
 

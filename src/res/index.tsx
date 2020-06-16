@@ -36,3 +36,8 @@ export const res_play_white = require("./play_white.svg");
 export const res_close = require("./close.svg");
 export const res_delete = require("./delete.svg");
 export const res_back = require("./back.svg");
+
+export const res_arrow_left = require("./arrow_left.svg");
+export const res_arrow_right = require("./arrow_right.svg");
+export const res_circle_left = require("./circle_left.svg");
+export const res_circle_right = require("./circle_right.svg");

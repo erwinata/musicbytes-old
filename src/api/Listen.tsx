@@ -14,22 +14,27 @@ import {
   fillRecommendation,
   removeRecommendation,
   addCommonRecommendation,
+  addSongSearched,
+  setLoadingRecommendation,
 } from "redux/actions/listen";
+import { resolve } from "url";
 
 export const getRandomSongReference = (
-  cachedSongPlayed: { song: string; total: number }[],
-  total: number
+  cachedSongPlayed: { song: string; total: number }[]
 ) => {
   const state = store.getState();
 
-  let resultIndex: number[] = [];
+  let resultIndex: number = -1;
   let indexPool: number[] = [];
 
   cachedSongPlayed.map((song, index) => {
     if (
-      !find(state.listen.recommendation, (e) => {
-        return e.reference.song.id === song.song;
-      })
+      !find(
+        state.listen.recommendationState.songSearched,
+        (songSearchedItem) => {
+          return songSearchedItem === song.song;
+        }
+      )
     ) {
       indexPool = indexPool.concat(Array(song.total).fill(index));
     }
@@ -38,21 +43,14 @@ export const getRandomSongReference = (
   console.log("indexPool");
   console.log(indexPool);
 
-  // for (let i = 0; i < cachedSongPlayed.length; i++) {
-  //   indexPool = indexPool.concat(Array(cachedSongPlayed[i].total).fill(i));
-  // }
-  for (let i = 0; i < Math.min(total, cachedSongPlayed.length); i++) {
-    let randomIndex = Math.floor(Math.random() * Math.floor(indexPool.length));
-    let indexSong = indexPool[randomIndex];
-    resultIndex.push(indexSong);
-    remove(indexPool, (indexPoolItem) => indexPoolItem === indexSong);
-  }
+  let randomIndex = Math.floor(Math.random() * Math.floor(indexPool.length));
+  resultIndex =
+    indexPool[randomIndex] !== undefined ? indexPool[randomIndex] : -1;
+
   return resultIndex;
 };
 
 export const retrieveRecommendation = async (songSelected: Song) => {
-  // setTimeout(resolve, 100, 'foo');
-
   // let totalTags = Math.round(
   //   clamp(
   //     songSelected!.tags.length / 2,
@@ -77,63 +75,100 @@ export const retrieveRecommendation = async (songSelected: Song) => {
 
 export const generateRecommendation = async (total: number) => {
   const dispatch = store.dispatch;
+  const state = store.getState();
+
+  bindActionCreators(setLoadingRecommendation, dispatch)(true);
 
   let cachedSongPlayed: { song: string; total: number }[] = [];
 
   if (localStorage.getItem("song_played")) {
     cachedSongPlayed = JSON.parse(localStorage.getItem("song_played")!);
-    // let songSelectedId = cachedSongPlayed[0].song;
 
-    let songSelectedIndexes = getRandomSongReference(cachedSongPlayed, total);
+    let currentTotalRecommendation = state.listen.recommendation.length;
+    const targetTotal = Math.min(
+      cachedSongPlayed.length,
+      state.listen.recommendation.length + total
+    );
+    console.log("limit");
 
-    if (localStorage.getItem("song")) {
-      let resultSongsIds = await Promise.all(
-        songSelectedIndexes.map(async (songSelectedIndex) => {
-          let songSelectedId = cachedSongPlayed[songSelectedIndex].song;
-          let songSelected = (await SongDetail(songSelectedId))[0];
+    let iteration = 0;
+    let limitIteration =
+      cachedSongPlayed.length - state.listen.recommendation.length;
 
-          let recommendationAdd: Recommendation = {
-            title: "Related to " + songSelected?.title,
-            song: [],
-            reference: {
-              song: songSelected!,
-              type: RecommendationType.TAGS,
-            },
-          };
+    // console.log(limit);
+    // console.log(targetTotal);
+    // console.log(limit);
 
-          bindActionCreators(addRecommendation, dispatch)(recommendationAdd);
+    while (
+      currentTotalRecommendation < targetTotal ||
+      iteration < limitIteration
+    ) {
+      // let songSelectedId = cachedSongPlayed[0].song;
 
-          if (songSelected) {
-            return retrieveRecommendation(songSelected);
-          }
-          return [];
-        })
-      );
+      let songSelectedIndex = getRandomSongReference(cachedSongPlayed);
+      console.log("songSelectedIndex");
+      console.log(songSelectedIndex);
 
-      console.log("resultSongs");
-      console.log(resultSongsIds);
-      console.log(songSelectedIndexes);
+      if (songSelectedIndex === -1) {
+        break;
+      }
 
-      await Promise.all(
-        songSelectedIndexes.map(async (songSelectedIndex, index) => {
-          let songSelectedId = cachedSongPlayed[songSelectedIndex].song;
-          let songSelected = (await SongDetail(songSelectedId))[0];
-          let reference = {
+      let songSelectedId = cachedSongPlayed[songSelectedIndex].song;
+      let songSelected = (await SongDetail(songSelectedId))[0];
+
+      let resultSongs = await new Promise<Song[]>(async (resolve) => {
+        let recommendationAdd: Recommendation = {
+          title: "Related to " + songSelected?.title,
+          song: [],
+          reference: {
             song: songSelected!,
             type: RecommendationType.TAGS,
-          };
+          },
+        };
 
-          if (resultSongsIds[index].length >= 3) {
-            bindActionCreators(fillRecommendation, dispatch)(
-              resultSongsIds[index],
-              reference
-            );
-          } else {
-            bindActionCreators(removeRecommendation, dispatch)(reference);
-          }
-        })
-      );
+        bindActionCreators(addRecommendation, dispatch)(recommendationAdd);
+
+        if (songSelected) {
+          resolve(retrieveRecommendation(songSelected));
+        }
+        resolve([]);
+      });
+
+      console.log("resultSongs");
+      console.log(resultSongs);
+
+      await new Promise(async (resolve) => {
+        let reference = {
+          song: songSelected!,
+          type: RecommendationType.TAGS,
+        };
+
+        bindActionCreators(addSongSearched, dispatch)(songSelectedId);
+
+        if (resultSongs.length >= 3) {
+          bindActionCreators(fillRecommendation, dispatch)(
+            resultSongs,
+            reference
+          );
+          currentTotalRecommendation++;
+        } else {
+          bindActionCreators(removeRecommendation, dispatch)(reference);
+        }
+
+        resolve();
+      });
+
+      iteration++;
+
+      console.log("rec " + currentTotalRecommendation + " " + targetTotal);
+      console.log("ite " + iteration + " " + limitIteration);
+
+      if (currentTotalRecommendation == targetTotal) {
+        break;
+      }
     }
+
+    bindActionCreators(setLoadingRecommendation, dispatch)(false);
   }
 };
 

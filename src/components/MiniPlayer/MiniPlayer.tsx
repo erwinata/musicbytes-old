@@ -27,7 +27,10 @@ interface StateProps {
     seeking: boolean;
   };
   playState: PlayState;
-  isDesktop: boolean;
+  deviceInfo: {
+    isLandscape: boolean;
+    isTouch: boolean;
+  };
 }
 interface DispatchProps {
   showPlayer: (show: boolean) => any;
@@ -40,7 +43,7 @@ const MiniPlayer: React.FC<Props> = ({
   songs,
   time,
   playState,
-  isDesktop,
+  deviceInfo,
   showPlayer,
   togglePlaying,
   nextSong,
@@ -87,7 +90,7 @@ const MiniPlayer: React.FC<Props> = ({
     setTitleStyleState({ reset: true, reverse: false });
   }, [songs?.playing]);
 
-  if (!songs || isDesktop) return null;
+  if (!songs || deviceInfo.isLandscape) return null;
   else {
     if (songs!.list.length <= 0) return null;
   }
@@ -141,7 +144,7 @@ const mapStateToProps = (state: AppState) => {
     songs: state.player.songs,
     time: state.player.time,
     playState: state.player.playerState.playState,
-    isDesktop: state.app.isDesktop,
+    deviceInfo: state.app.deviceInfo,
   };
 };
 

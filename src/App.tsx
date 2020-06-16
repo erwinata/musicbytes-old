@@ -33,7 +33,7 @@ import { useEffectOnce } from "react-use";
 import ClickOverlay from "components/ClickOverlay/ClickOverlay";
 import Cookies from "js-cookie";
 import { UserData } from "types/UserData";
-import { isBrowser } from "react-device-detect";
+import { isBrowser, isMobile } from "react-device-detect";
 import { ToastType } from "types/ToastType";
 import { loadUser } from "helpers/localStorage";
 import { ConvertDurationToNumber } from "helpers/duration";
@@ -62,7 +62,10 @@ type Props = StateProps & DispatchProps;
 interface StateProps {
   user?: UserData;
   recommendation: Recommendation[];
-  isDesktop: boolean;
+  deviceInfo: {
+    isLandscape: boolean;
+    isTouch: boolean;
+  };
   tabState: {
     currentTab: NavigationTab;
     transitionDirection: number;
@@ -83,7 +86,7 @@ interface DispatchProps {
 const App: React.FC<Props> = ({
   user,
   recommendation,
-  isDesktop,
+  deviceInfo,
   tabState,
   songs,
   showPlayer,
@@ -161,8 +164,6 @@ const App: React.FC<Props> = ({
     h: window.innerHeight,
   });
 
-  useEffectOnce(() => {});
-
   useEffect(() => {
     if (windowSize.w > windowSize.h && isBrowser) {
       setDevice(true);
@@ -181,9 +182,7 @@ const App: React.FC<Props> = ({
 
       const userLoggedIn = await checkUserCookies();
 
-      if (!userLoggedIn) {
-        generateCommonRecommendation();
-      }
+      await generateCommonRecommendation();
 
       switch (location.pathname) {
         case "/":
@@ -254,7 +253,7 @@ const App: React.FC<Props> = ({
           />
         </div>
       ) : (
-        <div className={`wrapper ${isDesktop ? "desktop" : ""}`}>
+        <div className={`wrapper ${deviceInfo.isLandscape ? "desktop" : ""}`}>
           <Overlay />
           <ClickOverlay />
           <MiniPlayer />
@@ -262,10 +261,16 @@ const App: React.FC<Props> = ({
           <Popup />
           <Option />
 
-          <div className={`leftWrapper ${isDesktop ? "desktop" : ""}`}>
+          <div
+            className={`leftWrapper ${deviceInfo.isLandscape ? "desktop" : ""}`}
+          >
             <Player />
           </div>
-          <div className={`rightWrapper ${isDesktop ? "desktop" : ""}`}>
+          <div
+            className={`rightWrapper ${
+              deviceInfo.isLandscape ? "desktop" : ""
+            }`}
+          >
             <Header />
             <PlaylistView />
             <Navbar />
@@ -281,7 +286,7 @@ const mapStateToProps = (state: AppState) => {
   return {
     user: state.app.user,
     recommendation: state.listen.recommendation,
-    isDesktop: state.app.isDesktop,
+    deviceInfo: state.app.deviceInfo,
     tabState: state.app.tabState,
     songs: state.player.songs,
     showPlayer: state.player.showPlayer,

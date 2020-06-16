@@ -26,6 +26,10 @@ import { SongDetail } from "api/SongDetail";
 import { SearchSongLocal } from "api/SearchLocal";
 import { InfoImage } from "components/InfoImage/InfoImage";
 import { InfoImageType } from "types/InfoImage";
+import HorizontalScroll from "react-scroll-horizontal";
+import { Loading } from "components/Loading/Loading";
+import { LoadingType } from "types/LoadingType";
+import { generateRecommendation } from "api/Listen";
 
 type Props = PassingProps & StateProps & DispatchProps;
 
@@ -36,8 +40,16 @@ interface StateProps {
     playlist?: Playlist;
   }[];
   recommendation: Recommendation[];
+  recommendationState: {
+    loading: boolean;
+    songSearched: string[];
+    isEnded: boolean;
+  };
   commonRecommendation: CommonRecommendation[];
-  isDesktop: boolean;
+  deviceInfo: {
+    isLandscape: boolean;
+    isTouch: boolean;
+  };
   songs?: {
     playing: Song;
     list: Song[];
@@ -51,8 +63,9 @@ interface DispatchProps {
 const Listen: React.FC<Props> = ({
   recent,
   recommendation,
+  recommendationState,
   commonRecommendation,
-  isDesktop,
+  deviceInfo,
   songs,
   addRecommendation,
   setRecent,
@@ -68,8 +81,107 @@ const Listen: React.FC<Props> = ({
     console.log(recommendation);
   }, [recommendation]);
 
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  const handleScroll = (e: any) => {
+    const target = e.target;
+
+    let pos = target.scrollHeight - target.scrollTop;
+
+    if (pos >= target.clientHeight - 5 && pos <= target.clientHeight) {
+      if (!loadingMore) {
+        setLoadingMore(true);
+        generateRecommendation(2);
+      }
+    }
+  };
+
   return (
-    <div className={`Listen ${isDesktop ? "desktop" : ""}`}>
+    <div
+      className={`Listen ${!deviceInfo.isTouch ? "desktop" : ""}`}
+      onScroll={handleScroll}
+    >
+      {/* <div className={`outer-wrapper ${!deviceInfo.isTouch ? "desktop" : ""}`}>
+        <div className={`wrapperr ${!deviceInfo.isTouch ? "desktop" : ""}`}>
+          <div className={`HorizonItem`}>
+            <div
+              className="image"
+              style={{
+                backgroundImage:
+                  "url('https://i.ytimg.com/vi/7dNrO7TSZdU/hqdefault.jpg')",
+              }}
+            ></div>
+            <h1>Judul</h1>
+            <h2>artis</h2>
+          </div>
+          <div className={`HorizonItem`}>
+            <div
+              className="image"
+              style={{
+                backgroundImage:
+                  "url('https://i.ytimg.com/vi/7dNrO7TSZdU/hqdefault.jpg')",
+              }}
+            ></div>
+            <h1>Judul</h1>
+            <h2>artis</h2>
+          </div>
+          <div className={`HorizonItem`}>
+            <div
+              className="image"
+              style={{
+                backgroundImage:
+                  "url('https://i.ytimg.com/vi/7dNrO7TSZdU/hqdefault.jpg')",
+              }}
+            ></div>
+            <h1>Judul</h1>
+            <h2>artis</h2>
+          </div>
+          <div className={`HorizonItem`}>
+            <div
+              className="image"
+              style={{
+                backgroundImage:
+                  "url('https://i.ytimg.com/vi/7dNrO7TSZdU/hqdefault.jpg')",
+              }}
+            ></div>
+            <h1>Judul</h1>
+            <h2>artis</h2>
+          </div>
+          <div className={`HorizonItem`}>
+            <div
+              className="image"
+              style={{
+                backgroundImage:
+                  "url('https://i.ytimg.com/vi/7dNrO7TSZdU/hqdefault.jpg')",
+              }}
+            ></div>
+            <h1>Judul</h1>
+            <h2>artis</h2>
+          </div>
+        </div>
+      </div> */}
+
+      {/* <div className="tesHorizontal">
+        <div className="tesHorizontalItem">
+          <img src="https://i.ytimg.com/vi/7dNrO7TSZdU/hqdefault.jpg" alt="a" />
+        </div>
+        <div className="tesHorizontalItem">
+          <img src="https://i.ytimg.com/vi/7dNrO7TSZdU/hqdefault.jpg" alt="a" />
+        </div>
+        <div className="tesHorizontalItem">
+          <img src="https://i.ytimg.com/vi/7dNrO7TSZdU/hqdefault.jpg" alt="a" />
+        </div>
+        <div className="tesHorizontalItem">
+          <img src="https://i.ytimg.com/vi/7dNrO7TSZdU/hqdefault.jpg" alt="a" />
+        </div>
+        <div className="tesHorizontalItem">
+          <img src="https://i.ytimg.com/vi/7dNrO7TSZdU/hqdefault.jpg" alt="a" />
+        </div>
+        <div className="tesHorizontalItem">
+          <img src="https://i.ytimg.com/vi/7dNrO7TSZdU/hqdefault.jpg" alt="a" />
+        </div>
+      </div> */}
+
       {recent.length > 0 ? (
         <>
           <CategoryTitle text="Recently Played" />
@@ -95,7 +207,7 @@ const Listen: React.FC<Props> = ({
 
       <CategoryTitle text="You might like these" />
 
-      {recommendation.length > 0 ? (
+      {recommendation.length > 0 || !recommendationState.isEnded ? (
         <>
           {recommendation.map((recommendationItem) => {
             return (
@@ -115,12 +227,16 @@ const Listen: React.FC<Props> = ({
         />
       )}
 
-      <div className="end">
-        <h1>Wanna see more recommendation?</h1>
-        <h2>Play more songs so we can tune your preferences :)</h2>
-      </div>
+      <Loading show={recommendationState.loading} type={LoadingType.Scale} />
 
-      {songs?.playing && !isDesktop ? (
+      {recommendationState.isEnded ? (
+        <div className="end">
+          <h1>Wanna see more recommendation?</h1>
+          <h2>Play more songs so we can tune your preferences :)</h2>
+        </div>
+      ) : null}
+
+      {songs?.playing && !deviceInfo.isLandscape ? (
         <div className="miniPlayerPadding"></div>
       ) : null}
     </div>
@@ -131,8 +247,9 @@ const mapStateToProps = (state: AppState) => {
   return {
     recent: state.listen.recent,
     recommendation: state.listen.recommendation,
+    recommendationState: state.listen.recommendationState,
     commonRecommendation: state.listen.commonRecommendation,
-    isDesktop: state.app.isDesktop,
+    deviceInfo: state.app.deviceInfo,
     songs: state.player.songs,
   };
 };

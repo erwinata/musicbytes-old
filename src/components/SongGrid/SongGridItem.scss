@@ -1,8 +1,11 @@
 @import "_base";
 
 .SongGridItem {
-  // display: inline-block;
+  display: inline-block;
+  vertical-align: top;
   position: relative;
+  width: 12rem;
+  margin-right: 1rem;
 
   .image {
     position: relative;
@@ -44,7 +47,7 @@
   }
   h2 {
     @extend .subText;
-    max-height: 1.1rem;
+    max-height: 2.1rem;
     overflow: hidden;
   }
 }

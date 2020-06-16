@@ -12,6 +12,7 @@ import { PopupMenuType } from "types/PopupMenuType";
 import { OptionActionType } from "types/Option";
 import { XY } from "types/XY";
 import { UserData } from "types/UserData";
+import { isMobile } from "react-device-detect";
 
 export interface IAppState {
   user?: UserData;
@@ -44,7 +45,10 @@ export interface IAppState {
     optionList?: OptionActionType[];
     position?: XY;
   };
-  isDesktop: boolean;
+  deviceInfo: {
+    isLandscape: boolean;
+    isTouch: boolean;
+  };
 }
 
 const samplePlaylist = [
@@ -172,7 +176,10 @@ const appReducerDefaultState: IAppState = {
   optionState: {
     show: false,
   },
-  isDesktop: false,
+  deviceInfo: {
+    isLandscape: false,
+    isTouch: isMobile,
+  },
 };
 
 export const appReducer = (
@@ -293,7 +300,10 @@ export const appReducer = (
     case "SET_DEVICE":
       return {
         ...state,
-        isDesktop: action.isDesktop,
+        deviceInfo: {
+          ...state.deviceInfo,
+          isLandscape: action.isDesktop,
+        },
       };
     default:
       return state;

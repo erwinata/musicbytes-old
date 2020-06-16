@@ -1,8 +1,4 @@
 @import "_base";
-@import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap");
 
 :root {
@@ -27,6 +23,8 @@
   -khtml-user-drag: none;
   -moz-user-drag: none;
   -o-user-drag: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 ::-webkit-scrollbar {
@@ -57,7 +55,7 @@
     }
   }
 
-  .wrapper {
+  & > .wrapper {
     height: 100vh;
     width: 100vw;
     overflow: hidden;

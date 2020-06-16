@@ -19,7 +19,10 @@ interface StateProps {
     currentTab: NavigationTab;
   };
   showPlayer: boolean;
-  isDesktop: boolean;
+  deviceInfo: {
+    isLandscape: boolean;
+    isTouch: boolean;
+  };
 }
 interface DispatchProps {
   viewPlaylist: (playlist: Playlist, playlistIndex?: number) => any;
@@ -28,12 +31,12 @@ interface DispatchProps {
 const Navbar: React.FC<Props> = ({
   tabState,
   showPlayer,
-  isDesktop,
+  deviceInfo,
   viewPlaylist,
 }) => {
   return (
     <div
-      className={`Navbar ${isDesktop ? "desktop" : ""}`}
+      className={`Navbar ${deviceInfo.isLandscape ? "desktop" : ""}`}
       onClick={() => {
         viewPlaylist(undefined!);
       }}
@@ -41,7 +44,8 @@ const Navbar: React.FC<Props> = ({
       <Link to="/Discover">
         <NavbarItem
           active={
-            ((!showPlayer && !isDesktop) || isDesktop) &&
+            ((!showPlayer && !deviceInfo.isLandscape) ||
+              deviceInfo.isLandscape) &&
             tabState.currentTab === NavigationTab.DISCOVER
           }
           type={NavigationTab.DISCOVER}
@@ -50,7 +54,8 @@ const Navbar: React.FC<Props> = ({
       <Link to="/">
         <NavbarItem
           active={
-            ((!showPlayer && !isDesktop) || isDesktop) &&
+            ((!showPlayer && !deviceInfo.isLandscape) ||
+              deviceInfo.isLandscape) &&
             tabState.currentTab === NavigationTab.LISTEN
           }
           type={NavigationTab.LISTEN}
@@ -59,7 +64,8 @@ const Navbar: React.FC<Props> = ({
       <Link to="/Library">
         <NavbarItem
           active={
-            ((!showPlayer && !isDesktop) || isDesktop) &&
+            ((!showPlayer && !deviceInfo.isLandscape) ||
+              deviceInfo.isLandscape) &&
             tabState.currentTab === NavigationTab.LIBRARY
           }
           type={NavigationTab.LIBRARY}
@@ -73,7 +79,7 @@ const mapStateToProps = (state: AppState) => {
   return {
     tabState: state.app.tabState,
     showPlayer: state.player.showPlayer,
-    isDesktop: state.app.isDesktop,
+    deviceInfo: state.app.deviceInfo,
   };
 };
 const mapDispatchToProps = (

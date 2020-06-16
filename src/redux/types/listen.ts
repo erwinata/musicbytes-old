@@ -11,6 +11,10 @@ export const ADD_COMMON_RECOMMENDATION = "ADD_COMMON_RECOMMENDATION";
 export const ADD_RECOMMENDATION = "ADD_RECOMMENDATION";
 export const FILL_RECOMMENDATION = "FILL_RECOMMENDATION";
 export const REMOVE_RECOMMENDATION = "REMOVE_RECOMMENDATION";
+
+export const ADD_SONG_SEARCHED = "ADD_SONG_SEARCHED";
+export const SET_LOADING_RECOMMENDATION = "SET_LOADING_RECOMMENDATION";
+
 export const ADD_RECENT = "ADD_RECENT";
 
 export interface AddCommonRecommendationAction {
@@ -35,6 +39,16 @@ export interface RemoveRecommendationAction {
   };
 }
 
+export interface AddSongSearchedAction {
+  type: typeof ADD_SONG_SEARCHED;
+  songId: string;
+  isEnded: boolean;
+}
+export interface SetLoadingRecommendationAction {
+  type: typeof SET_LOADING_RECOMMENDATION;
+  loading: boolean;
+}
+
 export interface SetRecentAction {
   type: typeof ADD_RECENT;
   recent: {
@@ -48,4 +62,6 @@ export type ListenActionTypes =
   | AddRecommendationAction
   | FillRecommendationAction
   | RemoveRecommendationAction
+  | AddSongSearchedAction
+  | SetLoadingRecommendationAction
   | SetRecentAction;

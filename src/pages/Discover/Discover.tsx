@@ -29,7 +29,10 @@ interface StateProps {
   query: string;
   songs?: Song[];
   songPlaying?: Song;
-  isDesktop: boolean;
+  deviceInfo: {
+    isLandscape: boolean;
+    isTouch: boolean;
+  };
 }
 interface DispatchProps {
   addToNowPlaying: (song: Song) => any;
@@ -42,7 +45,7 @@ export const Discover: React.FC<Props> = ({
   query,
   songs,
   songPlaying,
-  isDesktop,
+  deviceInfo,
   addToNowPlaying,
   setPopupMenu,
   likeSong,
@@ -77,7 +80,6 @@ export const Discover: React.FC<Props> = ({
 
     let pos = target.scrollHeight - target.scrollTop;
 
-    // if (loadingMore.scrollLock) {
     //   target.scrollTop = target.scrollHeight + 100;
     // }
 
@@ -102,7 +104,7 @@ export const Discover: React.FC<Props> = ({
 
   return (
     <div
-      className={`Discover ${isDesktop ? "desktop" : ""}`}
+      className={`Discover ${deviceInfo.isLandscape ? "desktop" : ""}`}
       onScroll={handleScroll}
     >
       <SearchBar startSearchSong={startSearchSong} />
@@ -128,7 +130,7 @@ export const Discover: React.FC<Props> = ({
         <Loading show={loadingMore.show} type={LoadingType.Beat} />
       </div>
 
-      {songPlaying && !isDesktop ? (
+      {songPlaying && !deviceInfo.isLandscape ? (
         <div className="miniPlayerPadding"></div>
       ) : null}
     </div>
@@ -140,7 +142,7 @@ const mapStateToProps = (state: AppState) => {
     query: state.discover.query,
     songs: state.discover.songs,
     songPlaying: state.player.songs?.playing,
-    isDesktop: state.app.isDesktop,
+    deviceInfo: state.app.deviceInfo,
   };
 };
 

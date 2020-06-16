@@ -37,7 +37,10 @@ interface StateProps {
     current: number;
     total: number;
   };
-  isDesktop: boolean;
+  deviceInfo: {
+    isLandscape: boolean;
+    isTouch: boolean;
+  };
 }
 interface DispatchProps {
   durationIncrement: () => any;
@@ -54,7 +57,7 @@ const Player: React.FC<Props> = ({
   playerState,
   setting,
   time,
-  isDesktop,
+  deviceInfo,
   durationIncrement,
   addToNowPlaying,
 }: Props) => {
@@ -94,7 +97,7 @@ const Player: React.FC<Props> = ({
   const style = {
     mobile: useSpring({
       top: showPlayer ? "0vh" : "100vh",
-      opacity: showPlayer ? 1 : 0,
+      // opacity: showPlayer ? 1 : 0,
     }),
     desktop: {
       top: "0vh",
@@ -104,8 +107,8 @@ const Player: React.FC<Props> = ({
 
   return (
     <animated.div
-      className={`Player ${isDesktop ? "desktop" : ""}`}
-      style={isDesktop ? style.desktop : style.mobile}
+      className={`Player ${deviceInfo.isLandscape ? "desktop" : ""}`}
+      style={deviceInfo.isLandscape ? style.desktop : style.mobile}
     >
       <PlayerThumbnail />
       <PlayerControl />
@@ -122,7 +125,7 @@ const mapStateToProps = (state: AppState) => {
     playerState: state.player.playerState,
     setting: state.player.setting,
     time: state.player.time,
-    isDesktop: state.app.isDesktop,
+    deviceInfo: state.app.deviceInfo,
   };
 };
 

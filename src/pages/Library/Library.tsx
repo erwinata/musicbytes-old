@@ -38,7 +38,10 @@ interface StateProps {
   playlists: Playlist[];
   collection: Song[];
   songPlaying?: Song;
-  isDesktop: boolean;
+  deviceInfo: {
+    isLandscape: boolean;
+    isTouch: boolean;
+  };
 }
 interface DispatchProps {
   loadPlaylists: (playlists: Playlist[]) => any;
@@ -51,7 +54,7 @@ const Library: React.FC<Props> = ({
   playlists,
   collection,
   songPlaying,
-  isDesktop,
+  deviceInfo,
   loadPlaylists,
   loadCollection,
   addToNowPlaying,
@@ -80,7 +83,7 @@ const Library: React.FC<Props> = ({
   }, [user]);
 
   return (
-    <div className={`Library ${isDesktop ? "desktop" : ""}`}>
+    <div className={`Library ${deviceInfo.isLandscape ? "desktop" : ""}`}>
       {user ? (
         <>
           <CategoryTitle text="Your Playlist" />
@@ -110,7 +113,7 @@ const Library: React.FC<Props> = ({
             resetPlaylist={true}
             textNodata="You don't have any liked songs"
           />
-          {songPlaying && !isDesktop ? (
+          {songPlaying && !deviceInfo.isLandscape ? (
             <div className="miniPlayerPadding"></div>
           ) : null}
         </>
@@ -127,7 +130,7 @@ const mapStateToProps = (state: AppState) => {
     playlists: state.library.playlists,
     collection: state.library.collection,
     songPlaying: state.player.songs?.playing,
-    isDekstop: state.app.isDesktop,
+    deviceInfo: state.app.deviceInfo,
   };
 };
 
