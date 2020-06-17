@@ -185,6 +185,46 @@ const Listen: React.FC<Props> = ({
               />
             );
           })}
+
+          {/* {commonRecommendation.map((recommendationItem, index) => {
+            return (
+              <RecommendationItem
+                recommendation={recommendationItem}
+                optionList={optionList}
+                key={index}
+              />
+            );
+          })}
+
+          {commonRecommendation.map((recommendationItem, index) => {
+            return (
+              <RecommendationItem
+                recommendation={recommendationItem}
+                optionList={optionList}
+                key={index}
+              />
+            );
+          })}
+
+          {commonRecommendation.map((recommendationItem, index) => {
+            return (
+              <RecommendationItem
+                recommendation={recommendationItem}
+                optionList={optionList}
+                key={index}
+              />
+            );
+          })}
+
+          {commonRecommendation.map((recommendationItem, index) => {
+            return (
+              <RecommendationItem
+                recommendation={recommendationItem}
+                optionList={optionList}
+                key={index}
+              />
+            );
+          })} */}
         </>
       ) : null}
 

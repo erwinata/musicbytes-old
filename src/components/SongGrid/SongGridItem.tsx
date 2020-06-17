@@ -54,7 +54,7 @@ const SongGridItem: React.FC<Props> = ({
   });
 
   return (
-    <animated.div
+    <div
       className={`SongGridItem ${!isSong ? "playlist" : ""}`}
       onClick={(e: any) => handleClick(e)}
       // style={style}
@@ -64,8 +64,8 @@ const SongGridItem: React.FC<Props> = ({
         style={{
           backgroundImage: `url('${
             isSong
-              ? song?.thumbnails?.medium
-              : playlist?.songs[0].thumbnails?.medium
+              ? song?.thumbnails?.default
+              : playlist?.songs[0].thumbnails?.default
           }')`,
         }}
       >
@@ -74,7 +74,7 @@ const SongGridItem: React.FC<Props> = ({
       </div>
       <h1>{isSong ? song!.title : playlist!.title}</h1>
       <h2>{isSong ? song!.channel : playlist!.songs.length + " songs"}</h2>
-    </animated.div>
+    </div>
   );
 };
 

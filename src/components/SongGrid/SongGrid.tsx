@@ -93,13 +93,13 @@ const SongGrid: React.FC<Props> = ({
   const [tick, setTick] = useState(0);
   const [scrollLeftLimit, setScrollLeftLimit] = useState(0);
   const scrollLeftSpring = useSpring({ x: scrollLeft });
-  const divRef = React.createRef<any>();
   const [mouseInside, setMouseInside] = useState(false);
   const [mouseHovering, setMouseHovering] = useState(0);
 
   useEffect(() => {
+    console.log("TICK");
     if (mouseHovering !== 0) {
-      let target = divRef.current.scrollLeft + mouseHovering * 150;
+      let target = scrollLeftSpring.x.getValue() + mouseHovering * 175;
       if (target < 0) {
         target = 0;
       } else if (target > scrollLeftLimit) {
@@ -108,6 +108,16 @@ const SongGrid: React.FC<Props> = ({
       setScrollLeft(target);
     }
   }, [tick]);
+
+  const doScroll = () => {
+    let target = scrollLeftSpring.x.getValue() + mouseHovering * 100;
+    if (target < 0) {
+      target = 0;
+    } else if (target > scrollLeftLimit) {
+      target = scrollLeftLimit;
+    }
+    setScrollLeft(target);
+  };
 
   useEffect(() => {
     setScrollLeftLimit(
@@ -119,20 +129,23 @@ const SongGrid: React.FC<Props> = ({
     const currentTargetRect = e.currentTarget.getBoundingClientRect();
     const offsetX = e.pageX - currentTargetRect.left;
     const elementWidth = currentTargetRect.right - currentTargetRect.left;
-    const percentage = (offsetX / elementWidth) * 100;
+    const percentage = offsetX / elementWidth;
 
-    let hovering = (percentage * direction) / 100;
-    if (direction < 0) {
-      hovering = ((100 - percentage) * direction) / 100;
+    let hovering = 0;
+    if (direction > 0) {
+      hovering = Math.max(percentage * direction, 0.35);
+    } else if (direction < 0) {
+      hovering = Math.min((1 - percentage) * direction, -0.35);
     }
 
     setMouseHovering(hovering);
+    // doScroll();
 
     if (scrollingInterval === null) {
       setScrollingInterval(
         setInterval(() => {
           setTick(Date.now());
-        }, 100)
+        }, 150)
       );
     }
   };
@@ -144,34 +157,39 @@ const SongGrid: React.FC<Props> = ({
   };
 
   const style = {
-    arrowRight: useSpring({
-      opacity:
-        songGridItemMeasure.width <= songGridMeasure.width ||
-        deviceInfo.isTouch ||
-        Math.ceil(scrollLeft) === scrollLeftLimit
-          ? 0
-          : 1,
-    }),
-    arrowLeft: useSpring({
-      opacity:
-        songGridItemMeasure.width <= songGridMeasure.width ||
-        deviceInfo.isTouch ||
-        Math.floor(scrollLeft) === 0
-          ? 0
-          : 1,
-    }),
+    arrowRight:
+      // useSpring(
+      {
+        opacity:
+          songGridItemMeasure.width <= songGridMeasure.width ||
+          deviceInfo.isTouch ||
+          Math.ceil(scrollLeft) === scrollLeftLimit
+            ? 0
+            : 1,
+      },
+    // ),
+    arrowLeft:
+      // useSpring(
+      {
+        opacity:
+          songGridItemMeasure.width <= songGridMeasure.width ||
+          deviceInfo.isTouch ||
+          Math.floor(scrollLeft) === 0
+            ? 0
+            : 1,
+      },
+    // ),
   };
 
   return (
-    <animated.div
+    <div
       className={`SongGrid ${!deviceInfo.isTouch ? "desktop" : ""}`}
       // style={!deviceInfo.isTouch ? style.songgrid : undefined}
       ref={songGridRef}
     >
-      <Loading show={isLoading ? true : false} type={LoadingType.Scale} />
-      {/* <div className="SongGrid" onWheel={(e) => onWheel(e)}> */}
+      {/* <Loading show={isLoading ? true : false} type={LoadingType.Scale} /> */}
 
-      <animated.div
+      <div
         className="arrow left"
         onMouseMove={(e: any) => {
           mouseMove(e, -1);
@@ -182,8 +200,8 @@ const SongGrid: React.FC<Props> = ({
         style={style.arrowLeft}
       >
         <img src={res_circle_left} alt="Prev" />
-      </animated.div>
-      <animated.div
+      </div>
+      <div
         className="arrow right"
         onMouseMove={(e: any) => {
           mouseMove(e, 1);
@@ -194,12 +212,11 @@ const SongGrid: React.FC<Props> = ({
         style={style.arrowRight}
       >
         <img src={res_circle_right} alt="Next" />
-      </animated.div>
+      </div>
       <animated.div
         className={`wrapper ${!deviceInfo.isTouch ? "desktop" : ""}`}
         // style={!deviceInfo.isTouch ? style.wrapper : undefined}
         // ref={songGridRef}
-        ref={divRef}
         scrollLeft={scrollLeftSpring.x}
       >
         <div
@@ -242,7 +259,7 @@ const SongGrid: React.FC<Props> = ({
         text={textNodata}
         type={InfoImageType.NODATA}
       />
-    </animated.div>
+    </div>
   );
 };
 
